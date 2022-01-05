@@ -120,16 +120,11 @@ router.post("/login", (req, res) => {
 // @access public
 
 router.get("/current",passport.authenticate('jwt', {session: false}),(req, res)=>{
-	if(req.user.id)
-	{
-	return res.status(200).json({
-        id : req.user.id,
-        name : req.user.name,
-        email : req.user.email
-    })
-	}
-	return res.status(400).json({status : false, error : "No user logged in"});
-    
+        return res.status(200).json({
+            id : req.user.id,
+            name : req.user.name,
+            email : req.user.email
+        })
 })
 
 //@route POST /api/users/logout

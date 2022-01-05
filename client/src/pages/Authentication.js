@@ -1,34 +1,53 @@
 import {Button, Container ,makeStyles, TextField} from '@material-ui/core';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 const Authentication = ()=>{
+    const navigate = useNavigate();
+    const {loginUser} = useAuth();
+    const [password, setPassword]=useState('');
+    const [email, setEmail]=useState('');
+    const handlePasswordChange = (e)=>{
+        setPassword(e.target.value);
+    }
+    const handleEmailChange = (e)=>{
+        setEmail(e.target.value);
+    }
+    
+    const handleFormSubmit = (e)=>{
+        e.preventDefault();
+        loginUser(email, password);
+    }
     const useStyles = makeStyles({
         root : {
-            padding : '20vh',
+            height : '100vh',
         },
         form : {
+            paddingTop : '60px',
             display : 'grid',
+            justifyItems : 'center'
         },
-        field  :{
-            margin : '10px',
-            minWidth : '200px'
+        textField : {
+           marginTop : '20px',
+           minWidth : '300px',
         },
         button : {
-            color : 'white'
+            width : 'fit-content',
+            margin : '10px'
         }
     });
     const classes = useStyles();
 
      
     return <Container maxWidth= {'lg'} className={classes.root}>
-        <Container maxWidth= {'sm'}>
-            <form className={classes.form}>
-                <TextField className={classes.field} label="Email" variant="outlined" type='email'/>
-                <TextField className={classes.field} label="Password" variant="outlined" type='password'/>
-                <Button className = {classes.button} variant="contained" color="primary">
-                    Login
-                </Button>       
-            </form>
+                <form onSubmit={handleFormSubmit} className={classes.form}>
+                    <TextField value={email} onChange={handleEmailChange} className={classes.textField} label="Email" variant="outlined" type='email'/>
+                    <TextField value={password} onChange={handlePasswordChange} className={classes.textField} label="Password" variant="outlined" type='password'/>
+                    <Button type='submit' className={classes.button} variant="contained" color="primary">
+                        Login
+                    </Button>       
+                </form>
             </Container>
-    </Container>
 }
 
 export default Authentication;
