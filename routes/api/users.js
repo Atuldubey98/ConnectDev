@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const { register, login, getCurrentUser, logout } = require("../controller/users");
+const {
+  register,
+  login,
+  getCurrentUser,
+  logout,
+  tokenRefresh,
+} = require("../controller/users");
 require("../../config/passport")(passport);
 
 //@route POST api/users/register
@@ -26,10 +32,10 @@ router.get(
 //@route POST /api/users/logout
 //@desc Logging the user out
 //@access private
-router.get(
-  "/logout",
-  passport.authenticate("jwt", { session: false }),
-  logout
-);
+router.get("/logout", passport.authenticate("jwt", { session: false }), logout);
 
+//@route POST /api/users/refresh
+//@desc Logging the user out
+//@access private
+router.post("/refresh", tokenRefresh);
 module.exports = router;

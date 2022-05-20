@@ -68,67 +68,41 @@ const login = (req, res) => {
         });
       }
       // checking the password
-      bcrypt.compare(password, user.password).then((isMatch) => {
-        if (isMatch) {
-          // User matched
-          const payload = {
-            id: user.id,
-            name: user.name,
-            avatar: user.avatar,
-          }; // Create a payload
-          // Sign token
-          jwt.sign(
-            payload,
-            keys.SECRET_KEY,
-            {
-              expiresIn: 300,
-            },
-            (err, token) => {
-              if (err) {
-                console.log(err);
-                return res.status(400).json({
-                  error: err,
-                });
-              }
-              jwt.sign(
-                payload,
-                keys.SECRET_KEY,
-                {
-                  expiresIn: 3600,
-                },
-                async (error, refreshToken) => {
-                  if (error) {
-                    return res.status(400).json({
-                      ...error,
-                    });
-                  }
-                  const rf = await Token.findOne({ user: user._id });
-                  if (!rf) {
-                    const newToken = new Token({
-                      refreshToken,
-                      user: user._id,
-                    });
-                    await newToken.save(newToken);
-                  } else {
-                    await Token.findOneAndUpdate(
-                      { _id: rf._id },
-                      { refreshToken }
-                    );
-                  }
-                  return res.status(200).json({
-                    success: true,
-                    accessToken: "Bearer " + token,
-                    refreshToken,
-                  });
-                }
-              );
-            }
-          );
-        } else {
-          return res.status(400).json({
-            message: "Password Incorrect",
-          });
+      bcrypt.compare(password, user.password).then(async (isMatch) => {
+        if (!isMatch) {
+          return res.status(400).json({ error: "Password doesn't match" });
         }
+        const refreshToken = jwt.sign(
+          {
+            id: user.id,
+            email: user.email,
+            avatar: user.avatar,
+          },
+          keys.SECRET_KEY,
+          { expiresIn: "1d" }
+        );
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
+        const expired_at = new Date();
+        expired_at.setDate(expired_at.getDate() + 7);
+        const newToken = new Token({
+          refreshToken,
+          user: user.id,
+          expired_at,
+        });
+        await newToken.save();
+        const accessToken = jwt.sign(
+          {
+            id: user.id,
+            email: user.email,
+            avatar: user.avatar,
+          },
+          keys.SECRET_KEY,
+          { expiresIn: "60s" }
+        );
+        res.send({ accessToken: `Bearer ${accessToken}` });
       });
     })
     .catch((err) => {
@@ -147,64 +121,36 @@ const getCurrentUser = (req, res) => {
   });
 };
 
-const tokenRefresh = (req, res) => {
+const tokenRefresh = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
-    if (!jwt.verify(refreshToken, keys.SECRET_KEY, { expires: 3600 })) {
-      return res.status(400).json({ status: false });
+    console.log(req.cookies);
+    const refreshToken = req.cookies["refreshToken"];
+    const payload = jwt.verify(refreshToken, keys.SECRET_KEY);
+    if (!payload) {
+      return res.status(401).json({ status: false });
     }
-    const payload = {
-      id: req.user.id,
-      name: req.user.name,
-      avatar: req.user.avatar,
-    }; // Create a payload
-    // Sign token
-    jwt.sign(
-      payload,
-      keys.SECRET_KEY,
+    const dbToken = await Token.find({
+      user: payload.id,
+      expired_at: { $gte: 18 },
+    });
+    if (!dbToken) {
+      return res.status(401).json({ status: false });
+    }
+    const accessToken = jwt.sign(
       {
-        expiresIn: 300,
+        id: payload.id,
+        email: payload.email,
+        avatar: payload.avatar,
       },
-      (err, token) => {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({
-            error: err,
-          });
-        }
-        jwt.sign(
-          payload,
-          keys.SECRET_KEY,
-          {
-            expiresIn: 3600,
-          },
-          async (error, refreshToken) => {
-            if (error) {
-              return res.status(400).json({
-                ...error,
-              });
-            }
-            const rf = await Token.findOne({ user: user._id });
-            if (!rf) {
-              const newToken = new Token({
-                refreshToken,
-                user: user._id,
-              });
-              await newToken.save();
-            } else {
-              await Token.findOneAndUpdate({ _id: rf._id }, { refreshToken });
-            }
-            return res.status(200).json({
-              success: true,
-              accessToken: "Bearer " + token,
-              refreshToken,
-            });
-          }
-        );
-      }
+      keys.SECRET_KEY,
+      { expiresIn: "60s" }
     );
-  } catch (error) {
-    return res.status(400).json({ status: false });
+    res.send({ accessToken });
+  } catch (e) {
+    console.log(e);
+    res.status(401).json({
+      error: e,
+    });
   }
 };
 

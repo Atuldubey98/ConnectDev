@@ -5,9 +5,16 @@ const profile = require("./routes/api/profile");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 9000;
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 // DB config
 app.use(
   bodyParser.urlencoded({
