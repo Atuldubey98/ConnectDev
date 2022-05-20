@@ -1,14 +1,14 @@
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const User = require("../../models/User");
+const Token = require("../../models/Token");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport");
 require("../../config/passport")(passport);
 
-
-const register = (req, res) =>{
-    User.findOne({ email: req.body.email })
+const register = (req, res) => {
+  User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
         return res.status(400).json({
@@ -54,10 +54,9 @@ const register = (req, res) =>{
       console.log(err);
       res.status(400).json({ error: err });
     });
-}
+};
 
-const login = (req, res)=>{
-    console.log(req.body);
+const login = (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   User.findOne({ email })
@@ -82,7 +81,7 @@ const login = (req, res)=>{
             payload,
             keys.SECRET_KEY,
             {
-              expiresIn: 3600,
+              expiresIn: 300,
             },
             (err, token) => {
               if (err) {
@@ -90,12 +89,39 @@ const login = (req, res)=>{
                 return res.status(400).json({
                   error: err,
                 });
-              } else {
-                res.status(200).json({
-                  success: true,
-                  token: "Bearer " + token,
-                });
               }
+              jwt.sign(
+                payload,
+                keys.SECRET_KEY,
+                {
+                  expiresIn: 3600,
+                },
+                async (error, refreshToken) => {
+                  if (error) {
+                    return res.status(400).json({
+                      ...error,
+                    });
+                  }
+                  const rf = await Token.findOne({ user: user._id });
+                  if (!rf) {
+                    const newToken = new Token({
+                      refreshToken,
+                      user: user._id,
+                    });
+                    await newToken.save(newToken);
+                  } else {
+                    await Token.findOneAndUpdate(
+                      { _id: rf._id },
+                      { refreshToken }
+                    );
+                  }
+                  return res.status(200).json({
+                    success: true,
+                    accessToken: "Bearer " + token,
+                    refreshToken,
+                  });
+                }
+              );
             }
           );
         } else {
@@ -111,20 +137,81 @@ const login = (req, res)=>{
         error: err,
       });
     });
-}
+};
 
-const getCurrentUser = (req, res)=>{
-    return res.status(200).json({
-        id: req.user.id,
-        name: req.user.name,
-        email: req.user.email,
-      });
-}
+const getCurrentUser = (req, res) => {
+  return res.status(200).json({
+    id: req.user.id,
+    name: req.user.name,
+    email: req.user.email,
+  });
+};
 
-const logout = (req, res) =>{
-    req.logOut();
-    return res
-      .status(200)
-      .json({ status: false, message: "User Success fully logged out" });
-}
-module.exports={register, login, getCurrentUser, logout};
+const tokenRefresh = (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!jwt.verify(refreshToken, keys.SECRET_KEY, { expires: 3600 })) {
+      return res.status(400).json({ status: false });
+    }
+    const payload = {
+      id: req.user.id,
+      name: req.user.name,
+      avatar: req.user.avatar,
+    }; // Create a payload
+    // Sign token
+    jwt.sign(
+      payload,
+      keys.SECRET_KEY,
+      {
+        expiresIn: 300,
+      },
+      (err, token) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            error: err,
+          });
+        }
+        jwt.sign(
+          payload,
+          keys.SECRET_KEY,
+          {
+            expiresIn: 3600,
+          },
+          async (error, refreshToken) => {
+            if (error) {
+              return res.status(400).json({
+                ...error,
+              });
+            }
+            const rf = await Token.findOne({ user: user._id });
+            if (!rf) {
+              const newToken = new Token({
+                refreshToken,
+                user: user._id,
+              });
+              await newToken.save();
+            } else {
+              await Token.findOneAndUpdate({ _id: rf._id }, { refreshToken });
+            }
+            return res.status(200).json({
+              success: true,
+              accessToken: "Bearer " + token,
+              refreshToken,
+            });
+          }
+        );
+      }
+    );
+  } catch (error) {
+    return res.status(400).json({ status: false });
+  }
+};
+
+const logout = (req, res) => {
+  req.logOut();
+  return res
+    .status(200)
+    .json({ status: false, message: "User Success fully logged out" });
+};
+module.exports = { register, login, getCurrentUser, logout, tokenRefresh };

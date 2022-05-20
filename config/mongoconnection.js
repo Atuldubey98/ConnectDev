@@ -5,9 +5,10 @@ const multer = require("multer");
 
 const promise = mongoose
   .connect(db, {
-    useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false,
+    useCreateIndex: true,
+    useUnifiedTopology : true
   })
   .then(() => mongoose.connection.db)
   .catch((err) => {
