@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  createSearchParams,
+} from "react-router-dom";
 import useQuery from "../hooks/useQuery";
 const Header = () => {
   const [search, setsearch] = useState("");
@@ -8,15 +12,25 @@ const Header = () => {
     console.log(search);
   };
   const navigate = useNavigate();
-  const location = useLocation();
   const query = useQuery();
   const handleSearchChange = (e) => {
     setsearch(e.target.value);
   };
   const navigateToSideNav = () => {
-    navigate(
-      query.has("nav") ? location.pathname : location.pathname + "?nav=true"
-    );
+    let params = {};
+    if (query.has("limit")) {
+      params.limit = query.get("limit");
+    }
+    if (query.has("page")) {
+      params.page = query.get("page");
+    }
+    if (!query.has("nav")) {
+      params.nav = true;
+    }
+    navigate({
+      pathname: "/",
+      search: `?${createSearchParams(params)}`,
+    });
   };
   const headerNavList = [
     {

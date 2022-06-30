@@ -16,6 +16,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const limit = req.query.limit ? Number(req.query.limit) : 10;
   const s = req.query.s ? req.query.s : "";
   const totalCount = await Post.estimatedDocumentCount();
+  const totalPages = Math.ceil(totalCount / limit);
   const posts = await Post.find({ text: { $regex: s } }, undefined, {
     skip: page * limit,
     limit,
@@ -25,6 +26,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json({
     totalCount,
     count: posts.length,
+    totalPages,
     posts,
     page: page + 1,
     status: true,

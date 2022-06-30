@@ -7,6 +7,7 @@ import useQuery from "../hooks/useQuery";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAllPosts } from "../redux/actions/postActions";
+
 const HomePage = () => {
   const query = useQuery();
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getAllPosts(limit, page));
   }, [dispatch, limit, page]);
+
   return (
     <div className="home">
       <Header />
