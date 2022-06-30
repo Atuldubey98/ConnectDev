@@ -4,8 +4,16 @@ import Posts from "../components/Posts";
 import RightNav from "../components/RightNav";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getAllPosts } from "../redux/actions/postActions";
 const HomePage = () => {
   const query = useQuery();
+  const dispatch = useDispatch();
+ 
+  useEffect(() => {
+    dispatch(getAllPosts());
+  }, [dispatch]);
   return (
     <div className="home">
       <Header />
