@@ -1,11 +1,12 @@
 import {
   POST_ERROR,
   POST_LOADING,
+  POST_METADATA_SET,
   POST_SUCCESS,
 } from "../constants/postsConstants";
 
 export const postsReducer = (
-  state = { posts: { loading: false, error: null, posts: [] } },
+  state = { posts: { loading: false, error: null, posts: [], metadata: null } },
   action
 ) => {
   switch (action.type) {
@@ -22,6 +23,13 @@ export const postsReducer = (
         loading: true,
         error: null,
         posts: [],
+      };
+    case POST_METADATA_SET:
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        metadata: action.payload,
       };
     case POST_ERROR: {
       return {

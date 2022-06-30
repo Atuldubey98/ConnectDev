@@ -10,10 +10,11 @@ import { getAllPosts } from "../redux/actions/postActions";
 const HomePage = () => {
   const query = useQuery();
   const dispatch = useDispatch();
- 
+  const limit = query.has("limit") ? query.get("limit") : 10;
+  const page = query.has("page") ? query.get("page") : 0;
   useEffect(() => {
-    dispatch(getAllPosts());
-  }, [dispatch]);
+    dispatch(getAllPosts(limit, page));
+  }, [dispatch, limit, page]);
   return (
     <div className="home">
       <Header />
