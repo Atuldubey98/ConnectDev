@@ -11,6 +11,8 @@ exports.getPost = catchAsyncErrors(async (req, res, next) => {
   const post = await Post.findById(req.query.id);
   return res.status(200).json(post);
 });
+
+
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const page = req.query.page ? Number(req.query.page) : 0;
   const limit = req.query.limit ? Number(req.query.limit) : 10;

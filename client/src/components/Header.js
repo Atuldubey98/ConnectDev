@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  Link,
-  useNavigate,
-  createSearchParams,
-} from "react-router-dom";
+import { Link, useNavigate, createSearchParams } from "react-router-dom";
 import useQuery from "../hooks/useQuery";
 const Header = () => {
   const [search, setsearch] = useState("");
@@ -80,8 +76,10 @@ const Header = () => {
         </ul>
         <ul className="nav navbar-nav navbar-right d-flex justify-items-center align-content-center">
           <li className="mr-2">
-            <span className="font-weight-bold">Compose</span>
-            <i className="fa-solid fa-pen-to-square"></i>
+            <button type="button" class="btn btn-light">
+              <i className="fa-solid fa-pen-to-square"></i>
+              <span className="ml-2">Compose  </span>
+            </button>
           </li>
           <li>
             <form onSubmit={handleSearchSubmit}>
