@@ -12,13 +12,21 @@ exports.getPost = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json(post);
 });
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
-  const skip = req.query.skip ? Number(req.query.skip) : 0;
-  const posts = await Post.find({}, undefined, { skip, limit: 5 }).sort({
+  const page = req.query.page ? Number(req.query.page) : 0;
+  const limit = req.query.limit ? Number(req.query.limit) : 10;
+  const s = req.query.s ? req.query.s : "";
+  const totalCount = await Post.estimatedDocumentCount();
+  const posts = await Post.find({ text: { $regex: s } }, undefined, {
+    skip: page * limit,
+    limit,
+  }).sort({
     date: "desc",
   });
   return res.status(200).json({
+    totalCount,
     count: posts.length,
     posts,
+    page: page + 1,
     status: true,
   });
 });
