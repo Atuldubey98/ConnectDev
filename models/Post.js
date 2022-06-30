@@ -21,6 +21,15 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
+  header: {
+    type: String,
+  },
+  subtitle: {
+    type: String,
+  },
+  title: {
+    type: String,
+  },
 });
 
 module.exports = Post = mongoose.model("post", PostSchema);

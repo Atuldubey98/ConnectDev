@@ -9,12 +9,18 @@ const Posts = () => {
   return (
     <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
       {loading ? (
-        <div>Loading</div>
+        <div class="spinner-border text-success" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
       ) : (
         posts.length > 0 &&
         posts.map((post) => <Post key={post._id} post={post} />)
       )}
-      {error && <div>{error}</div>}
+      {error && (
+        <div class="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
       <Paginator />
     </div>
   );
