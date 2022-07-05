@@ -11,11 +11,12 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user",
   },
-  likes: {
+  likes:{ 
     type: Array,
+    ref : "likes"
   },
   comments: {
-    type: Array,
+    type : Array,
   },
   date: {
     type: Date,
