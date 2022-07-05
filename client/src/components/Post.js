@@ -5,7 +5,6 @@ const Post = ({ post }) => {
   const { text, likes, comments } = post;
   const [show, setShow] = useState(false);
   const { user } = useSelector((state) => state.user);
-
   return (
     <div className="card m-2 w-100">
       <div className="card-header d-flex justify-content-between align-items-center">

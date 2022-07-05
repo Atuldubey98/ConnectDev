@@ -16,9 +16,7 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  if (loading) {
-    return <div class="spinner-border text-dark"></div>;
-  }
+
   return (
     <div
       style={{
@@ -26,47 +24,53 @@ const LoginPage = () => {
       }}
       className="container-fluid d-flex justify-content-center align-items-center"
     >
-      <form
-        onSubmit={onFormSubmit}
-        className="d-flex-column col-md-5 justify-content-center align-items-center border border-secondary p-5 bg-light rounded"
-      >
-        <div className="mb-3">
-          <label
-            htmlFor="exampleInputEmail1"
-            className="form-label font-weight-bold"
-          >
-            Email address
-          </label>
-          <input
-            type="email"
-            onChange={handleEmailChange}
-            className="form-control"
-            id="exampleInputEmail1"
-            value={email}
-            placeholder={"user@example.com"}
-            aria-describedby="emailHelp"
-          />
+      {loading ? (
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
-        <div className="mb-3">
-          <label
-            htmlFor="exampleInputPassword1"
-            className="form-label font-weight-bold"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            placeholder={"Password"}
-            value={password}
-            onChange={handlePasswordChange}
-            className="form-control"
-            id="exampleInputPassword1"
-          />
-        </div>
-        <button type="submit" className="btn btn-success">
-          Submit
-        </button>
-      </form>
+      ) : (
+        <form
+          onSubmit={onFormSubmit}
+          className="d-flex-column col-md-5 justify-content-center align-items-center border border-secondary p-5 bg-light rounded"
+        >
+          <div className="mb-3">
+            <label
+              htmlFor="exampleInputEmail1"
+              className="form-label font-weight-bold"
+            >
+              Email address
+            </label>
+            <input
+              type="email"
+              onChange={handleEmailChange}
+              className="form-control"
+              id="exampleInputEmail1"
+              value={email}
+              placeholder={"user@example.com"}
+              aria-describedby="emailHelp"
+            />
+          </div>
+          <div className="mb-3">
+            <label
+              htmlFor="exampleInputPassword1"
+              className="form-label font-weight-bold"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder={"Password"}
+              value={password}
+              onChange={handlePasswordChange}
+              className="form-control"
+              id="exampleInputPassword1"
+            />
+          </div>
+          <button type="submit" className="btn btn-success">
+            Submit
+          </button>
+        </form>
+      )}
     </div>
   );
 };
