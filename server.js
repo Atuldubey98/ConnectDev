@@ -1,22 +1,22 @@
 const express = require("express");
 const app = express();
-require("./config/mongoconnection");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
+require("./config/mongoconnection");
 app.use(cookieParser());
+const cors = require("cors");
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+  })
+);
 app.use(
   bodyParser.urlencoded({
     extended: false,
   })
 );
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-  );
 const port = process.env.PORT || 9000;
 const user = require("./api/routes/user");
 const errorMiddleware = require("./api/middlewares/error");

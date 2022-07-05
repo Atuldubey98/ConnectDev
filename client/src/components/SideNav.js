@@ -1,7 +1,10 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../redux/actions/userActions";
 const SideNav = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const sideNavList = [
     {
       text: "Home",
@@ -29,7 +32,7 @@ const SideNav = () => {
     },
   ];
   const handleLogout = () => {
-    navigate("/login", { replace: true });
+    dispatch(logout());
   };
   return (
     <div className="col-md-2 d-flex justify-content-start align-items-center flex-column">

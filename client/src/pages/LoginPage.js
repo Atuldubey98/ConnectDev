@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { login } from "../redux/actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
-  const { isAuthenticated, user } = useSelector(
-    (state) => state.user
-  );
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { loading } = useSelector((state) => state.user);
   const [password, setPassword] = useState("");
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -20,11 +16,9 @@ const LoginPage = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/")
-    }
-  }, [navigate, isAuthenticated, user]);
+  if (loading) {
+    return <div class="spinner-border text-dark"></div>;
+  }
   return (
     <div
       style={{

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 const Post = ({ post }) => {
   const { text, likes, comments } = post;
   const [show, setShow] = useState(false);
+  const { user } = useSelector((state) => state.user);
+
   return (
     <div className="card m-2 w-100">
       <div className="card-header d-flex justify-content-between align-items-center">
@@ -31,11 +34,11 @@ const Post = ({ post }) => {
               <span className="ml-2">Edit</span>
             </Link>
             <Link className="dropdown-item" to="#">
-              <i class="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-trash"></i>
               <span className="ml-2">Delete</span>
             </Link>
             <Link className="dropdown-item" to="#">
-              <i class="fa-solid fa-user"></i>
+              <i className="fa-solid fa-user"></i>
               <span className="ml-2">Take me to profle</span>
             </Link>
           </div>
@@ -43,7 +46,10 @@ const Post = ({ post }) => {
         <button className="m-2 btn ">
           <i
             style={{
-              color: "white",
+              color:
+                likes.filter((like) => like.user === user._id).length > 0
+                  ? "red"
+                  : "white",
             }}
             className="fa-solid fa-heart card-link mr-2"
           ></i>

@@ -76,7 +76,7 @@ const Header = () => {
         </ul>
         <ul className="nav navbar-nav navbar-right d-flex justify-items-center align-content-center">
           <li className="mr-2">
-            <button type="button" class="btn btn-light">
+            <button type="button" className="btn btn-light">
               <i className="fa-solid fa-pen-to-square"></i>
               <span className="ml-2">Compose  </span>
             </button>

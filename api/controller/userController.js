@@ -28,3 +28,16 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   }
   sendToken(user, 201, res);
 });
+
+exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
+  return res.status(200).json({ status: true, message: "User logged out" });
+});
+
+exports.getCurrentUserProfile = catchAsyncErrors(async (req, res,next)=>{
+  const user = req.user;
+  return res.status(200).json(user);
+})

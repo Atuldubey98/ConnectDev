@@ -13,8 +13,10 @@ import {
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: LOGIN_REQUEST });
-    const { data } = await instance.post(`api/users/login`, { email, password });
-    console.log(data);
+    const { data } = await instance.post(`api/users/login`, {
+      email,
+      password,
+    });
     dispatch({ type: LOGIN_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: LOGIN_FAIL, payload: error.message });
@@ -24,15 +26,15 @@ export const login = (email, password) => async (dispatch) => {
 export const loadUser = () => async (dispatch) => {
   try {
     dispatch({ type: LOAD_USER_REQUEST });
-    const { data } = await instance.get(`/api/v1/profile`);
-    dispatch({ type: LOAD_USER_SUCCESS, payload: data.user });
+    const { data } = await instance.get(`api/users`);
+    dispatch({ type: LOAD_USER_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: LOAD_USER_FAIL, payload: error.message });
   }
 };
-export const logout = (navigate) => async (dispatch) => {
+export const logout = () => async (dispatch) => {
   try {
-    await instance.post("/api/v1/logout");
+    await instance.post("/api/users/logout");
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
     dispatch({ type: LOGOUT_FAIL, payload: error.message });
