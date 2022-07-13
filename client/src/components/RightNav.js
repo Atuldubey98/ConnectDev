@@ -1,4 +1,5 @@
 import React from "react";
+import Notification from "./Notification";
 const RightNav = () => {
   return (
     <div
@@ -7,7 +8,9 @@ const RightNav = () => {
         overflowY: "auto",
       }}
       className="col-md-3 overflow-auto"
-    ></div>
+    >
+      <Notification />
+    </div>
   );
 };
 

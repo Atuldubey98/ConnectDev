@@ -15,6 +15,7 @@ const Paginator = () => {
     if (query.has("nav")) {
       params.nav = true;
     }
+
     navigate({
       pathname: "/",
       search: `?${createSearchParams(params)}`,

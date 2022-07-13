@@ -33,8 +33,9 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const page = req.query.page ? Number(req.query.page) : 0;
   const limit = req.query.limit ? Number(req.query.limit) : 10;
   const s = req.query.s ? req.query.s : "";
-  const totalCount = await Post.estimatedDocumentCount();
-  const totalPages = Math.ceil(totalCount / limit);
+  const totalCount = await Post.find({
+    text: { $regex: s },
+  }).countDocuments();
   const posts = await Post.find({ text: { $regex: s } }, undefined, {
     skip: page * limit,
     limit,
@@ -43,7 +44,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       date: "desc",
     })
     .populate("likes");
-
+  const totalPages = Math.ceil(totalCount / limit);
   return res.status(200).json({
     totalCount,
     count: posts.length,
@@ -87,5 +88,5 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
       },
     }
   );
-  return res.status(200).json({ status: true, message: "Post Disliked" });
+  return res.status(200).json({ status: false, message: "Post Disliked" });
 });

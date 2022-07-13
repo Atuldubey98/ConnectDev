@@ -5,7 +5,23 @@ const Header = () => {
   const [search, setsearch] = useState("");
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log(search);
+    let params = {};
+    if (query.has("limit")) {
+      params.limit = query.get("limit");
+    }
+    if (query.has("page")) {
+      params.page = 0;
+    }
+    if (query.has("nav")) {
+      params.nav = true;
+    }
+    if (search && search !== "") {
+      params.s = search;
+    }
+    navigate({
+      pathname: "/",
+      search: `?${createSearchParams(params)}`,
+    });
   };
   const navigate = useNavigate();
   const query = useQuery();
@@ -14,6 +30,7 @@ const Header = () => {
   };
   const navigateToSideNav = () => {
     let params = {};
+
     if (query.has("limit")) {
       params.limit = query.get("limit");
     }
@@ -78,7 +95,7 @@ const Header = () => {
           <li className="mr-2">
             <button type="button" className="btn btn-light">
               <i className="fa-solid fa-pen-to-square"></i>
-              <span className="ml-2">Compose  </span>
+              <span className="ml-2">Compose </span>
             </button>
           </li>
           <li>

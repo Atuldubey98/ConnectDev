@@ -1,33 +1,32 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { logout } from "../redux/actions/userActions";
 const SideNav = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const sideNavList = [
     {
       text: "Home",
       link: "/",
-      className: "mb-3",
+      className: "m-3",
       iconClass: "fa-solid fa-house mr-2",
     },
     {
       text: "Chats",
       link: "/",
-      className: "mb-3",
+      className: "m-3",
       iconClass: "fa-brands fa-rocketchat mr-2",
     },
     {
       text: "My Posts",
       link: "/",
-      className: "mb-3",
+      className: "m-3",
       iconClass: "fa-solid fa-signs-post mr-2",
     },
     {
       text: "Profile",
       link: "/",
-      className: "mb-3",
+      className: "m-3",
       iconClass: "fa-solid fa-user mr-2",
     },
   ];
@@ -40,14 +39,13 @@ const SideNav = () => {
         {sideNavList.map((s) => (
           <li key={s.text} className={s.className}>
             <i className={s.iconClass}></i>
-            <Link to={s.link}>{s.text}</Link>
+            <Link className="text-decoration-none text-dark" to={s.link}>
+              {s.text}
+            </Link>
           </li>
         ))}
-        <li>
-          <i
-            onClick={handleLogout}
-            className="fa-solid fa-arrow-right-from-bracket mr-2"
-          ></i>
+        <li onClick={handleLogout} className="cursor-pointer m-3">
+          <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>
           Logout
         </li>
       </ul>

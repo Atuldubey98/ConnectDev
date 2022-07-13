@@ -14,10 +14,11 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const limit = query.has("limit") ? query.get("limit") : 10;
   const page = query.has("page") ? query.get("page") : 0;
+  const s = query.has("s") ? query.get("s") : "";
   const { loading, user } = useSelector((state) => state.user);
   useEffect(() => {
-    dispatch(getAllPosts(limit, page));
-  }, [dispatch, limit, page]);
+    dispatch(getAllPosts(limit, page, s));
+  }, [dispatch, limit, page, s]);
   if (loading) {
     return <div className="spinner-border text-primary"></div>;
   } else if (!user) {

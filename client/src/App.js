@@ -11,7 +11,7 @@ const App = () => {
   useEffect(() => {
     dispatch(loadUser());
     if (isAuthenticated) {
-      navigate("/");
+      navigate("/?nav=true");
     }
   }, [dispatch, navigate, isAuthenticated]);
   return (
