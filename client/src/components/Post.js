@@ -10,14 +10,14 @@ const Post = ({ post }) => {
   const [liked, setLiked] = useState(
     likes.filter((like) => like.user === user._id).length > 0
   );
-  const [length, setLength]=useState(likes.length);
+  const [length, setLength] = useState(likes.length);
   const likeThePost = async () => {
     try {
       setLoading(true);
       const res = await likePost(post._id);
       setLoading(false);
       setLiked(res);
-      setLength(len=>len+=res ? 1 : -1)
+      setLength((len) => (len += res ? 1 : -1));
     } catch (e) {
       console.log(e);
     }
@@ -38,7 +38,7 @@ const Post = ({ post }) => {
           <span>Open</span>
         </button>
         <div className="dropdown">
-          <button className="btn card-link" onClick={() => setShow((o) => !o)}>
+          <button className="btn btn-light card-link" onClick={() => setShow((o) => !o)}>
             <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
           </button>
           <div
@@ -64,7 +64,10 @@ const Post = ({ post }) => {
             <span className="sr-only">Loading...</span>
           </div>
         ) : (
-          <button onClick={likeThePost} className="m-2 btn ">
+          <button
+            onClick={likeThePost}
+            className="m-2 btn btn-light font-weight-bold"
+          >
             <i
               style={{
                 color: liked ? "red" : "lightGrey",
@@ -74,12 +77,17 @@ const Post = ({ post }) => {
             {length}
           </button>
         )}
-        <button className="m-2 btn">
-          <i className="fa-solid fa-comment card-link mr-2"></i>
+        <button className="m-2 btn btn-light font-weight-bold">
+          <i
+            style={{
+              color: "blueviolet"
+            }}
+            className="fa-solid fa-comment card-link mr-2"
+          ></i>
           {comments.length}
         </button>
       </div>
     </div>
-  );  
+  );
 };
 export default Post;

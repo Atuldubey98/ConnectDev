@@ -1,8 +1,14 @@
 import React, { useState } from "react";
-import { Link, useNavigate, createSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  createSearchParams,
+  useLocation,
+} from "react-router-dom";
 import useQuery from "../hooks/useQuery";
 const Header = () => {
   const [search, setsearch] = useState("");
+  const location = useLocation();
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     let params = {};
@@ -41,7 +47,7 @@ const Header = () => {
       params.nav = true;
     }
     navigate({
-      pathname: "/",
+      pathname: location.pathname,
       search: `?${createSearchParams(params)}`,
     });
   };
@@ -71,15 +77,21 @@ const Header = () => {
       iconClass: "fa-solid fa-user mr-2",
     },
   ];
+  const navigateToCompose = () => {
+    let params = { nav: true };
+
+    navigate({
+      pathname: "/compose",
+      search: `?${createSearchParams(params)}`,
+    });
+  };
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
       <div className="container-fluid">
-        <div className="navbar-header">
-          <i
-            className="fa-solid fa-bars pr-2"
-            style={{ cursor: "pointer" }}
-            onClick={navigateToSideNav}
-          ></i>
+        <div className="navbar-header d-flex">
+          <button className="btn btn-light" onClick={navigateToSideNav}>
+            <i className="fa-solid fa-bars" style={{ cursor: "pointer" }}></i>
+          </button>
           <Link className="navbar-brand font-weight-bold" to="#">
             Connect Dev
           </Link>
@@ -93,7 +105,11 @@ const Header = () => {
         </ul>
         <ul className="nav navbar-nav navbar-right d-flex justify-items-center align-content-center">
           <li className="mr-2">
-            <button type="button" className="btn btn-light">
+            <button
+              onClick={navigateToCompose}
+              type="button"
+              className="btn btn-light"
+            >
               <i className="fa-solid fa-pen-to-square"></i>
               <span className="ml-2">Compose </span>
             </button>
