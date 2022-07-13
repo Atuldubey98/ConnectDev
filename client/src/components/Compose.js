@@ -29,7 +29,7 @@ const Compose = () => {
   };
   const onComposeSubmit = (e) => {
     e.preventDefault();
-    dispatch(addPost({ title, text, header, subtitle, color }));
+    dispatch(addPost({ title, text, header, subtitle, color }));    
   };
   const handlePreview = (e) => {
     e.preventDefault();

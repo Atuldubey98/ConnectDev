@@ -31,8 +31,8 @@ const LoginPage = () => {
       className="container-fluid d-flex justify-content-center align-items-center"
     >
       {loading ? (
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading...</span>
+        <div className="spinner-border" role="status">
+          <span className="sr-only">Loading...</span>
         </div>
       ) : (
         <form

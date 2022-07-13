@@ -29,6 +29,21 @@ exports.deletePostsById = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+exports.deleteSinglePostById = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.query;
+  const post = await Post.findById(id);
+  if (!post)
+    return res.status(400).json({
+      status: false,
+      message: "Not exist",
+    });
+  await Post.deleteOne({ _id: id });
+  return res.status(200).json({
+    status: true,
+    message: "Deleted",
+  });
+});
+
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const page = req.query.page ? Number(req.query.page) : 0;
   const limit = req.query.limit ? Number(req.query.limit) : 10;

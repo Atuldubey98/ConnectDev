@@ -1,5 +1,9 @@
 import instance from "../../instance";
 import {
+  DELETE_REQUEST_ERROR,
+  DELETE_REQUEST_LOADING,
+  DELETE_REQUEST_RESET,
+  DELETE_REQUEST_SUCCESS,
   POST_ERROR,
   POST_LOADING,
   POST_METADATA_SET,
@@ -51,5 +55,20 @@ export const likePost = async (postId) => {
     return data.status;
   } catch (e) {
     throw e;
+  }
+};
+
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_REQUEST_RESET });
+    dispatch({ type: DELETE_REQUEST_LOADING });
+    const { data } = await instance.delete("api/post", {
+      params: {
+        id,
+      },
+    });
+    dispatch({ type: DELETE_REQUEST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: DELETE_REQUEST_ERROR, payload: error.message });
   }
 };

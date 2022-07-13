@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { likePost } from "../redux/actions/postActions";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePost, likePost } from "../redux/actions/postActions";
 const Post = ({ post }) => {
   const { text, likes, comments, title, subtitle, header, color } = post;
+  const [isDeleted, setIsDeleted] = useState(color);
   const [show, setShow] = useState(false);
   const { user } = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [liked, setLiked] = useState(
     likes.filter((like) => like.user === user._id).length > 0
@@ -23,8 +23,15 @@ const Post = ({ post }) => {
       console.log(e);
     }
   };
+  const deleteSinglePost = () => {
+    setShow((o) => !o);
+    dispatch(deletePost(post._id));
+    setIsDeleted("bg-secondary");
+  };
   return (
-    <div className={color ? "card m-2 w-100 " + color : "card m-2 w-100 "}>
+    <div
+      className={isDeleted ? "card m-2 w-100 " + isDeleted : "card m-2 w-100 "}
+    >
       <div className="card-header d-flex justify-content-between align-items-center">
         {header && <span className="font-weight-bold">{header}</span>}
       </div>
@@ -53,20 +60,24 @@ const Post = ({ post }) => {
           >
             {user._id === post.user && (
               <div>
-                <Link className="dropdown-item" to="#">
+                <div className="dropdown-item btn" to="#">
                   <i className="fa-solid fa-pen-to-square"></i>
                   <span className="ml-2">Edit</span>
-                </Link>
-                <Link className="dropdown-item" to="#">
+                </div>
+                <div
+                  onClick={deleteSinglePost}
+                  className="dropdown-item btn"
+                  to="#"
+                >
                   <i className="fa-solid fa-trash"></i>
                   <span className="ml-2">Delete</span>
-                </Link>
+                </div>
               </div>
             )}
-            <Link className="dropdown-item" to="#">
+            <div className="dropdown-item btn" to="#">
               <i className="fa-solid fa-user"></i>
               <span className="ml-2">Take me to profle</span>
-            </Link>
+            </div>
           </div>
         </div>
         {loading ? (

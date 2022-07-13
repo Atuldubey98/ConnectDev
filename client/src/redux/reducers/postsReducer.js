@@ -1,4 +1,8 @@
 import {
+  DELETE_REQUEST_ERROR,
+  DELETE_REQUEST_LOADING,
+  DELETE_REQUEST_RESET,
+  DELETE_REQUEST_SUCCESS,
   POST_ERROR,
   POST_LOADING,
   POST_METADATA_SET,
@@ -76,6 +80,44 @@ export const itemPostingReducer = (
       };
     }
     case POST_REQUEST_RESET: {
+      return {
+        loading: false,
+        item: null,
+        error: null,
+      };
+    }
+    default:
+      return { ...state };
+  }
+};
+
+export const itemDeleteReducer = (
+  state = { loading: false, error: null, item: null },
+  action
+) => {
+  switch (action.type) {
+    case DELETE_REQUEST_LOADING: {
+      return {
+        loading: true,
+        item: null,
+        error: null,
+      };
+    }
+    case DELETE_REQUEST_SUCCESS: {
+      return {
+        loading: false,
+        item: action.payload,
+        error: null,
+      };
+    }
+    case DELETE_REQUEST_ERROR: {
+      return {
+        loading: false,
+        item: null,
+        error: action.payload,
+      };
+    }
+    case DELETE_REQUEST_RESET: {
       return {
         loading: false,
         item: null,
