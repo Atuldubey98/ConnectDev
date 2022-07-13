@@ -2,6 +2,10 @@ import {
   POST_ERROR,
   POST_LOADING,
   POST_METADATA_SET,
+  POST_REQUEST_ERROR,
+  POST_REQUEST_LOADING,
+  POST_REQUEST_RESET,
+  POST_REQUEST_SUCCESS,
   POST_SUCCESS,
 } from "../constants/postsConstants";
 
@@ -42,5 +46,43 @@ export const postsReducer = (
     default: {
       return { ...state };
     }
+  }
+};
+
+export const itemPostingReducer = (
+  state = { loading: false, error: null, item: null },
+  action
+) => {
+  switch (action.type) {
+    case POST_REQUEST_LOADING: {
+      return {
+        loading: true,
+        item: null,
+        error: null,
+      };
+    }
+    case POST_REQUEST_SUCCESS: {
+      return {
+        loading: false,
+        item: action.payload,
+        error: null,
+      };
+    }
+    case POST_REQUEST_ERROR: {
+      return {
+        loading: false,
+        item: null,
+        error: action.payload,
+      };
+    }
+    case POST_REQUEST_RESET: {
+      return {
+        loading: false,
+        item: null,
+        error: null,
+      };
+    }
+    default:
+      return { ...state };
   }
 };
