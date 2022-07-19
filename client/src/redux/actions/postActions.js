@@ -26,16 +26,20 @@ export const addPost = (post) => async (dispatch) => {
     dispatch({ type: POST_REQUEST_ERROR, payload: error });
   }
 };
-export const getAllPosts = (limit, page, s) => async (dispatch) => {
+export const getAllPosts = (limit, page, s, myPosts) => async (dispatch) => {
   try {
     dispatch({ type: POST_LOADING });
+    let params = {
+      limit,
+      page,
+      s,
+    };
+    if (myPosts) {
+      params.myPosts = true;
+    }
     const { data } = await instance.get(`api/post/all`, {
       withCredentials: true,
-      params: {
-        limit,
-        page,
-        s,
-      },
+      params,
     });
     dispatch({ type: POST_SUCCESS, payload: data.posts });
     dispatch({ type: POST_METADATA_SET, payload: data });

@@ -29,11 +29,19 @@ const Compose = () => {
   };
   const onComposeSubmit = (e) => {
     e.preventDefault();
-    dispatch(addPost({ title, text, header, subtitle, color }));    
+    dispatch(addPost({ title, text, header, subtitle, color }));
   };
   const handlePreview = (e) => {
     e.preventDefault();
     setPreview((p) => !p);
+  };
+  const resetCompose = (e) => {
+    e.preventDefault();
+    setText("");
+    setHeader("");
+    setTitle("");
+    setColor("");
+    setPreview("");
   };
   return (
     <div className="col-md-7">
@@ -128,6 +136,12 @@ const Compose = () => {
             <button type="submit" className={"btn btn-success"}>
               {"Save"}
             </button>
+            <input
+              type="reset"
+              className={"btn btn-danger"}
+              value={"Reset"}
+              onClick={resetCompose}
+            />
           </div>
         </div>
         {item && (

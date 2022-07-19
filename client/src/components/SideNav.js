@@ -7,26 +7,22 @@ const SideNav = () => {
   const sideNavList = [
     {
       text: "Home",
-      link: "/",
-      className: "m-3",
+      link: "/?nav=true",
       iconClass: "fa-solid fa-house mr-2",
     },
     {
       text: "Chats",
       link: "/",
-      className: "m-3",
       iconClass: "fa-brands fa-rocketchat mr-2",
     },
     {
       text: "My Posts",
-      link: "/",
-      className: "m-3",
+      link: "/?nav=true&myPosts=true",
       iconClass: "fa-solid fa-signs-post mr-2",
     },
     {
       text: "Profile",
       link: "/",
-      className: "m-3",
       iconClass: "fa-solid fa-user mr-2",
     },
   ];
@@ -34,21 +30,32 @@ const SideNav = () => {
     dispatch(logout());
   };
   return (
-    <div className="col-md-2 d-flex justify-content-start align-items-center flex-column">
-      <ul className="list-unstyled justify-content-start align-items-center">
+    <div className="col-md-2 d-flex flex-column">
+      <div className="list-unstyled list-group list-group-flush">
         {sideNavList.map((s) => (
-          <li key={s.text} className={s.className}>
+          <li
+            key={s.text}
+            className={
+              "list-group-item font-weight-bold list-group-item-action"
+            }
+          >
             <i className={s.iconClass}></i>
             <Link className="text-decoration-none text-dark" to={s.link}>
               {s.text}
             </Link>
           </li>
         ))}
-        <li onClick={handleLogout} className="cursor-pointer m-3">
+        <li
+          style={{
+            cursor: "pointer",
+          }}
+          onClick={handleLogout}
+          className="list-group-item font-weight-bold list-group-item-action"
+        >
           <i className="fa-solid fa-arrow-right-from-bracket mr-2"></i>
           Logout
         </li>
-      </ul>
+      </div>
     </div>
   );
 };

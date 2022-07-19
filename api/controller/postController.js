@@ -48,10 +48,16 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const page = req.query.page ? Number(req.query.page) : 0;
   const limit = req.query.limit ? Number(req.query.limit) : 10;
   const s = req.query.s ? req.query.s : "";
+  const myPosts = req.query.myPosts ? true : false;
   const totalCount = await Post.find({
     text: { $regex: s },
   }).countDocuments();
-  const posts = await Post.find({ text: { $regex: s } }, undefined, {
+  let filter = { text: { $regex: s } };
+  if (myPosts) {
+    filter.user = req.user._id;
+  }
+  console.log(filter);
+  const posts = await Post.find(filter, undefined, {
     skip: page * limit,
     limit,
   })

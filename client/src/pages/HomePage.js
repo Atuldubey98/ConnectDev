@@ -15,15 +15,11 @@ const HomePage = () => {
   const limit = query.has("limit") ? query.get("limit") : 10;
   const page = query.has("page") ? query.get("page") : 0;
   const s = query.has("s") ? query.get("s") : "";
+  const myPosts = query.has("myPosts") ? true : false;
   const { loading, user } = useSelector((state) => state.user);
   useEffect(() => {
-    dispatch(getAllPosts(limit, page, s));
-  }, [dispatch, limit, page, s]);
-  if (loading) {
-    return <div className="spinner-border text-primary"></div>;
-  } else if (!user) {
-    return <Navigate to={"/login"} />;
-  }
+    dispatch(getAllPosts(limit, page, s, myPosts));
+  }, [dispatch, limit, page, s, myPosts]);
   return (
     <div className="home">
       <Header />

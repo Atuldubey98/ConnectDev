@@ -7,7 +7,7 @@ const RightNav = () => {
         height: "50vh",
         overflowY: "auto",
       }}
-      className="col-md-3 overflow-auto"
+      className="col-md-3 overflow-auto d-none d-xl-block"
     >
       <Notification />
     </div>

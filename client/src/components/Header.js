@@ -66,7 +66,7 @@ const Header = () => {
     },
     {
       text: "My Posts",
-      link: "/myposts",
+      link: "/?nav=true&myPosts=true",
       className: "mr-3",
       iconClass: "fa-solid fa-signs-post mr-2",
     },

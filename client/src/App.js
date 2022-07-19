@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import ComposePage from "./pages/ComposePage";
 import HomePage from "./pages/HomePage";
+import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
 
@@ -18,7 +19,16 @@ const App = () => {
     <div className="app">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<HomePage />} />
+        <Route path="/signup" element={<SignupPage />} />
+
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <HomePage />{" "}
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/compose"
           element={
