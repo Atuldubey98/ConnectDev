@@ -54,25 +54,25 @@ const Header = () => {
   const headerNavList = [
     {
       text: "Home",
-      link: "/",
+      link: "/?nav=true",
       className: "mr-3",
       iconClass: "fa-solid fa-house mr-2",
     },
     {
       text: "Chats",
-      link: "/",
+      link: "/chats",
       className: "mr-3",
       iconClass: "fa-brands fa-rocketchat mr-2",
     },
     {
-      text: "Posts",
-      link: "/",
+      text: "My Posts",
+      link: "/myposts",
       className: "mr-3",
       iconClass: "fa-solid fa-signs-post mr-2",
     },
     {
       text: "Profile",
-      link: "/",
+      link: "/profile",
       className: "mr-3",
       iconClass: "fa-solid fa-user mr-2",
     },

@@ -5,6 +5,8 @@ import PrivateRoute from "./components/PrivateRoute";
 import ComposePage from "./pages/ComposePage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+
 import { loadUser } from "./redux/actions/userActions";
 const App = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <ComposePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/compose"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />
