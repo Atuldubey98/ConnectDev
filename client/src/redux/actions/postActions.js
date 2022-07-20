@@ -76,3 +76,17 @@ export const deletePost = (id) => async (dispatch) => {
     dispatch({ type: DELETE_REQUEST_ERROR, payload: error.message });
   }
 };
+
+export const postComment = async (postId, text) => {
+  try {
+    const { data } = await instance.post(
+      "api/post/comment",
+      { postId, text },
+      { withCredentials: true }
+    );
+
+    return data.comment;
+  } catch (e) {
+    console.log(e);
+  }
+};

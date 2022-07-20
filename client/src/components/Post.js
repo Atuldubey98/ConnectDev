@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
-import { deletePost, likePost } from "../redux/actions/postActions";
+import {
+  deletePost,
+  likePost,
+  postComment,
+} from "../redux/actions/postActions";
 const Post = ({ post }) => {
+  const bottomRef = useRef(null);
   const { text, likes, comments, title, subtitle, header, color } = post;
   const [isDeleted, setIsDeleted] = useState(color);
+  const [commentText, setCommentText] = useState("");
+  const handleCommentTextChange = (e) => {
+    setCommentText(e.target.value);
+  };
   const [show, setShow] = useState(false);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [liked, setLiked] = useState(
-    likes.filter((like) => like.user === user._id).length > 0
+    likes.filter((like) => like.user._id === user._id).length > 0
   );
+  const [loadedComments, setLoadedComments] = useState(comments);
+  const [loadingComments, setLoadingComments] = useState(false);
   const [length, setLength] = useState(likes.length);
   const likeThePost = async () => {
     try {
@@ -24,12 +35,34 @@ const Post = ({ post }) => {
       console.log(e);
     }
   };
+
+  const commentOnPost = async (e) => {
+    try {
+      e.preventDefault();
+      setLoadingComments(true);
+      const res = await postComment(post._id, commentText);
+      setLoadedComments((c) => [...c, res]);
+      setLoadingComments(false);
+      setCommentText("");
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const deleteSinglePost = () => {
     setShow((o) => !o);
     dispatch(deletePost(post._id));
     setIsDeleted("bg-secondary");
   };
   const [showComments, setShowComments] = useState(false);
+  const scrollToBottomWithSmoothScroll = () => {
+    bottomRef?.current?.scrollTo({
+      top: bottomRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+  useEffect(() => {
+    scrollToBottomWithSmoothScroll();
+  }, [loadedComments, showComments]);
   return (
     <div
       className={isDeleted ? "card m-2 w-100 " + isDeleted : "card m-2 w-100 "}
@@ -108,10 +141,12 @@ const Post = ({ post }) => {
               }}
               className="fa-solid fa-comment card-link mr-2"
             ></i>
-            {comments.length}
+            {loadedComments.length}
           </button>
           <button
-            onClick={() => setShowComments((c) => !c)}
+            onClick={() => {
+              setShowComments((c) => !c);
+            }}
             className="btn btn-light font-weight-bold"
           >
             <i
@@ -125,8 +160,12 @@ const Post = ({ post }) => {
       </div>
       {showComments && (
         <div className="card-footer">
-          <div className="d-flex flex-column">
-            {comments.map((comment) => (
+          <div
+            style={{ maxHeight: "50vh" }}
+            ref={bottomRef}
+            className="d-flex flex-column overflow-auto"
+          >
+            {loadedComments.map((comment) => (
               <Comment key={comment._id} comment={comment} />
             ))}
           </div>
@@ -135,8 +174,16 @@ const Post = ({ post }) => {
               placeholder="Write your comment here"
               type="text"
               className="form-control"
+              value={commentText}
+              onChange={handleCommentTextChange}
             />
-            <button className="btn btn-success mt-2">Comment</button>
+            <button
+              disabled={loadingComments}
+              onClick={commentOnPost}
+              className="btn btn-success mt-2"
+            >
+              Comment
+            </button>
           </form>
         </div>
       )}

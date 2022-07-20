@@ -161,7 +161,12 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
       },
     }
   );
-  return res.status(200).json({ status: true, message: "Commented" });
+  console.log(comment._doc);
+  return res.status(200).json({
+    status: true,
+    message: "Commented",
+    comment: { ...comment._doc, user: req.user },
+  });
 });
 
 exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
