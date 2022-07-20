@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Comment from "./Comment";
 import { deletePost, likePost } from "../redux/actions/postActions";
 const Post = ({ post }) => {
   const { text, likes, comments, title, subtitle, header, color } = post;
@@ -28,6 +29,7 @@ const Post = ({ post }) => {
     dispatch(deletePost(post._id));
     setIsDeleted("bg-secondary");
   };
+  const [showComments, setShowComments] = useState(false);
   return (
     <div
       className={isDeleted ? "card m-2 w-100 " + isDeleted : "card m-2 w-100 "}
@@ -98,16 +100,46 @@ const Post = ({ post }) => {
             {length}
           </button>
         )}
-        <button className="m-2 btn btn-light font-weight-bold">
-          <i
-            style={{
-              color: "blueviolet",
-            }}
-            className="fa-solid fa-comment card-link mr-2"
-          ></i>
-          {comments.length}
-        </button>
+        <div className="btn-group">
+          <button className="btn btn-light font-weight-bold">
+            <i
+              style={{
+                color: "blueviolet",
+              }}
+              className="fa-solid fa-comment card-link mr-2"
+            ></i>
+            {comments.length}
+          </button>
+          <button
+            onClick={() => setShowComments((c) => !c)}
+            className="btn btn-light font-weight-bold"
+          >
+            <i
+              style={{
+                color: "blueviolet",
+              }}
+              className="fa-solid fa-pen-to-square"
+            ></i>
+          </button>
+        </div>
       </div>
+      {showComments && (
+        <div className="card-footer">
+          <div className="d-flex flex-column">
+            {comments.map((comment) => (
+              <Comment key={comment._id} comment={comment} />
+            ))}
+          </div>
+          <form className="d-flex flex-column justify-content-center align-items-center">
+            <textarea
+              placeholder="Write your comment here"
+              type="text"
+              className="form-control"
+            />
+            <button className="btn btn-success mt-2">Comment</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };

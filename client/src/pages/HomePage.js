@@ -5,9 +5,8 @@ import RightNav from "../components/RightNav";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getAllPosts } from "../redux/actions/postActions";
-import { Navigate } from "react-router-dom";
 
 const HomePage = () => {
   const query = useQuery();
@@ -16,7 +15,6 @@ const HomePage = () => {
   const page = query.has("page") ? query.get("page") : 0;
   const s = query.has("s") ? query.get("s") : "";
   const myPosts = query.has("myPosts") ? true : false;
-  const { loading, user } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(getAllPosts(limit, page, s, myPosts));
   }, [dispatch, limit, page, s, myPosts]);

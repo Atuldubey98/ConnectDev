@@ -1,5 +1,7 @@
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const Post = require("../../models/Post");
+const Comments = require("../../models/Comments");
+
 const Likes = require("../../models/Likes");
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
@@ -9,7 +11,22 @@ exports.savePost = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
-  const post = await Post.findById(req.query.id);
+  const post = await Post.findById(req.query.id)
+    .populate({
+      path: "likes",
+      populate: {
+        path: "user",
+        select: "name email",
+      },
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "name email",
+      },
+    });
+
   return res.status(200).json(post);
 });
 
@@ -56,7 +73,6 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   if (myPosts) {
     filter.user = req.user._id;
   }
-  console.log(filter);
   const posts = await Post.find(filter, undefined, {
     skip: page * limit,
     limit,
@@ -64,7 +80,20 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
     .sort({
       date: "desc",
     })
-    .populate("likes");
+    .populate({
+      path: "likes",
+      populate: {
+        path: "user",
+        select: "name email",
+      },
+    })
+    .populate({
+      path: "comments",
+      populate: {
+        path: "user",
+        select: "name email",
+      },
+    });
   const totalPages = Math.ceil(totalCount / limit);
   return res.status(200).json({
     totalCount,
@@ -110,4 +139,47 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
     }
   );
   return res.status(200).json({ status: false, message: "Post Disliked" });
+});
+
+exports.postComment = catchAsyncErrors(async (req, res, next) => {
+  const { postId, ...data } = req.body;
+  if (!postId) {
+    return res.status(400).json({ status: false });
+  }
+  const postById = await Post.findById(postId);
+  if (!postById) {
+    return res.status(400).json({ status: false });
+  }
+  const comment = new Comments({ user: req.user._id, post: postId, ...data });
+  await comment.save();
+
+  await Post.updateOne(
+    { _id: postId },
+    {
+      $push: {
+        comments: comment._id,
+      },
+    }
+  );
+  return res.status(200).json({ status: true, message: "Commented" });
+});
+
+exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
+  const { commentId, postId } = req.body;
+  if (!commentId || !postId) {
+    return res.status(400).json({ status: false });
+  }
+  const comment = await Comments.findByIdAndRemove(commentId);
+  if (!comment) {
+    return res.status(400).json({ status: false });
+  }
+  await Post.updateOne(
+    { _id: postId },
+    {
+      $pull: {
+        comments: commentId,
+      },
+    }
+  );
+  return res.status(200).json({ status: true, message: "Deleted" });
 });

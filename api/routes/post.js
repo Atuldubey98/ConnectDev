@@ -7,15 +7,22 @@ const {
   likeOrDislikePost,
   deletePostsById,
   deleteSinglePostById,
+  postComment,
+  deleteComment,
 } = require("../controller/postController");
 
 const router = Router();
-router.post("/", isAuthenticated, savePost);
+router
+  .post("/", isAuthenticated, savePost)
+  .get("/", isAuthenticated, getPost)
+  .delete("/", isAuthenticated, deleteSinglePostById);
+router
+  .get("/all", isAuthenticated, getAllPosts)
+  .delete("/all", isAuthenticated, deletePostsById);
 router.post("/like", isAuthenticated, likeOrDislikePost);
-router.delete("/all", isAuthenticated, deletePostsById);
-router.delete("/", isAuthenticated, deleteSinglePostById);
 
-router.get("/", isAuthenticated, getPost);
-router.get("/all", isAuthenticated, getAllPosts);
+router
+  .post("/comment", isAuthenticated, postComment)
+  .delete("/comment", isAuthenticated, deleteComment);
 
 module.exports = router;

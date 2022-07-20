@@ -9,7 +9,7 @@ const PostSchema = new Schema({
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "users",
   },
   likes: {
     type: Array,
@@ -17,6 +17,7 @@ const PostSchema = new Schema({
   },
   comments: {
     type: Array,
+    ref: "comments",
   },
   date: {
     type: Date,

@@ -5,7 +5,6 @@ import { addPost } from "../redux/actions/postActions";
 const Compose = () => {
   const [text, setText] = useState("");
   const { item, loading, error } = useSelector((state) => state.item);
-  console.log(loading);
   const [header, setHeader] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [title, setTitle] = useState("");
@@ -43,6 +42,17 @@ const Compose = () => {
     setColor("");
     setPreview("");
   };
+  const colorOptions = [
+    { value: "", text: "Open this select menu" },
+    { value: "bg-primary", text: "Blue" },
+    { value: "bg-secondary", text: "Grey" },
+    { value: "bg-success", text: "Green" },
+    { value: "bg-danger", text: "Red" },
+    { value: "bg-warning", text: "Yellow" },
+    { value: "bg-info", text: "Information" },
+    { value: "bg-light", text: "Light" },
+    { value: "bg-dark", text: "Dark" },
+  ];
   return (
     <div className="col-md-7">
       <form onSubmit={onComposeSubmit}>
@@ -123,15 +133,11 @@ const Compose = () => {
               onChange={handleColorChange}
               className="custom-select"
             >
-              <option value={""}>Open this select menu</option>
-              <option value="bg-primary">Blue</option>
-              <option value="bg-secondary">Grey</option>
-              <option value="bg-success">Green</option>
-              <option value="bg-danger">Red</option>
-              <option value="bg-warning">Yellow</option>
-              <option value="bg-info">Information</option>
-              <option value="bg-light">Light</option>
-              <option value="bg-dark">Dark</option>
+              {colorOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.text}
+                </option>
+              ))}
             </select>
             <button type="submit" className={"btn btn-success"}>
               {"Save"}
