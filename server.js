@@ -19,8 +19,10 @@ app.use(
 app.use(bodyParser.json());
 const port = process.env.PORT || 9000;
 const user = require("./api/routes/user");
-const errorMiddleware = require("./api/middlewares/error");
+const profile = require("./api/routes/profile");
 const post = require("./api/routes/post");
+
+const errorMiddleware = require("./api/middlewares/error");
 
 // DB config
 
@@ -28,6 +30,7 @@ const post = require("./api/routes/post");
 // Use Routes
 app.use("/api/users", user);
 app.use("/api/post", post);
+app.use("/api/profile", profile);
 
 app.use(errorMiddleware);
 app.all("*", (req, res, next) => {

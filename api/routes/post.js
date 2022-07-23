@@ -12,13 +12,16 @@ const {
 } = require("../controller/postController");
 
 const router = Router();
+
 router
   .post("/", isAuthenticated, savePost)
   .get("/", isAuthenticated, getPost)
   .delete("/", isAuthenticated, deleteSinglePostById);
+
 router
   .get("/all", isAuthenticated, getAllPosts)
   .delete("/all", isAuthenticated, deletePostsById);
+
 router.post("/like", isAuthenticated, likeOrDislikePost);
 
 router

@@ -1,32 +1,54 @@
 const mongoose = require("mongoose");
-const db = require("./keys").MONGO_URI;
+const MONGO_URI = require("./keys").MONGO_URI;
 const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require("multer");
+const catchAsyncErrors = require("../api/middlewares/catchAsyncErrors");
 
-const promise = mongoose
-  .connect(db, {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-    useUnifiedTopology : true
-  })
-  .then(() => mongoose.connection.db)
-  .catch((err) => {
-    console.log(err);
+try{
+  mongoose
+  .connect(MONGO_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
   });
-
+}catch(e){
+  console.log(e);
+}
+mongoose.connection.on("connected", () => {
+  let db = mongoose.connections[0].db;
+  bucket = new mongoose.mongo.GridFSBucket(mongoose.connections[0].db, {
+    bucketName: "avatar"
+  });
+});
 const storage = new GridFsStorage({
-  db: promise,
+  url:MONGO_URI,
   file: (req, file) => {
-    if (file.memetype === "image/jpeg" || file.memetype === "image/jpg") {
-      return {
-        bucketName: "posts",
-        fileName: "file_" + Date.now(),
+    return new Promise((resolve, reject) => {
+      console.log(file);
+      const filename = file.originalname;
+      const fileInfo = {
+        filename: filename,
+        bucketName: "avatar"
       };
-    } else {
-      return null;
-    }
+      resolve(fileInfo);
+    });
   },
 });
 
-module.exports = upload = multer({ storage });
+exports.getAvatarImage=catchAsyncErrors(async(req, res, next)=>{
+  const file = bucket
+    .find({
+      filename : req.params.filename
+    })
+    .toArray((err, files) => {
+      if (!files || files.length === 0) {
+        return res.status(404)
+          .json({
+            err: "no files exist"
+          });
+      }
+      bucket.openDownloadStreamByName(req.params.filename)
+        .pipe(res);
+    });
+})
+
+exports.upload = multer({ storage });
