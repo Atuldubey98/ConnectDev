@@ -5,10 +5,11 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
   skills: {
     type: Array,
+    required: true
   },
   user: {
     type: Schema.Types.ObjectId,
-    ref: "user",
+    ref: "users",
   },
   handle: {
     type: String,
@@ -24,6 +25,7 @@ const ProfileSchema = new Schema({
   },
   date: {
     type: Date,
+    default : Date.now()
   },
 });
 module.exports = Profile = mongoose.model("profiles", ProfileSchema);

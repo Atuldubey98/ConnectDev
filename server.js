@@ -24,7 +24,6 @@ const post = require("./api/routes/post");
 
 // DB config
 
-// Connect to mongofb
 
 // Use Routes
 app.use("/api/users", user);
