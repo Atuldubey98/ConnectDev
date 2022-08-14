@@ -7,6 +7,8 @@ import useQuery from "../hooks/useQuery";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAllPosts } from "../redux/actions/postActions";
+import { getProfile } from "../redux/actions/profileActions";
+
 
 const HomePage = () => {
   const query = useQuery();
@@ -17,6 +19,7 @@ const HomePage = () => {
   const myPosts = query.has("myPosts") ? true : false;
   useEffect(() => {
     dispatch(getAllPosts(limit, page, s, myPosts));
+    dispatch(getProfile());
   }, [dispatch, limit, page, s, myPosts]);
   return (
     <div className="home">

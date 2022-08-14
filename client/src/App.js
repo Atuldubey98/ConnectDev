@@ -25,7 +25,7 @@ const App = () => {
           path="/"
           element={
             <PrivateRoute>
-              <HomePage />
+              <HomePage/>
             </PrivateRoute>
           }
         />
@@ -33,7 +33,7 @@ const App = () => {
           path="/compose"
           element={
             <PrivateRoute>
-              <ComposePage />
+              <ComposePage/>
             </PrivateRoute>
           }
         />
@@ -41,7 +41,7 @@ const App = () => {
           path="/profile"
           element={
             <PrivateRoute>
-              <ProfilePage />
+              <ProfilePage/>
             </PrivateRoute>
           }
         />
