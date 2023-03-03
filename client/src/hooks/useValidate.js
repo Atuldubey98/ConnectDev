@@ -19,7 +19,6 @@ const useValidate = (schemaType, schema) => {
     error.email = email.length <= 3 ? "Email should be greater than 3" : null;
     error.password =
       password.length <= 6 ? "Password should be greater than 6" : null;
-    console.log(error);
     return (
       Object.values(error).filter((val) => typeof val === "string").length > 0
     );

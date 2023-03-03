@@ -84,14 +84,14 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       path: "likes",
       populate: {
         path: "user",
-        select: "name email",
+        select: "name email avatar",
       },
     })
     .populate({
       path: "comments",
       populate: {
         path: "user",
-        select: "name email",
+        select: "name email avatar",
       },
     });
   const totalPages = Math.ceil(totalCount / limit);

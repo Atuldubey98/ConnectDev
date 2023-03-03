@@ -24,27 +24,29 @@ const Paginator = () => {
 
   if (!loading) {
     return (
-      <nav aria-label="Page navigation">
-        <ul className="pagination">
-          {Array.from(Array(metadata?.totalPages).keys()).map((page) => (
-            <li
-              key={page}
-              className={
-                query.get("page") === String(page)
-                  ? "page-item active"
-                  : "page-item"
-              }
-            >
-              <button
-                className="page-link"
-                onClick={() => navigateToPage(page)}
+      <div className="d-flex justify-content-center align-items-center">
+        <nav aria-label="Page navigation">
+          <ul className="pagination">
+            {Array.from(Array(metadata?.totalPages).keys()).map((page) => (
+              <li
+                key={page}
+                className={
+                  query.get("page") === String(page)
+                    ? "page-item active"
+                    : "page-item"
+                }
               >
-                {page + 1}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
+                <button
+                  className="page-link"
+                  onClick={() => navigateToPage(page)}
+                >
+                  {page + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
     );
   }
   return <div></div>;

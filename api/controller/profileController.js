@@ -8,9 +8,10 @@ const Exps = require("../../models/Exps");
 const Education = require("../../models/Education");
 const Handle = require("../../models/Handle");
 const User = require("../../models/User");
+const path = require("path");
 
 let gfs;
-connection.once("open", () => {
+connection.once("open", async () => {
   gfs = new mongoose.mongo.GridFSBucket(connection.db, {
     bucketName: "avatar",
   });
@@ -120,14 +121,14 @@ exports.getAvatarImage = catchAsyncErrors(async (req, res, next) => {
       filename: req.params.filename,
     })
     .toArray((err, files) => {
+      console.log(files);
       if (!files || files.length === 0) {
         return res.status(404).json({
           err: "no files exist",
         });
       }
-      console.log("Found");
     });
-  gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+    gfs.openDownloadStreamByName(req.params.filename).pipe(res);
 });
 
 exports.uploadAvatar = catchAsyncErrors(async (req, res, next) => {
@@ -139,8 +140,18 @@ exports.uploadAvatar = catchAsyncErrors(async (req, res, next) => {
       message: "Please attach avatar",
     });
   }
-
   const _id = req.user._id;
+  const existingUser = await User.findById(_id);
+  if (existingUser.avatar && existingUser.avatar !== "") {
+    const prevFileName = path.basename(existingUser.avatar);
+    gfs.find({ filename: prevFileName }).toArray((err, files) => {
+      if (files.length > 0) {
+        const id = files[0]._id;
+        gfs.delete(id);
+      }
+    });
+  }
+
   const user = await User.findOneAndUpdate(
     { _id },
     { avatar: `${req.originalUrl}/${file.filename}`, name },

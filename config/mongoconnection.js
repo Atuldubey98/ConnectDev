@@ -9,11 +9,12 @@ const storage = new GridFsStorage({
     return new Promise((resolve, reject) => {
       const filename = file.originalname;
       const fileInfo = {
-        filename: filename,
+        filename: filename + "_" + Date.now(),
         bucketName: "avatar",
       };
       resolve(fileInfo);
     });
   },
 });
+
 module.exports = upload = multer({ storage });
