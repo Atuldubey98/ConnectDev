@@ -5,7 +5,7 @@ import Posts from "../components/Posts";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 import { getAllPosts } from "../redux/actions/postActions";
-
+// import { io } from "socket.io-client";
 
 const HomePage = () => {
   const query = useQuery();
@@ -17,6 +17,9 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getAllPosts(limit, page, s, myPosts));
   }, [dispatch, limit, page, s, myPosts]);
+  // const socket = io("http://localhost:9000", {
+  //   withCredentials: true,
+  // });
   return (
     <div className="home">
       <Header />
@@ -24,7 +27,6 @@ const HomePage = () => {
         <div className="row">
           {query.has("nav") && <SideNav />}
           <Posts />
-          
         </div>
       </div>
     </div>
