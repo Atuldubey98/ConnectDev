@@ -1,13 +1,18 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/actions/userActions";
 import { useSelector } from "react-redux";
 
 const SideNav = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  console.log("http://localhost:9000" + user.avatar);
+  const navigate = useNavigate();
+  function navigateTo(url) {
+    if (url) {
+      navigate(url);
+    }
+  }
   const sideNavList = [
     {
       text: "Home",
@@ -49,6 +54,7 @@ const SideNav = () => {
             cursor: "pointer",
           }}
           className="list-group-item font-weight-bold list-group-item-action"
+          onClick={() => navigateTo(`/profile?nav=${true}`)}
         >
           {user && user.avatar ? (
             <img

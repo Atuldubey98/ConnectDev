@@ -1,3 +1,5 @@
+import avatar from "../assets/User-avatar.svg.png";
+
 const Comment = ({ comment }) => {
   const { user, text, date } = comment;
   const getFullDate = () => {
@@ -8,11 +10,10 @@ const Comment = ({ comment }) => {
   return (
     <div className="d-flex flex-start bg-white rounded p-1 m-1 border-success">
       <img
-        className="rounded-circle shadow-1-strong mr-2"
-        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp"
-        alt="avatar"
-        width="30"
-        height="30"
+        src={user.avatar ? "http://localhost:9000" + user.avatar : avatar}
+        className="rounded-circle mr-1 border border-5 border-success"
+        style={{ width: "30px", height: "30px", cursor: "pointer" }}
+        alt="Avatar"
       />
       <div>
         <h6 className="font-weight-bolder">{user && user?.name}</h6>

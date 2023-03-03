@@ -10,10 +10,45 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  PROFILE_PIC_LOADED,
+  PROFILE_PIC_ERROR,
+  PROFILE_PIC_LOADING,
 } from "../constants/userConstants";
 
-export const userReducer = (state = { user: {} }, action) => {
+export const userReducer = (
+  state = {
+    loading: true,
+    isAuthenticated: false,
+    user: null,
+    registerError: "",
+    profilePicLoading: false,
+    profilePicError: "",
+  },
+  action
+) => {
   switch (action.type) {
+    case PROFILE_PIC_LOADED:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          avatar: action.payload.avatar,
+          name: action.payload.name,
+        },
+        profilePicLoading: false,
+      };
+    case PROFILE_PIC_ERROR:
+      return {
+        ...state,
+        profilePicError: action.payload,
+        profilePicLoading: false,
+      };
+    case PROFILE_PIC_LOADING:
+      return {
+        ...state,
+        profilePicError: "",
+        profilePicLoading: true,
+      };
     case LOGIN_REQUEST:
       return {
         loading: true,
@@ -54,6 +89,11 @@ export const userReducer = (state = { user: {} }, action) => {
         error: action.payload,
       };
     case REGISTER_FAIL:
+      return {
+        ...state,
+        registerError: action.payload,
+        loading: false,
+      };
     case LOGOUT_FAIL:
       return {
         ...state,
@@ -75,8 +115,8 @@ export const userReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         error: null,
+        registerError: "",
       };
-
     default:
       return state;
   }

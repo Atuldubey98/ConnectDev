@@ -1,30 +1,48 @@
-import React, { useEffect, useState } from "react";
-import { login } from "../redux/actions/userActions";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../redux/actions/userActions";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useValidate from "../hooks/useValidate";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { validate, validationError } = useValidate("login", {
+    email,
+    password,
+  });
+  const [errorMsg, setErrorMsg] = useState({ email: null, password: null });
   const onFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(email, password));
+    if (validate()) {
+      setErrorMsg(validationError);
+    } else {
+      dispatch(login(email, password, navigate, setToast));
+    }
   };
+  function setToast(message) {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/?nav=true", { replace: true });
-    }
-  }, [isAuthenticated, navigate]);
+
   return (
     <div
       style={{
@@ -57,6 +75,9 @@ const LoginPage = () => {
               placeholder={"user@example.com"}
               aria-describedby="emailHelp"
             />
+            {errorMsg.email ? (
+              <small className="form-text text-danger">{errorMsg.email}</small>
+            ) : null}
           </div>
           <div className="mb-3">
             <label
@@ -73,6 +94,11 @@ const LoginPage = () => {
               className="form-control"
               id="exampleInputPassword1"
             />
+            {errorMsg.password ? (
+              <small className="form-text text-danger">
+                {errorMsg.password}
+              </small>
+            ) : null}
           </div>
           <div className=" mb-3 d-flex flex-column align-items-center">
             <button type="submit" className="btn btn-success mb-1">
@@ -82,6 +108,7 @@ const LoginPage = () => {
           </div>
         </form>
       )}
+      <ToastContainer />
     </div>
   );
 };

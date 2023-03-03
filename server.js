@@ -3,14 +3,22 @@ const app = express();
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 require("./config/mongoconnection");
-app.use(cookieParser());
 const cors = require("cors");
-app.use(
-  cors({
-    origin: ["http://localhost:3000"],
-    credentials: true,
-  })
-);
+
+const whitelist = ["http://localhost:3000", "http://localhost:9000"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(
   bodyParser.urlencoded({
     extended: false,
@@ -25,7 +33,6 @@ const post = require("./api/routes/post");
 const errorMiddleware = require("./api/middlewares/error");
 
 // DB config
-
 
 // Use Routes
 app.use("/api/users", user);

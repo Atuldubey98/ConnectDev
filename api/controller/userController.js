@@ -42,10 +42,6 @@ exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
 
 exports.getCurrentUserProfile = catchAsyncErrors(async (req, res,next)=>{
   const user = req.user;
-  const profile = await Profile.findOne({user:user._id});
-  if (!profile) {
-    return res.status(200).json(user);
-  }
   return res.status(200).json(user);
 })
 

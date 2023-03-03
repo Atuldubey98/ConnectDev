@@ -6,9 +6,23 @@ import {
   likePost,
   postComment,
 } from "../redux/actions/postActions";
+import { useNavigate } from "react-router-dom";
 const Post = ({ post }) => {
   const bottomRef = useRef(null);
-  const { text, likes, comments, title, subtitle, header, color } = post;
+  const navigate = useNavigate();
+  function navigateTo(url) {
+    navigate(url);
+  }
+  const {
+    text,
+    likes,
+    comments,
+    title,
+    subtitle,
+    header,
+    color,
+    user: userId,
+  } = post;
   const [isDeleted, setIsDeleted] = useState(color);
   const [commentText, setCommentText] = useState("");
   const handleCommentTextChange = (e) => {
@@ -109,7 +123,16 @@ const Post = ({ post }) => {
                 </div>
               </div>
             )}
-            <div className="dropdown-item btn" to="#">
+            <div
+              onClick={() => {
+                if (user._id === userId) {
+                  navigateTo("/profile");
+                } else {
+                  navigateTo("/random-user/" + userId);
+                }
+              }}
+              className="dropdown-item btn"
+            >
               <i className="fa-solid fa-user"></i>
               <span className="ml-2">Take me to profle</span>
             </div>

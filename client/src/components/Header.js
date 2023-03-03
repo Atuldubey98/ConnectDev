@@ -72,7 +72,7 @@ const Header = () => {
     },
     {
       text: "Profile",
-      link: "/profile",
+      link: "/profile?nav=true",
       className: "mr-3",
       iconClass: "fa-solid fa-user mr-2",
     },

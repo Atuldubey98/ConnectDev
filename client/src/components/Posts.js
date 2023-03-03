@@ -7,10 +7,12 @@ const Posts = () => {
   const { posts, loading, error } = useSelector((state) => state.posts);
 
   return (
-    <div className="col-md-7 d-flex flex-column justify-content-center align-items-center">
+    <div className="col-md-7 col rod-flex flex-column justify-content-center align-items-center">
       {loading ? (
-        <div className="spinner-border text-success" role="status">
-          <span className="sr-only">Loading...</span>
+        <div className="d-flex justify-content-center align-items-center">
+          <div className="spinner-border text-success" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
         </div>
       ) : (
         posts.length > 0 &&

@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "../components/Header";
-import SideNav from "../components/SideNav";
-import RightNav from "../components/RightNav";
 import ProfileUpdates from "../components/ProfileUpdates";
+import RightNav from "../components/RightNav";
+import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 const ProfilePage = () => {
   const query = useQuery();

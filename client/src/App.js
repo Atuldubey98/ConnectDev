@@ -1,31 +1,30 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import ComposePage from "./pages/ComposePage";
 import HomePage from "./pages/HomePage";
-import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
+import SignupPage from "./pages/SignupPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 import { loadUser } from "./redux/actions/userActions";
 const App = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   useEffect(() => {
     dispatch(loadUser());
-  }, [dispatch, navigate]);
+  }, [dispatch]);
   return (
     <div className="app">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-
         <Route
           path="/"
           element={
             <PrivateRoute>
-              <HomePage/>
+              <HomePage />
             </PrivateRoute>
           }
         />
@@ -33,7 +32,7 @@ const App = () => {
           path="/compose"
           element={
             <PrivateRoute>
-              <ComposePage/>
+              <ComposePage />
             </PrivateRoute>
           }
         />
@@ -41,7 +40,15 @@ const App = () => {
           path="/profile"
           element={
             <PrivateRoute>
-              <ProfilePage/>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/random-user/:userId"
+          element={
+            <PrivateRoute>
+              <UserProfilePage />
             </PrivateRoute>
           }
         />

@@ -1,13 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Header from "../components/Header";
 import Posts from "../components/Posts";
-import RightNav from "../components/RightNav";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { getAllPosts } from "../redux/actions/postActions";
-import { getProfile } from "../redux/actions/profileActions";
 
 
 const HomePage = () => {
@@ -19,7 +16,6 @@ const HomePage = () => {
   const myPosts = query.has("myPosts") ? true : false;
   useEffect(() => {
     dispatch(getAllPosts(limit, page, s, myPosts));
-    dispatch(getProfile());
   }, [dispatch, limit, page, s, myPosts]);
   return (
     <div className="home">
@@ -28,7 +24,7 @@ const HomePage = () => {
         <div className="row">
           {query.has("nav") && <SideNav />}
           <Posts />
-          <RightNav />
+          
         </div>
       </div>
     </div>
