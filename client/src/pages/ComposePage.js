@@ -1,7 +1,6 @@
 import React from "react";
 import Compose from "../components/Compose";
 import Header from "../components/Header";
-import RightNav from "../components/RightNav";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 
@@ -15,7 +14,6 @@ const ComposePage = () => {
         <div className="row">
           {query.has("nav") && <SideNav />}
           <Compose />
-          <RightNav />
         </div>
       </div>
     </div>

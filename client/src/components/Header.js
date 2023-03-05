@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Link,
   useNavigate,
   createSearchParams,
   useLocation,
 } from "react-router-dom";
+import { SocketContext } from "../context/SocketContext";
 import useQuery from "../hooks/useQuery";
 const Header = () => {
   const [search, setsearch] = useState("");
   const location = useLocation();
+  const { connected } = useContext(SocketContext);
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     let params = {};
@@ -85,16 +87,21 @@ const Header = () => {
       search: `?${createSearchParams(params)}`,
     });
   };
+
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
       <div className="container-fluid">
-        <div className="navbar-header d-flex">
+        <div className="navbar-header d-flex align-items-center justify-content-center">
           <button className="btn btn-light" onClick={navigateToSideNav}>
             <i className="fa-solid fa-bars" style={{ cursor: "pointer" }}></i>
           </button>
           <Link className="navbar-brand font-weight-bold" to="#">
             Connect Dev
           </Link>
+          <i
+            className="fa-solid fa-circle"
+            style={{ color: connected ? "green" : "red" }}
+          />
         </div>
         <ul className="nav navbar-nav navbar-left d-none d-xl-flex">
           {headerNavList.map((h) => (

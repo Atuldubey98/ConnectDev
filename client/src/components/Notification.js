@@ -2,7 +2,7 @@ import React from "react";
 const Notification = () => {
   return (
     <div
-      className="toast m-2 card p-2 show"
+      className="toast m-2 card p-2"
       role="alert"
       aria-live="assertive"
       aria-atomic="true"

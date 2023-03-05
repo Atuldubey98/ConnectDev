@@ -1,5 +1,5 @@
 const sendToken = async (user, statusCode, res) => {
-  const token = await user.getJWTToken(user.email, user.name);
+  const token = await user.getJWTToken(user.email, user.name, user._id);
   // options for cookie
   const options = {
     httpOnly: true,

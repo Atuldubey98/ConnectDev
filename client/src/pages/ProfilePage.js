@@ -1,7 +1,6 @@
 import React from "react";
 import Header from "../components/Header";
 import ProfileUpdates from "../components/ProfileUpdates";
-import RightNav from "../components/RightNav";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 const ProfilePage = () => {
@@ -13,7 +12,6 @@ const ProfilePage = () => {
         <div className="row">
           {query.has("nav") && <SideNav />}
           <ProfileUpdates />
-          <RightNav />
         </div>
       </div>
     </div>

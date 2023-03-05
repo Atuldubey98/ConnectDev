@@ -25,11 +25,12 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
-UserSchema.methods.getJWTToken = (email, name) => {
+UserSchema.methods.getJWTToken = (email, name, id) => {
   return jwt.sign(
     {
       email,
       name,
+      id
     },
     process.env.JWT_SECRET,
     {

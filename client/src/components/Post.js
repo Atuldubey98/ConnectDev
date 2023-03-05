@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
 import {
@@ -7,6 +7,7 @@ import {
   postComment,
 } from "../redux/actions/postActions";
 import { useNavigate } from "react-router-dom";
+import { SocketContext } from "../context/SocketContext";
 const Post = ({ post }) => {
   const bottomRef = useRef(null);
   const navigate = useNavigate();
@@ -38,15 +39,24 @@ const Post = ({ post }) => {
   const [loadedComments, setLoadedComments] = useState(comments);
   const [loadingComments, setLoadingComments] = useState(false);
   const [length, setLength] = useState(likes.length);
+  const {
+    connected,
+    likePost: likePostSocket,
+    commentOnPostSocket,
+  } = useContext(SocketContext);
   const likeThePost = async () => {
     try {
       setLoading(true);
       const res = await likePost(post._id);
+
+      if (connected) {
+        likePostSocket({ _id: post._id, user: userId, liked: res });
+      }
       setLoading(false);
       setLiked(res);
       setLength((len) => (len += res ? 1 : -1));
     } catch (e) {
-      console.log(e);
+      setLoading(false);
     }
   };
 
@@ -56,10 +66,11 @@ const Post = ({ post }) => {
       setLoadingComments(true);
       const res = await postComment(post._id, commentText);
       setLoadedComments((c) => [...c, res]);
+      commentOnPostSocket({ _id: post._id, user: userId });
       setLoadingComments(false);
       setCommentText("");
     } catch (e) {
-      console.log(e);
+      setLoadingComments(false);
     }
   };
   const deleteSinglePost = () => {
