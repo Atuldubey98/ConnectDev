@@ -9,6 +9,8 @@ import {
   postsReducer,
 } from "./reducers/postsReducer";
 import { randomUserReducer } from "./reducers/randomUserReducer";
+import { chatUserReducer } from "./reducers/chatUserReducer";
+import { chatReducer } from "./reducers/chatReducer";
 
 const reducer = combineReducers({
   user: userReducer,
@@ -17,6 +19,8 @@ const reducer = combineReducers({
   itemDelete: itemDeleteReducer,
   profile: profileReducer,
   ranProfile: randomUserReducer,
+  chatUser: chatUserReducer,
+  chats: chatReducer,
 });
 const middlewares = [thunk];
 const store = createStore(reducer, {}, applyMiddleware(...middlewares));

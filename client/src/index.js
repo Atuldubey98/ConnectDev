@@ -8,13 +8,13 @@ import { Provider } from "react-redux";
 import { SocketContextProvider } from "./context/SocketContext";
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <CookiesProvider>
-        <SocketContextProvider>
+    <SocketContextProvider>
+      <BrowserRouter>
+        <CookiesProvider>
           <App />
-        </SocketContextProvider>
-      </CookiesProvider>
-    </BrowserRouter>
+        </CookiesProvider>
+      </BrowserRouter>
+    </SocketContextProvider>
   </Provider>,
   document.getElementById("root")
 );

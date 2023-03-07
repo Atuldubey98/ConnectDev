@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Header";
 import Posts from "../components/Posts";
 import SideNav from "../components/SideNav";
 import useQuery from "../hooks/useQuery";
 import { getAllPosts } from "../redux/actions/postActions";
-import "react-toastify/dist/ReactToastify.css";
 const HomePage = () => {
   const query = useQuery();
   const dispatch = useDispatch();

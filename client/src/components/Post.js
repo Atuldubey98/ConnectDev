@@ -48,7 +48,7 @@ const Post = ({ post }) => {
     try {
       setLoading(true);
       const res = await likePost(post._id);
-
+      console.log(connected)
       if (connected) {
         likePostSocket({ _id: post._id, user: userId, liked: res });
       }
