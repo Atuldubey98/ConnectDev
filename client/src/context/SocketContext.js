@@ -2,9 +2,10 @@ import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { API_URL } from "../instance";
 import { CHAT_MESSAGE_ADD } from "../redux/constants/chatConstants";
 export const SocketContext = createContext();
-export const socket = io("http://localhost:9000", {
+export const socket = io(API_URL, {
   withCredentials: true,
 });
 
