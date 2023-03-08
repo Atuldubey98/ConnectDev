@@ -21,7 +21,7 @@ const SideNav = () => {
     },
     {
       text: "Chats",
-      link: "/",
+      link: "/chats?nav=true",
       iconClass: "fa-brands fa-rocketchat mr-2",
     },
     {

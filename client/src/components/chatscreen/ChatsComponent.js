@@ -6,7 +6,7 @@ import {
   CHATS_ERROR,
   CHATS_LOADING,
   CHATS_RESET,
-  CHATS_SUCCESS
+  CHATS_SUCCESS,
 } from "../../redux/constants/chatConstants";
 import MessageComponent from "./MessageComponent";
 function ChatsComponent({ onSetShow, roomChat }) {
@@ -23,7 +23,10 @@ function ChatsComponent({ onSetShow, roomChat }) {
       dispatch({ type: CHATS_LOADING });
       try {
         const { data } = await instance.get(`/api/chat/chats/${roomChat._id}`);
-        dispatch({ type: CHATS_SUCCESS, payload: data.messages });
+        dispatch({
+          type: CHATS_SUCCESS,
+          payload: { messages: data.messages, roomId: roomChat._id },
+        });
         messageRef.current.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
         dispatch({ type: CHATS_ERROR, payload: "No Chats found" });
@@ -54,7 +57,7 @@ function ChatsComponent({ onSetShow, roomChat }) {
       </div>
       <div
         style={{ height: "65vh" }}
-        className="container-md col overflow-auto"
+        className="container-md col overflow-auto "
       >
         {loading ? (
           <div className="d-flex justify-content-center align-items-center pt-5">
@@ -63,16 +66,18 @@ function ChatsComponent({ onSetShow, roomChat }) {
             </div>
           </div>
         ) : (
-          messages.map((message) => {
-            const sameUser = message.user._id === currentUser._id;
-            return (
-              <MessageComponent
-                key={message._id}
-                message={message}
-                sameUser={sameUser}
-              />
-            );
-          })
+          <div className="pl-2 pr-2">
+            {messages.map((message) => {
+              const sameUser = message.user._id === currentUser._id;
+              return (
+                <MessageComponent
+                  key={message._id}
+                  message={message}
+                  sameUser={sameUser}
+                />
+              );
+            })}
+          </div>
         )}
         <div ref={messageRef} className="dummy__msg"></div>
       </div>

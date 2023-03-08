@@ -10,7 +10,6 @@ export const socket = io("http://localhost:9000", {
 
 export const SocketContextProvider = ({ children }) => {
   const [connected, setConnected] = useState(false);
-
   const dispatch = useDispatch();
   const messageRef = useRef();
   useEffect(() => {
@@ -30,14 +29,12 @@ export const SocketContextProvider = ({ children }) => {
         socket.connect();
       }
     });
-
     socket.on("connect_error", () => {});
     socket.on("private", (data) => {
       dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
       messageRef.current.scrollIntoView({ behavior: "smooth" });
     });
     socket.on("notify", (data) => {
-      console.log(data);
       toast.info(data.message, {
         position: "top-right",
         autoClose: 2000,

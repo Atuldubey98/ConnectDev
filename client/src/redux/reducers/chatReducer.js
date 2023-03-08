@@ -7,15 +7,16 @@ import {
 } from "../constants/chatConstants";
 
 const initialState = {
+  roomId: "",
   messages: [],
   loading: false,
-  error: true,
+  error: "",
 };
 export const chatReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case CHATS_RESET:
-      return { ...state, ...initialState };
+      return { ...state, messages: [], loading: false, error: "" };
     case CHATS_LOADING:
       return {
         ...state,
@@ -25,16 +26,19 @@ export const chatReducer = (state = initialState, action) => {
       return {
         ...state,
         error: payload,
+        roomId: "",
       };
     case CHATS_SUCCESS:
       return {
         ...state,
-        messages: payload,
+        roomId: payload.roomId,
+        messages: payload.messages,
         loading: false,
       };
     case CHAT_MESSAGE_ADD:
       return {
         ...state,
+        roomId: payload.roomId,
         messages: [...state.messages, payload],
       };
     default:
