@@ -59,7 +59,6 @@ io.on("connection", async (socket) => {
   }
   socket.on("message", async (data) => {
     const { room, msgBody } = data;
-
     const message = new Message({
       roomId: room._id,
       user: socket.user.id,

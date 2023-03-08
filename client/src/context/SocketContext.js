@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
@@ -12,6 +12,13 @@ export const SocketContextProvider = ({ children }) => {
   const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const messageRef = useRef();
+  const privateReaction = useCallback(
+    (data) => {
+      dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
+      messageRef.current.scrollIntoView({ behavior: "smooth" });
+    },
+    [dispatch]
+  );
   useEffect(() => {
     socket.on("connect", () => {
       console.log("User connected !");
@@ -31,8 +38,7 @@ export const SocketContextProvider = ({ children }) => {
     });
     socket.on("connect_error", () => {});
     socket.on("private", (data) => {
-      dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
-      messageRef.current.scrollIntoView({ behavior: "smooth" });
+      privateReaction(data);
     });
     socket.on("notify", (data) => {
       toast.info(data.message, {
@@ -46,7 +52,8 @@ export const SocketContextProvider = ({ children }) => {
         theme: "light",
       });
     });
-  }, [dispatch]);
+  }, [dispatch, privateReaction]);
+
   function sendMsgOnSocket(data) {
     socket.emit("message", data);
   }
