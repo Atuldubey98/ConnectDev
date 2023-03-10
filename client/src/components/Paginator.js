@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import useQuery from "../hooks/useQuery";
 
 const Paginator = () => {
-  const { loading, metadata } = useSelector((state) => state.posts);
+  const { loading, metadata, posts } = useSelector((state) => state.posts);
   const query = useQuery();
   const navigate = useNavigate();
   const navigateToPage = (page) => {
@@ -23,11 +23,12 @@ const Paginator = () => {
   };
 
   if (!loading) {
+    const pages = Array.from(Array(metadata?.totalPages).keys())
     return (
       <div className="d-flex justify-content-center align-items-center">
         <nav aria-label="Page navigation">
           <ul className="pagination">
-            {Array.from(Array(metadata?.totalPages).keys()).map((page) => (
+            {posts.length > 0 && pages.map((page) => (
               <li
                 key={page}
                 className={
