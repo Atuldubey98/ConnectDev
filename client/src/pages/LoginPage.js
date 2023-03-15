@@ -47,6 +47,7 @@ const LoginPage = () => {
     <div
       style={{
         height: "100vh",
+        backgroundColor: '#a3ebb1'
       }}
       className="container-fluid d-flex justify-content-center align-items-center"
     >

@@ -104,9 +104,7 @@ const Post = ({ post }) => {
         <p className="card-tex">{text}</p>
       </div>
       <div className="card-footer d-flex align-items-center justify-content-around">
-        <button className="btn btn-primary card-link">
-          <span>Open</span>
-        </button>
+
         <div className="dropdown">
           <button
             className="btn btn-light card-link"
