@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/actions/userActions";
 import { useSelector } from "react-redux";
+import { socket } from "../context/SocketContext";
 
 const SideNav = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const SideNav = () => {
     },
   ];
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logout(socket));
   };
   return (
     <div className="col-md-2 d-flex flex-column">

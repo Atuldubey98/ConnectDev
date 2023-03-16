@@ -36,6 +36,10 @@ exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
     expires: new Date(Date.now()),
     httpOnly: true,
   });
+  res.cookie("io", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+  });
   return res.status(200).json({ status: true, message: "User logged out" });
 });
 

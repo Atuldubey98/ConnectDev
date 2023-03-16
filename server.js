@@ -24,7 +24,7 @@ const port = process.env.PORT || 9000;
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cookie: true,
+  cookie: false,
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],

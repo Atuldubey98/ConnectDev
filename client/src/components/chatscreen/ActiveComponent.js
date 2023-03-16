@@ -47,6 +47,15 @@ function ActiveComponent() {
                 <span className="sr-only">Loading...</span>
               </div>
             </div>
+          ) : active.length === 0 ? (
+            <div
+              className="d-flex align-items-center justify-content-center"
+              style={{ height: "10rem" }}
+            >
+              <p className="text-secondary text-center">
+                Add Friends to from Search
+              </p>
+            </div>
           ) : (
             <ul className="list-group">
               {active.map(({ room }) => {

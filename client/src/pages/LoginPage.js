@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { socket } from "../context/SocketContext";
 import { login } from "../redux/actions/userActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -16,12 +17,14 @@ const LoginPage = () => {
     password,
   });
   const [errorMsg, setErrorMsg] = useState({ email: null, password: null });
+
   const onFormSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
       setErrorMsg(validationError);
     } else {
       dispatch(login(email, password, navigate, setToast));
+      socket.connect();
     }
   };
   function setToast(message) {
@@ -47,7 +50,7 @@ const LoginPage = () => {
     <div
       style={{
         height: "100vh",
-        backgroundColor: '#a3ebb1'
+        backgroundColor: "#a3ebb1",
       }}
       className="container-fluid d-flex justify-content-center align-items-center"
     >

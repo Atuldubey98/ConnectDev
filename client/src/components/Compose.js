@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import useValidate from "../hooks/useValidate";
 import { addPost } from "../redux/actions/postActions";
 
 const Compose = () => {
   const [text, setText] = useState("");
   const { item, loading, error } = useSelector((state) => state.item);
+
   const [header, setHeader] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [title, setTitle] = useState("");
@@ -26,8 +28,22 @@ const Compose = () => {
   const handleColorChange = (e) => {
     setColor(e.target.value);
   };
+  const { validate, validationError } = useValidate("compose", {
+    header,
+    text,
+  });
+  const defaultErrorMsg = { header: null, text: null };
+  const [errorMsg, setErrorMsg] = useState(defaultErrorMsg);
+
   const onComposeSubmit = (e) => {
     e.preventDefault();
+    if (validate()) {
+      setErrorMsg(validationError);
+      setTimeout(() => {
+        setErrorMsg(defaultErrorMsg);
+      }, 2000);
+      return;
+    }
     dispatch(addPost({ title, text, header, subtitle, color }));
   };
   const handlePreview = (e) => {
@@ -65,16 +81,23 @@ const Compose = () => {
             {preview ? (
               <span className="font-weight-bold">{header}</span>
             ) : (
-              <textarea
-                disabled={loading}
-                placeholder="Enter header here"
-                className="form-control"
-                value={header}
-                onChange={onHeaderChange}
-                style={{
-                  border: "none",
-                }}
-              />
+              <div className="w-100">
+                <textarea
+                  disabled={loading}
+                  placeholder="Enter header here"
+                  className="form-control w-100"
+                  value={header}
+                  onChange={onHeaderChange}
+                  style={{
+                    border: "none",
+                  }}
+                />
+                {errorMsg.header ? (
+                  <small className="form-text text-danger">
+                    {errorMsg.header}
+                  </small>
+                ) : null}
+              </div>
             )}
           </div>
           <div className="card-body">
@@ -108,13 +131,20 @@ const Compose = () => {
               {preview ? (
                 text
               ) : (
-                <textarea
-                  disabled={loading}
-                  className="form-control"
-                  value={text}
-                  onChange={onTextChange}
-                  placeholder="Enter text here"
-                />
+                <div className="w-100">
+                  <textarea
+                    disabled={loading}
+                    className="w-100 form-control"
+                    value={text}
+                    onChange={onTextChange}
+                    placeholder="Enter text here"
+                  />
+                  {errorMsg.text ? (
+                    <small className="form-text text-danger">
+                      {errorMsg.text}
+                    </small>
+                  ) : null}
+                </div>
               )}
             </p>
           </div>

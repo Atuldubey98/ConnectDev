@@ -14,9 +14,17 @@ const Posts = () => {
             <span className="sr-only">Loading...</span>
           </div>
         </div>
-      ) : (
-        posts.length > 0 &&
+      ) : posts.length > 0 ? (
         posts.map((post) => <Post key={post._id} post={post} />)
+      ) : (
+        <div
+          className="d-flex align-items-center justify-content-center"
+          style={{ height: "10rem" }}
+        >
+          <p className="text-secondary text-center">
+            Add Friends to from Search
+          </p>
+        </div>
       )}
       {error && (
         <div className="alert alert-danger" role="alert">

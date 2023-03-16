@@ -4,6 +4,9 @@ const sendToken = async (user, statusCode, res) => {
   const options = {
     httpOnly: true,
     sameSite: true,
+    path: "/",
+    expires: new Date(Date.now() + 900000),
+    secure: process.env.NODE_ENV !== "development",
   };
   res.status(statusCode).cookie("token", token, options).json(user);
 };

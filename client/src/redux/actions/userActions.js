@@ -58,11 +58,14 @@ export const loadUser = () => async (dispatch) => {
     dispatch({ type: LOAD_USER_FAIL, payload: error.message });
   }
 };
-export const logout = () => async (dispatch) => {
+export const logout = (socket) => async (dispatch) => {
   try {
+
     await instance.post("/api/users/logout");
+    socket.disconnect();
     dispatch({ type: LOGOUT_SUCCESS });
   } catch (error) {
+    console.log(error);
     dispatch({ type: LOGOUT_FAIL, payload: error.message });
   }
 };

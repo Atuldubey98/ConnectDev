@@ -62,7 +62,7 @@ const Header = () => {
     },
     {
       text: "Chats",
-      link: "/chats",
+      link: "/chats?nav=true",
       className: "mr-3",
       iconClass: "fa-brands fa-rocketchat mr-2",
     },
