@@ -15,17 +15,16 @@ const ProfileModal = () => {
   const dispatch = useDispatch();
   function onSubmit(e) {
     e.preventDefault();
-    if (picked) {
-      dispatch(
-        updateProfilePicture(
-          profilePhoto,
-          nameRef.current.value,
-          toggleModal,
-          showToast
-        )
-      );
-      setShow(false);
-    }
+    dispatch(
+      updateProfilePicture(
+        profilePhoto,
+        nameRef.current.value,
+        toggleModal,
+        showToast,
+        picked
+      )
+    );
+    setShow(false);
   }
   function showToast(message) {
     toast.success(message, {

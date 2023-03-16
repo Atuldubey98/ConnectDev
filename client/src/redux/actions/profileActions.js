@@ -38,12 +38,15 @@ export const addProfile = (profile) => async (dispatch) => {
 };
 
 export const updateProfilePicture =
-  (avatar, name, toggleModal, showToast) => async (dispatch) => {
+  (avatar, name, toggleModal, showToast, picked) => async (dispatch) => {
     try {
       dispatch({ type: PROFILE_PIC_LOADING });
       const form = new FormData();
-      form.append("avatar", avatar);
+      if (picked) {
+        form.append("avatar", avatar);
+      }
       form.append("name", name);
+      
       const { data } = await instance.post("/api/profile/avatar", form, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -56,6 +59,7 @@ export const updateProfilePicture =
       toggleModal();
       showToast(data.message);
     } catch (error) {
+      console.log(error);
       dispatch({
         type: PROFILE_PIC_ERROR,
         payload: error.response.data.message,

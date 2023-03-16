@@ -128,19 +128,29 @@ exports.getAvatarImage = catchAsyncErrors(async (req, res, next) => {
         });
       }
     });
-    gfs.openDownloadStreamByName(req.params.filename).pipe(res);
+  gfs.openDownloadStreamByName(req.params.filename).pipe(res);
 });
 
 exports.uploadAvatar = catchAsyncErrors(async (req, res, next) => {
   const file = req.file;
-  const { name } = req.body;
-  if (!file) {
+  if (!('name' in req.body) && !file) {
     return res.status(400).json({
       status: false,
-      message: "Please attach avatar",
+      message: "Please attach avatar as well as name",
     });
   }
   const _id = req.user._id;
+  const { name } = req.body;
+  if (!file) {
+    const user = await User.findOneAndUpdate(
+      { _id },
+      { name },
+      { new: true }
+    ).select("name");
+    return res
+      .status(201)
+      .json({ status: true, message: `Avatar uploaded`, user });
+  }
   const existingUser = await User.findById(_id);
   if (existingUser.avatar && existingUser.avatar !== "") {
     const prevFileName = path.basename(existingUser.avatar);
