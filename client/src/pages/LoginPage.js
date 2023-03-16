@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { socket } from "../context/SocketContext";
-import { login } from "../redux/actions/userActions";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useValidate from "../hooks/useValidate";
+import { login } from "../redux/actions/userActions";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
@@ -24,7 +23,6 @@ const LoginPage = () => {
       setErrorMsg(validationError);
     } else {
       dispatch(login(email, password, navigate, setToast));
-      socket.connect();
     }
   };
   function setToast(message) {
@@ -76,6 +74,7 @@ const LoginPage = () => {
               className="form-control"
               id="exampleInputEmail1"
               value={email}
+              autoFocus={true}
               placeholder={"user@example.com"}
               aria-describedby="emailHelp"
             />

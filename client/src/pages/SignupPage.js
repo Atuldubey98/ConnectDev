@@ -95,6 +95,7 @@ const SignupPage = () => {
               className="form-control"
               id="name"
               required
+              autoFocus={true}
               value={name}
               placeholder={"First Name + Last Name"}
               aria-describedby="name"
@@ -115,6 +116,7 @@ const SignupPage = () => {
               onChange={handleEmailChange}
               className="form-control"
               id="exampleInputEmail1"
+              
               value={email}
               required
               placeholder={"user@example.com"}

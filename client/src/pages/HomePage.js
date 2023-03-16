@@ -1,11 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Header";
 import Posts from "../components/Posts";
 import SideNav from "../components/SideNav";
-import { socket, SocketContext } from "../context/SocketContext";
+import { socket } from "../context/SocketContext";
+
 import useQuery from "../hooks/useQuery";
 import { getAllPosts } from "../redux/actions/postActions";
 const HomePage = () => {
@@ -15,13 +16,9 @@ const HomePage = () => {
   const page = query.has("page") ? query.get("page") : 0;
   const s = query.has("s") ? query.get("s") : "";
   const myPosts = query.has("myPosts") ? true : false;
-  const { connected } = useContext(SocketContext);
+
   useEffect(() => {
-    if (!connected) {
-      socket.connect();
-    }
-  }, [connected]);
-  useEffect(() => {
+    socket.connect();
     dispatch(getAllPosts(limit, page, s, myPosts));
   }, [dispatch, limit, page, s, myPosts]);
 

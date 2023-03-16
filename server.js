@@ -1,6 +1,5 @@
 require("./config/mongoconnection");
 const express = require("express");
-const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { parse } = require("cookie");
@@ -32,6 +31,7 @@ const io = new Server(server, {
   },
 });
 io.use((socket, next) => {
+  
   const fetchedToken = socket.handshake.headers.cookie;
   if (fetchedToken) {
     const token = parse(fetchedToken).token;
@@ -44,19 +44,9 @@ io.use((socket, next) => {
       next();
     }
   }
+  
 });
 io.on("connection", async (socket) => {
-  try {
-    console.log("Connecting --->", socket.id);
-    const posts = await Post.find({ user: socket.user.id }).select("_id");
-    const chatRooms = await Contact.find({ user: socket.user.id }).select(
-      "room"
-    );
-    chatRooms.forEach(({ room }) => socket.join("room:" + room));
-    posts.forEach((post) => socket.join("post:" + post._id));
-  } catch (error) {
-    console.log(error);
-  }
   socket.on("message", async (data) => {
     const { room, msgBody } = data;
     const message = new Message({
@@ -121,6 +111,18 @@ io.on("connection", async (socket) => {
   socket.on("disconnect", () => {
     console.log("Disconnected ---> ", socket.id);
   });
+  try {
+    console.log("Connecting --->", socket.id);
+    const posts = await Post.find({ user: socket.user.id }).select("_id");
+    const chatRooms = await Contact.find({ user: socket.user.id }).select(
+      "room"
+    );
+    chatRooms.forEach(({ room }) => socket.join("room:" + room));
+    posts.forEach((post) => socket.join("post:" + post._id));
+    console.log(posts);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const corsOptions = {
@@ -138,13 +140,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(
-  morgan("combined", {
-    skip: function (req, res) {
-      return res.statusCode < 400;
-    },
-  })
-);
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(
