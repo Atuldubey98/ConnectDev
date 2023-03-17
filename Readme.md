@@ -61,7 +61,7 @@ git clone git@github.com:Atuldubey98/ConnectDev.git
 cd ConnectDev && npm install
 ```
 
-3. Create .env file in project directory with following env variables.
+3. Create .env file in project directory with following env variables. Rename .env.example to .env and and make changes.
 ```
 MONGO_URI=
 SECRET_KEY=
