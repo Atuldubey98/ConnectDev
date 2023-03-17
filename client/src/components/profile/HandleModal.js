@@ -56,7 +56,8 @@ function HandleModal() {
                   Link to Profile
                 </label>
                 <input
-                  type="text"
+                  type="url"
+                  required
                   value={handle.link}
                   name="link"
                   onChange={onChange}

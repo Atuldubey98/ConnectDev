@@ -4,14 +4,15 @@ import { EXP_ADD } from "../../redux/constants/profileConstants";
 import uuid from "react-uuid";
 
 const ExperienceModal = () => {
-  const [exp, setExp] = useState({
+  const defaultExp = {
     title: "",
     company: "",
     fromDate: "",
     toDate: "",
     description: "",
     location: "",
-  });
+  };
+  const [exp, setExp] = useState(defaultExp);
   const onChange = (e) => {
     const { name, value } = e.target;
     setExp({ ...exp, [name]: value });
@@ -24,6 +25,7 @@ const ExperienceModal = () => {
       type: EXP_ADD,
       payload: { ...other, _id: uuid(), dates: `${fromDate} - ${toDate}` },
     });
+    setExp(defaultExp);
   }
   return (
     <div
@@ -57,6 +59,7 @@ const ExperienceModal = () => {
                   value={exp.title}
                   className="form-control"
                   id="title"
+                  required
                   name="title"
                   onChange={onChange}
                   aria-describedby="title"
@@ -68,6 +71,7 @@ const ExperienceModal = () => {
                 </label>
                 <input
                   type="text"
+                  required
                   value={exp.company}
                   name="company"
                   onChange={onChange}

@@ -10,7 +10,7 @@ import HandleTabBody from "./profile/HandleTabBody";
 import StatusBody from "./profile/StatusBody";
 import avatar from "../assets/User-avatar.svg.png";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProfileUpdates = () => {
   const { user } = useSelector((state) => state.user);
@@ -42,7 +42,19 @@ const ProfileUpdates = () => {
 
   function onSubmit(e) {
     e.preventDefault();
-    dispatch(addProfile(profile));
+    dispatch(addProfile(profile, showError));
+  }
+  function showError(message) {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   }
   function onCopyProfile() {
     navigator.clipboard.writeText(

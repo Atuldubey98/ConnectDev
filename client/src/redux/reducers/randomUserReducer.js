@@ -35,6 +35,7 @@ export const randomUserReducer = (
       return {
         ...state,
         ranProfileError: action.payload,
+        ranProfileLoading : false,
       };
     default:
       return state;
