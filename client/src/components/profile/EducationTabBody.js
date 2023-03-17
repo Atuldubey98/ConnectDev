@@ -16,13 +16,19 @@ function EducationTabBody({ education, sameUser }) {
         )}
       </div>
       <div className="mt-3">
-        {education.map(({ degree, _id, area, description, school }) => (
+        {education.map(({ degree, _id, area, description, school, dates }) => (
           <div key={_id} className="card mb-3">
             <div className="card-body">
-              <h4 className="card-title">{degree}</h4>
-              <h5 className="card-title">{school}</h5>
-              <p className="card-subtitle">{area}</p>
-              <p className="card-text">{description}</p>
+              <h4 className="card-title">
+                <string>
+                  {degree || ""} {area || ""}
+                </string>
+              </h4>
+
+              <h6 className="card-subtitle text-muted">
+                {school || ""} <span className="font-weight-bold">{dates}</span>
+              </h6>
+              <p className="card-text">{description || ""}</p>
             </div>
           </div>
         ))}

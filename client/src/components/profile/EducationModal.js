@@ -20,6 +20,7 @@ function EducationModal() {
       type: EDUCATION_ADD,
       payload: { ...other, _id: uuid(), dates: `${fromDate} - ${toDate}` },
     });
+    setEducation(initialEdu);
   }
   function onChange(e) {
     const { name, value } = e.target;
@@ -54,6 +55,7 @@ function EducationModal() {
                 </label>
                 <input
                   type="text"
+                  required
                   value={education.degree}
                   className="form-control"
                   id="degree"
@@ -68,6 +70,7 @@ function EducationModal() {
                 </label>
                 <input
                   type="text"
+                  required
                   value={education.area}
                   name="area"
                   onChange={onChange}
@@ -110,6 +113,7 @@ function EducationModal() {
                 </label>
                 <input
                   type="text"
+                  required
                   className="form-control"
                   value={education.school}
                   name="school"

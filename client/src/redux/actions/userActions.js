@@ -22,7 +22,7 @@ export const login =
         password,
       });
       dispatch({ type: LOGIN_SUCCESS, payload: data });
-      navigate("/");
+      navigate("/?nav=true");
     } catch (error) {
       setToast(error.response.data.message);
       dispatch({ type: LOGIN_FAIL, payload: error.message });
@@ -60,7 +60,6 @@ export const loadUser = () => async (dispatch) => {
 };
 export const logout = (socket) => async (dispatch) => {
   try {
-
     await instance.post("/api/users/logout");
     socket.disconnect();
     dispatch({ type: LOGOUT_SUCCESS });
