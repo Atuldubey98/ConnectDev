@@ -31,6 +31,7 @@ const Posts = () => {
           {error}
         </div>
       )}
+      
       <Paginator />
     </div>
   );

@@ -21,7 +21,7 @@ function SkillTabBody({ skills, sameUser }) {
   return (
     <div className="card-body">
       <div className="container d-flex justify-content-between align-items-center mb-3">
-        <h5 className="card-title">Skills</h5>
+        <h5 className="card-title font-weight-bold">Skills</h5>
         {showInput
           ? null
           : sameUser && (

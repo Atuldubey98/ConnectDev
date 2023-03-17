@@ -6,17 +6,14 @@ import Header from "../components/Header";
 import Posts from "../components/Posts";
 import SideNav from "../components/SideNav";
 import { socket } from "../context/SocketContext";
-
+import useFilters from "../hooks/useFilters";
 import useQuery from "../hooks/useQuery";
 import { getAllPosts } from "../redux/actions/postActions";
 const HomePage = () => {
-  const query = useQuery();
   const dispatch = useDispatch();
-  const limit = query.has("limit") ? query.get("limit") : 10;
-  const page = query.has("page") ? query.get("page") : 0;
-  const s = query.has("s") ? query.get("s") : "";
-  const myPosts = query.has("myPosts") ? true : false;
-
+  const query = useQuery();
+  const filters = useFilters();
+  const { limit, page, s, myPosts } = filters;
   useEffect(() => {
     socket.connect();
     dispatch(getAllPosts(limit, page, s, myPosts));

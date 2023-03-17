@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Comment from "./Comment";
+import "bootstrap/dist/js/bootstrap";
+
 import {
   deletePost,
   likePost,
@@ -8,6 +10,8 @@ import {
 } from "../redux/actions/postActions";
 import { useNavigate } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
+import EditPostModal from "./homescreen/EditPostModal";
+import LoadingIndicator from "./LoadingIndicator";
 const Post = ({ post }) => {
   const bottomRef = useRef(null);
   const navigate = useNavigate();
@@ -29,6 +33,11 @@ const Post = ({ post }) => {
   const handleCommentTextChange = (e) => {
     setCommentText(e.target.value);
   };
+  const [showModal, setShowModal] = useState(false);
+  function onShowModal() {
+    setShowModal(!showModal);
+    setShow(false);
+  }
   const [show, setShow] = useState(false);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -48,7 +57,7 @@ const Post = ({ post }) => {
     try {
       setLoading(true);
       const res = await likePost(post._id);
-      console.log(connected)
+      console.log(connected);
       if (connected) {
         likePostSocket({ _id: post._id, user: userId, liked: res });
       }
@@ -104,7 +113,6 @@ const Post = ({ post }) => {
         <p className="card-tex">{text}</p>
       </div>
       <div className="card-footer d-flex align-items-center justify-content-around">
-
         <div className="dropdown">
           <button
             className="btn btn-light card-link"
@@ -118,10 +126,17 @@ const Post = ({ post }) => {
           >
             {user._id === post.user && (
               <div>
-                <div className="dropdown-item btn" to="#">
+                <div
+                  href="#"
+                  data-bs-toggle="modal"
+                  className="dropdown-item btn"
+                  onClick={onShowModal}
+                  data-bs-target={`#${post._id}`}
+                >
                   <i className="fa-solid fa-pen-to-square"></i>
                   <span className="ml-2">Edit</span>
                 </div>
+
                 <div
                   onClick={deleteSinglePost}
                   className="dropdown-item btn"
@@ -148,9 +163,7 @@ const Post = ({ post }) => {
           </div>
         </div>
         {loading ? (
-          <div className="spinner-border text-success" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
+          <LoadingIndicator />
         ) : (
           <button
             onClick={likeThePost}
@@ -219,6 +232,11 @@ const Post = ({ post }) => {
           </form>
         </div>
       )}
+      <EditPostModal
+        post={post}
+        onShowModal={onShowModal}
+        showModal={showModal}
+      />
     </div>
   );
 };
