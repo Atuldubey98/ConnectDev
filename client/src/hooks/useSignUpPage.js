@@ -54,12 +54,12 @@ export default function useSignUpPage() {
   }
 
   const dispatch = useDispatch();
-
-  const [errorMsg, setErrorMsg] = useState({
+  const defaultError = {
     email: null,
     password: null,
     name: null,
-  });
+  };
+  const [errorMsg, setErrorMsg] = useState(defaultError);
   const { validate, validationError } = useValidate("signUp", {
     name: signUpUser.name,
     email: signUpUser.email,
@@ -69,6 +69,9 @@ export default function useSignUpPage() {
     e.preventDefault();
     if (validate()) {
       setErrorMsg(validationError);
+      setTimeout(() => {
+        setErrorMsg(defaultError);
+      }, 2000);
     } else {
       dispatch(
         register(
