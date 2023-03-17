@@ -8,6 +8,7 @@ import {
   CHATS_RESET,
   CHATS_SUCCESS,
 } from "../../redux/constants/chatConstants";
+import { RESET_ACTIVE_ROOM_ID } from "../../redux/constants/chatUserConstants";
 import MessageComponent from "./MessageComponent";
 function ChatsComponent({ onSetShow, roomChat }) {
   const { sendMsgOnSocket, messageRef } = useContext(SocketContext);
@@ -34,6 +35,7 @@ function ChatsComponent({ onSetShow, roomChat }) {
     })();
     return () => {
       dispatch({ type: CHATS_RESET });
+      dispatch({type : RESET_ACTIVE_ROOM_ID});
     };
   }, [dispatch, roomChat._id, messageRef]);
   const onSubmit = (e) => {

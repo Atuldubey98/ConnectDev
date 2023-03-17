@@ -7,7 +7,6 @@ export default function EditPostModal({ post, showModal, onShowModal }) {
       className={className}
       id={_id}
       style={style}
-      tabindex="-1"
       aria-labelledby={`${_id}label`}
       aria-hidden="true"
     >

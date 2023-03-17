@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { CHAT_MESSAGE_ADD } from "../redux/constants/chatConstants";
@@ -7,14 +7,29 @@ export const SocketContext = createContext();
 export const socket = io("ws://localhost:9000", { withCredentials: true });
 export const SocketContextProvider = ({ children }) => {
   const [connected, setConnected] = useState(socket.connected);
+  const { activeRoom } = useSelector((state) => state.chatUser);
   const dispatch = useDispatch();
   const messageRef = useRef();
   const privateReaction = useCallback(
     (data) => {
-      dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
-      messageRef.current.scrollIntoView({ behavior: "smooth" });
+      if (data.roomId === activeRoom) {
+        dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
+        messageRef.current.scrollIntoView({ behavior: "smooth" });
+      } else {
+        const { user } = data;
+        toast.info(`${user.name} sent a message`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     },
-    [dispatch]
+    [dispatch, activeRoom]
   );
 
   useEffect(() => {

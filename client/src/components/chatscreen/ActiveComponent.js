@@ -6,6 +6,7 @@ import {
   ACTIVE_USERS_ERROR,
   ACTIVE_USERS_LOADING,
   ACTIVE_USERS_SUCCESS,
+  SET_ACTIVE_ROOM_ID,
 } from "../../redux/constants/chatUserConstants";
 function ActiveComponent() {
   const [show, setShow] = useState(false);
@@ -32,8 +33,11 @@ function ActiveComponent() {
     })();
   }, [dispatch]);
   function onChangeChatUser(room) {
-    setShow(!show);
-    setRoomChat(room);
+    if ("_id" in room) {
+      setShow(!show);
+      dispatch({ type: SET_ACTIVE_ROOM_ID, payload: room._id });
+      setRoomChat(room);
+    }
   }
   return (
     <div className="mt-1">

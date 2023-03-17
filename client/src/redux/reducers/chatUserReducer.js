@@ -1,14 +1,35 @@
 import {
-  ACTIVE_USERS_ERROR, ACTIVE_USERS_LOADING, ACTIVE_USERS_RESET, ACTIVE_USERS_SUCCESS, CHAT_USERS_ERROR, CHAT_USERS_LOADING, CHAT_USERS_RESET, CHAT_USERS_SUCCESS, CREATE_CHATID_SUCCESS
+  ACTIVE_USERS_ERROR,
+  ACTIVE_USERS_LOADING,
+  ACTIVE_USERS_RESET,
+  ACTIVE_USERS_SUCCESS,
+  CHAT_USERS_ERROR,
+  CHAT_USERS_LOADING,
+  CHAT_USERS_RESET,
+  CHAT_USERS_SUCCESS,
+  CREATE_CHATID_SUCCESS,
+  RESET_ACTIVE_ROOM_ID,
+  SET_ACTIVE_ROOM_ID,
 } from "../constants/chatUserConstants";
 const initialState = {
   users: { data: [], loading: false, error: "" },
   activeUsers: { data: [], loading: false, error: "" },
+  activeRoom: "",
 };
 export const chatUserReducer = (state = initialState, action) => {
   const { payload, type } = action;
 
   switch (type) {
+    case SET_ACTIVE_ROOM_ID:
+      return {
+        ...state,
+        activeRoom: payload,
+      };
+    case RESET_ACTIVE_ROOM_ID:
+      return {
+        ...state,
+        activeRoom: "",
+      };
     case CHAT_USERS_RESET:
       return {
         ...initialState,
