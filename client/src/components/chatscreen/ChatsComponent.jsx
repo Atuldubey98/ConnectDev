@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SocketContext } from "../../context/SocketContext";
 import instance from "../../instance";
@@ -19,7 +19,7 @@ function ChatsComponent({ onSetShow, roomChat }) {
   const { user: currentUser } = useSelector((state) => state.user);
   const { users } = roomChat;
   const [msgBody, setMsgBody] = useState("");
-
+  const inputRef = useRef();
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
@@ -33,7 +33,8 @@ function ChatsComponent({ onSetShow, roomChat }) {
         });
         setTimeout(() => {
           messageRef.current.scrollIntoView({ behavior: "smooth" });
-        }, 200);
+          inputRef.current.focus();
+        }, 100);
       } catch (error) {
         dispatch({ type: CHATS_ERROR, payload: "No Chats found" });
       }
@@ -86,7 +87,6 @@ function ChatsComponent({ onSetShow, roomChat }) {
             })}
             <div
               className="dummy"
-              style={{ height: "1rem" }}
               ref={messageRef}
             ></div>
           </div>
@@ -94,8 +94,10 @@ function ChatsComponent({ onSetShow, roomChat }) {
       </div>
       <form onSubmit={onSubmit} className="mt-1 d-flex flex-direction">
         <input
+          autoComplete="false"
           name="messsage"
           id="msgBody"
+          ref={inputRef}
           value={msgBody}
           onChange={onChange}
           className="form-control flex-8"
