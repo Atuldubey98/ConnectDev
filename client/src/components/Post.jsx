@@ -57,7 +57,6 @@ const Post = ({ post }) => {
     try {
       setLoading(true);
       const res = await likePost(post._id);
-      console.log(connected);
       if (connected) {
         likePostSocket({ _id: post._id, user: userId, liked: res });
       }
@@ -179,7 +178,7 @@ const Post = ({ post }) => {
           </button>
         )}
         <div className="btn-group">
-          <button className="btn btn-light font-weight-bold">
+          <span className="d-flex align-items-center justify-content-center">
             <i
               style={{
                 color: "blueviolet",
@@ -187,7 +186,7 @@ const Post = ({ post }) => {
               className="fa-solid fa-comment card-link mr-2"
             ></i>
             {loadedComments.length}
-          </button>
+          </span>
           <button
             onClick={() => {
               setShowComments((c) => !c);

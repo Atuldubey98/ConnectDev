@@ -127,7 +127,7 @@ const Compose = () => {
                 />
               )}
             </h6>
-            <p className="card-text">
+            <div className="card-text">
               {preview ? (
                 text
               ) : (
@@ -146,7 +146,7 @@ const Compose = () => {
                   ) : null}
                 </div>
               )}
-            </p>
+            </div>
           </div>
           <div className="card-footer d-flex align-items-center justify-content-around">
             <button
