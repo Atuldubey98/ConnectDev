@@ -8,11 +8,13 @@ import {
   CHATS_RESET,
   CHATS_SUCCESS,
 } from "../../redux/constants/chatConstants";
-import { RESET_ACTIVE_ROOM_ID } from "../../redux/constants/chatUserConstants";
+import {
+  RESET_ACTIVE_ROOM_ID,
+  SET_ACTIVE_ROOM_ID,
+} from "../../redux/constants/chatUserConstants";
 import MessageComponent from "./MessageComponent";
 function ChatsComponent({ onSetShow, roomChat }) {
-  const { sendMsgOnSocket, messageRef, sendFileViaSocket } =
-    useContext(SocketContext);
+  const { sendMsgOnSocket, messageRef } = useContext(SocketContext);
   const { messages, loading } = useSelector((state) => state.chats);
   const { user: currentUser } = useSelector((state) => state.user);
   const { users } = roomChat;
@@ -22,30 +24,29 @@ function ChatsComponent({ onSetShow, roomChat }) {
   useEffect(() => {
     (async () => {
       dispatch({ type: CHATS_LOADING });
+      dispatch({ type: SET_ACTIVE_ROOM_ID, payload: roomChat._id });
       try {
         const { data } = await instance.get(`/api/chat/chats/${roomChat._id}`);
         dispatch({
           type: CHATS_SUCCESS,
           payload: { messages: data.messages, roomId: roomChat._id },
         });
-        messageRef.current.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          messageRef.current.scrollIntoView({ behavior: "smooth" });
+        }, 200);
       } catch (error) {
         dispatch({ type: CHATS_ERROR, payload: "No Chats found" });
       }
     })();
     return () => {
-      dispatch({ type: CHATS_RESET });
       dispatch({ type: RESET_ACTIVE_ROOM_ID });
+      dispatch({ type: CHATS_RESET });
     };
-  }, [dispatch, roomChat._id, messageRef]);
+  }, [dispatch, roomChat._id]);
   const onSubmit = (e) => {
     e.preventDefault();
-    if (picked) {
-      sendFileViaSocket({ file, room: roomChat });
-    } else {
-      sendMsgOnSocket({ msgBody, room: roomChat });
-      setMsgBody("");
-    }
+    sendMsgOnSocket({ msgBody, room: roomChat });
+    setMsgBody("");
   };
   function onChange(e) {
     const { value } = e.target;
@@ -83,9 +84,13 @@ function ChatsComponent({ onSetShow, roomChat }) {
                 />
               );
             })}
+            <div
+              className="dummy"
+              style={{ height: "1rem" }}
+              ref={messageRef}
+            ></div>
           </div>
         )}
-        <div ref={messageRef} className="dummy__msg"></div>
       </div>
       <form onSubmit={onSubmit} className="mt-1 d-flex flex-direction">
         <input
@@ -97,7 +102,7 @@ function ChatsComponent({ onSetShow, roomChat }) {
         />
         <button
           type="submit"
-          disabled={msgBody.length === 0 && !picked}
+          disabled={msgBody.length === 0}
           className="flex-4 btn btn-primary"
         >
           Send

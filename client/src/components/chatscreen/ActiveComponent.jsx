@@ -35,7 +35,6 @@ function ActiveComponent() {
   function onChangeChatUser(room) {
     if ("_id" in room) {
       setShow(!show);
-      dispatch({ type: SET_ACTIVE_ROOM_ID, payload: room._id });
       setRoomChat(room);
     }
   }

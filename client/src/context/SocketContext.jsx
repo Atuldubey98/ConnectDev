@@ -15,7 +15,9 @@ export const SocketContextProvider = ({ children }) => {
     (data) => {
       if (data.roomId === activeRoom) {
         dispatch({ type: CHAT_MESSAGE_ADD, payload: data });
-        messageRef.current.scrollIntoView({ behavior: "smooth" });
+        setTimeout(() => {
+          messageRef.current.scrollIntoView({ behavior: "smooth" });
+        }, 100);
       } else {
         const { user } = data;
         toast.info(`${user.name} sent a message`, {
