@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { parse } = require("cookie");
 const http = require("http");
+const morgan = require("morgan");
+const fs = require('fs');
+const path = require('path');
 const Post = require("./models/Post");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -22,6 +25,11 @@ const Room = require("./models/Room");
 const port = process.env.PORT || 9000;
 const app = express();
 const server = http.createServer(app);
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "logs", "access.log"),
+  { flags: "a" }
+);
+app.use(morgan("combined", { stream: accessLogStream }));
 const io = new Server(server, {
   cookie: false,
   cors: {
@@ -73,7 +81,6 @@ io.on("connection", async (socket) => {
     if (socket.user.id !== user) {
       const post = await Post.findById(_id).select("likes");
       const { likes } = post;
-      console.log(data);
       if (liked) {
         io.to("post:" + _id).emit("notify", {
           message: `${likes.length} liked your post`,
@@ -117,7 +124,6 @@ io.on("connection", async (socket) => {
     );
     chatRooms.forEach(({ room }) => socket.join("room:" + room));
     posts.forEach((post) => socket.join("post:" + post._id));
-    console.log(posts);
   } catch (error) {
     console.log(error);
   }
