@@ -11,10 +11,10 @@ import {
 import { RESET_ACTIVE_ROOM_ID } from "../../redux/constants/chatUserConstants";
 import MessageComponent from "./MessageComponent";
 function ChatsComponent({ onSetShow, roomChat }) {
-  const { sendMsgOnSocket, messageRef } = useContext(SocketContext);
+  const { sendMsgOnSocket, messageRef, sendFileViaSocket } =
+    useContext(SocketContext);
   const { messages, loading } = useSelector((state) => state.chats);
   const { user: currentUser } = useSelector((state) => state.user);
-
   const { users } = roomChat;
   const [msgBody, setMsgBody] = useState("");
 
@@ -35,13 +35,17 @@ function ChatsComponent({ onSetShow, roomChat }) {
     })();
     return () => {
       dispatch({ type: CHATS_RESET });
-      dispatch({type : RESET_ACTIVE_ROOM_ID});
+      dispatch({ type: RESET_ACTIVE_ROOM_ID });
     };
   }, [dispatch, roomChat._id, messageRef]);
   const onSubmit = (e) => {
     e.preventDefault();
-    sendMsgOnSocket({ msgBody, room: roomChat });
-    setMsgBody("");
+    if (picked) {
+      sendFileViaSocket({ file, room: roomChat });
+    } else {
+      sendMsgOnSocket({ msgBody, room: roomChat });
+      setMsgBody("");
+    }
   };
   function onChange(e) {
     const { value } = e.target;
@@ -91,7 +95,11 @@ function ChatsComponent({ onSetShow, roomChat }) {
           onChange={onChange}
           className="form-control flex-8"
         />
-        <button type="submit" className="flex-4 btn btn-primary">
+        <button
+          type="submit"
+          disabled={msgBody.length === 0 && !picked}
+          className="flex-4 btn btn-primary"
+        >
           Send
         </button>
       </form>

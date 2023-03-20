@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../components/Post";
+import Post from "./Post";
 import { useSelector } from "react-redux";
 import Paginator from "./Paginator";
 

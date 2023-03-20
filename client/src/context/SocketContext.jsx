@@ -10,6 +10,7 @@ export const SocketContextProvider = ({ children }) => {
   const { activeRoom } = useSelector((state) => state.chatUser);
   const dispatch = useDispatch();
   const messageRef = useRef();
+
   const privateReaction = useCallback(
     (data) => {
       if (data.roomId === activeRoom) {

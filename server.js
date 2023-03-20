@@ -25,13 +25,12 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cookie: false,
   cors: {
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 io.use((socket, next) => {
-  
   const fetchedToken = socket.handshake.headers.cookie;
   if (fetchedToken) {
     const token = parse(fetchedToken).token;
@@ -44,7 +43,6 @@ io.use((socket, next) => {
       next();
     }
   }
-  
 });
 io.on("connection", async (socket) => {
   socket.on("message", async (data) => {
@@ -129,7 +127,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     if (
       !origin ||
-      ["http://localhost:3000", "http://localhost:9000"].indexOf(origin) !== -1
+      ["http://localhost:5173", "http://localhost:9000"].indexOf(origin) !== -1
     ) {
       callback(null, true);
     } else {
