@@ -3,3 +3,5 @@
 /client/node_modules
 /nbproject/private/
 /logs/access.log
+/logs/error.log
+/logs/combined.log

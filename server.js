@@ -5,13 +5,13 @@ const cookieParser = require("cookie-parser");
 const { parse } = require("cookie");
 const http = require("http");
 const morgan = require("morgan");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 const Post = require("./models/Post");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-
+const logger = require("./utils/logger");
 const errorMiddleware = require("./api/middlewares/error");
 const user = require("./api/routes/user");
 const profile = require("./api/routes/profile");
@@ -114,10 +114,11 @@ io.on("connection", async (socket) => {
     }
   });
   socket.on("disconnect", () => {
-    console.log("Disconnected ---> ", socket.id);
+    logger.log({ level: "info", message: `Disconnecting ---- >${socket.id}` });
   });
   try {
-    console.log("Connecting --->", socket.id);
+    logger.log({ level: "info", message: `Connecting ---- >${socket.id}` });
+
     const posts = await Post.find({ user: socket.user.id }).select("_id");
     const chatRooms = await Contact.find({ user: socket.user.id }).select(
       "room"
@@ -125,7 +126,7 @@ io.on("connection", async (socket) => {
     chatRooms.forEach(({ room }) => socket.join("room:" + room));
     posts.forEach((post) => socket.join("post:" + post._id));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -167,5 +168,5 @@ app.all("*", (req, res, next) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server is Listening on ${port}`);
+  logger.log({ level: "info", message: `Server running on ${port}` });
 });
