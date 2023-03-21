@@ -121,7 +121,6 @@ exports.getAvatarImage = catchAsyncErrors(async (req, res, next) => {
       filename: req.params.filename,
     })
     .toArray((err, files) => {
-      console.log(files);
       if (!files || files.length === 0) {
         return res.status(404).json({
           err: "no files exist",
@@ -133,7 +132,7 @@ exports.getAvatarImage = catchAsyncErrors(async (req, res, next) => {
 
 exports.uploadAvatar = catchAsyncErrors(async (req, res, next) => {
   const file = req.file;
-  if (!('name' in req.body) && !file) {
+  if (!("name" in req.body) && !file) {
     return res.status(400).json({
       status: false,
       message: "Please attach avatar as well as name",

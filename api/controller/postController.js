@@ -161,7 +161,7 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
       },
     }
   );
-  console.log(comment._doc);
+
   return res.status(200).json({
     status: true,
     message: "Commented",
