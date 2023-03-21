@@ -60,6 +60,10 @@ io.on("connection", async (socket) => {
       user: socket.user.id,
       msgBody,
     });
+    logger.log({
+      level: "info",
+      message: `${socket.user.id} messaging to room---- >${room._id}`,
+    });
     const newMessage = await message.save();
     await Room.updateOne(
       { _id: room._id },
@@ -78,6 +82,10 @@ io.on("connection", async (socket) => {
   });
   socket.on("like", async (data) => {
     const { _id, user, liked } = data;
+    logger.log({
+      level: "info",
+      message: `${socket.user.id} liked post with id---- >${_id}`,
+    });
     if (socket.user.id !== user) {
       const post = await Post.findById(_id).select("likes");
       const { likes } = post;
@@ -100,6 +108,10 @@ io.on("connection", async (socket) => {
   });
   socket.on("comment", async (data) => {
     const { _id, user } = data;
+    logger.log({
+      level: "info",
+      message: `${socket.user.id} commenting on post with id---- >${_id}`,
+    });
     if (socket.user.id != user) {
       const { comments } = await Post.findById(_id).select("comments");
 
