@@ -110,7 +110,7 @@ const Header = () => {
             </li>
           ))}
         </ul>
-        <ul className="nav navbar-nav navbar-right d-flex justify-items-center align-content-center">
+        <ul className="nav navbar-nav navbar-right d-flex justify-items-center align-content-center flex-wrap">
           <li className="mr-2">
             <button
               onClick={navigateToCompose}
@@ -123,7 +123,7 @@ const Header = () => {
           </li>
           <li>
             <form onSubmit={handleSearchSubmit}>
-              <div className="d-flex justify-items-center align-content-center">
+              <div className="d-flex justify-items-center align-content-center flex-wrap">
                 <input
                   type="text"
                   placeholder="Search"

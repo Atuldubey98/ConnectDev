@@ -22,7 +22,7 @@ const HomePage = () => {
   return (
     <div className="home">
       <Header />
-      <div className="container-fluid vh-100">
+      <div className="container vh-100">
         <div className="row">
           {query.has("nav") && <SideNav />}
           <Posts />

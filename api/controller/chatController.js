@@ -8,10 +8,6 @@ exports.getChatsByRoomId = catchAsyncErrors(async (req, res, next) => {
     throw new Error("Schema error");
   }
   const room = await Room.findById(roomId)
-    .sort({
-      date: "desc",
-    })
-    .limit(10)
     .populate({
       path: "users",
       select: "name avatar _id email",
@@ -19,6 +15,9 @@ exports.getChatsByRoomId = catchAsyncErrors(async (req, res, next) => {
     })
     .populate({
       path: "messages",
+      options: {
+        limit: 10,
+      },
       populate: {
         path: "user",
         select: "name email avatar _id",

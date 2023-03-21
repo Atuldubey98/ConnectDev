@@ -35,7 +35,7 @@ const SideNav = () => {
     dispatch(logout(socket));
   };
   return (
-    <div className="col-md-2 d-flex flex-column">
+    <div className="col-md-2 d-flex flex-column align-items-center">
       <div className="list-unstyled list-group list-group-flush">
         {sideNavList.map((s) => (
           <li

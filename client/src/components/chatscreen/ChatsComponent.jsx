@@ -85,19 +85,20 @@ function ChatsComponent({ onSetShow, roomChat }) {
                 />
               );
             })}
-            <div
-              className="dummy"
-              ref={messageRef}
-            ></div>
+            <div className="dummy" ref={messageRef}></div>
           </div>
         )}
       </div>
-      <form onSubmit={onSubmit} className="mt-1 d-flex flex-direction">
+      <form
+        onSubmit={onSubmit}
+        autoComplete={"off"}
+        className="mt-1 d-flex flex-direction"
+      >
         <input
-          autoComplete="false"
           name="messsage"
           id="msgBody"
           ref={inputRef}
+          type="text"
           value={msgBody}
           onChange={onChange}
           className="form-control flex-8"

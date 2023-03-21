@@ -214,7 +214,7 @@ const Post = ({ post }) => {
             ))}
           </div>
           <form className="d-flex flex-column justify-content-center align-items-center">
-            <textarea
+            <input
               placeholder="Write your comment here"
               type="text"
               className="form-control"

@@ -10,7 +10,7 @@ const ComposePage = () => {
   return (
     <div className="compose">
       <Header />
-      <div className="container-fluid vh-100">
+      <div className="container vh-100">
         <div className="row">
           {query.has("nav") && <SideNav />}
           <Compose />

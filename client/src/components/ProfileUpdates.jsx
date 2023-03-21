@@ -63,23 +63,23 @@ const ProfileUpdates = () => {
   }
   return (
     <div className="container col">
-      <div className="d-flex align-items-center justify-content-center bg-light p-3 rounded">
+      <div className="d-flex align-items-center justify-content-center flex-wrap bg-light p-3">
         <img
           data-toggle="tooltip"
           data-placement="top"
           title="Click to copy profile link"
           src={user.avatar ? "http://localhost:9000" + user.avatar : avatar}
-          className="rounded-circle mr-1 border border-5 border-success"
-          style={{ maxWidth: "100px", cursor: "pointer" }}
+          className="rounded-circle mr-3 border border-5 border-success"
+          style={{ maxWidth: "100px", cursor: "pointer", objectFit: "contain" }}
           alt="Avatar"
           onClick={onCopyProfile}
         />
-        <div className="container">
+        <div className="text-center ml-5">
           <h3 className="fs-3 text-capitalize">{user?.name}</h3>
           {status ? status : null}
           <h3 className="fs-3">{user?.email}</h3>
         </div>
-        <div className="container">
+        <div className="container d-flex justify-content-center align-items-center m-2">
           <button
             data-bs-toggle="modal"
             data-bs-target="#profileModal"
