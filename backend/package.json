@@ -27,7 +27,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "socket.io": "^4.6.1",
-    "socket.io-stream": "^0.9.1",
+    "socket.io-stream": "^0.5.3",
     "validator": "^13.9.0",
     "winston": "^3.8.2"
   },
