@@ -22,7 +22,7 @@ const Posts = () => {
           style={{ height: "10rem" }}
         >
           <p className="text-secondary text-center">
-            Add Friends to from Search
+            Please post some article to see it here
           </p>
         </div>
       )}
@@ -31,7 +31,7 @@ const Posts = () => {
           {error}
         </div>
       )}
-      
+
       <Paginator />
     </div>
   );

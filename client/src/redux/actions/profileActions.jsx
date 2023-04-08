@@ -58,7 +58,6 @@ export const updateProfilePicture =
       toggleModal();
       showToast(data.message);
     } catch (error) {
-      console.log(error);
       dispatch({
         type: PROFILE_PIC_ERROR,
         payload: error.response.data.message,

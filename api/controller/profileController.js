@@ -145,7 +145,7 @@ exports.uploadAvatar = catchAsyncErrors(async (req, res, next) => {
       { _id },
       { name },
       { new: true }
-    ).select("name");
+    ).select("name avatar");
     return res
       .status(201)
       .json({ status: true, message: `Avatar uploaded`, user });
