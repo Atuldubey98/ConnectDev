@@ -21,11 +21,12 @@ const chatRouter = require("./api/routes/chat");
 const Contact = require("./models/Contact");
 const Message = require("./models/Message");
 const Room = require("./models/Room");
+const { APP_URL, PORT, JWT_SECRET, NODE_ENV } = require("./config/keys");
 
-const port = process.env.PORT || 9000;
+const port = PORT || 9000;
 const app = express();
 const server = http.createServer(app);
-if (process.env.NODE_ENV === "development") {
+if (NODE_ENV === "development") {
   const accessLogStream = fs.createWriteStream(
     path.join(__dirname, "logs", "access.log"),
     { flags: "a" }
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV === "development") {
 const io = new Server(server, {
   cookie: false,
   cors: {
-    origin: "http://localhost:5173",
+    origin: APP_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -48,7 +49,7 @@ io.use((socket, next) => {
       next(new Error("Unauthorized request"));
     }
     if (token) {
-      const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+      const decodedData = jwt.verify(token, JWT_SECRET);
       socket.user = decodedData;
       next();
     }
@@ -148,10 +149,7 @@ io.on("connection", async (socket) => {
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (
-      !origin ||
-      ["http://localhost:5173", "http://localhost:9000"].indexOf(origin) !== -1
-    ) {
+    if (!origin || [APP_URL, "http://localhost:9000"].indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));

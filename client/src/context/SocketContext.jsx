@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import { CHAT_MESSAGE_ADD } from "../redux/constants/chatConstants";
+import { API_URL } from "../instance";
 export const SocketContext = createContext();
-export const socket = io("ws://localhost:9000", { withCredentials: true });
+export const socket = io(API_URL, { withCredentials: true });
 export const SocketContextProvider = ({ children }) => {
   const [connected, setConnected] = useState(socket.connected);
   const { activeRoom } = useSelector((state) => state.chatUser);

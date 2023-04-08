@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const { JWT_SECRET, JWT_EXPIRE } = require("../config/keys");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -33,9 +34,9 @@ UserSchema.methods.getJWTToken = (email, name, id) => {
       name,
       id
     },
-    process.env.JWT_SECRET,
+    JWT_SECRET,
     {
-      expiresIn: process.env.JWT_EXPIRE,
+      expiresIn: JWT_EXPIRE,
     }
   );
 };
