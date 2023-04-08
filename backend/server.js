@@ -170,8 +170,6 @@ app.use(
   })
 );
 
-app.use(express.static(path.join(__dirname, "/client/dist")));
-
 app.use("/api/users", user);
 app.use("/api/post", post);
 app.use("/api/profile", profile);
