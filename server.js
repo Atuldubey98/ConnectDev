@@ -25,11 +25,13 @@ const Room = require("./models/Room");
 const port = process.env.PORT || 9000;
 const app = express();
 const server = http.createServer(app);
-const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, "logs", "access.log"),
-  { flags: "a" }
-);
-app.use(morgan("combined", { stream: accessLogStream }));
+if (process.env.NODE_ENV === "development") {
+  const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, "logs", "access.log"),
+    { flags: "a" }
+  );
+  app.use(morgan("combined", { stream: accessLogStream }));
+}
 const io = new Server(server, {
   cookie: false,
   cors: {
@@ -167,6 +169,8 @@ app.use(
     extended: false,
   })
 );
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
 app.use("/api/users", user);
 app.use("/api/post", post);
