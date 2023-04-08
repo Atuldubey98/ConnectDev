@@ -50,6 +50,8 @@ io.use((socket, next) => {
       socket.user = decodedData;
       next();
     }
+  } else {
+    next(new Error("Unauthorized request"));
   }
 });
 io.on("connection", async (socket) => {
