@@ -10,6 +10,7 @@ export default function FilterComp() {
         <input placeholder="Search for post" />
         <GoSearch size={18} />
       </form>
+      
     </section>
   )
 }

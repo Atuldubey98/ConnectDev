@@ -1,0 +1,12 @@
+.input__text > textarea {
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 0.3rem;
+  font-size: 1.1rem;
+  width: 100%;
+}
+.input__text {
+  border-radius: 0.3rem;
+  border: 1px solid lightgray;
+}

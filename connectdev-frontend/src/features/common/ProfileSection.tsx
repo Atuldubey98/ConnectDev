@@ -1,7 +1,8 @@
-import "./ProfileSection.css"
 import { AiFillEdit, AiOutlineArrowDown, AiOutlineLogout } from "react-icons/ai"
+import "./ProfileSection.css"
 
 export default function ProfileSection({ name }: { name: string }) {
+ 
   return (
     <div className="profile__section">
       <div className="profile__dropwrapper">
@@ -10,6 +11,7 @@ export default function ProfileSection({ name }: { name: string }) {
           <AiOutlineArrowDown />
         </div>
         <ul className="profile__dropdownItems">
+         
           <li className="d-flex-center">
             <AiFillEdit />
             <span>Edit Profile</span>

@@ -8,7 +8,8 @@ body {
 }
 :root {
   --accent-color: #5c79ff;
-  --hover-color : #4c6cf7;
+  --hover-color: #4c6cf7;
+  --secondary-color: rgb(240, 240, 240);
 }
 .d-flex-center {
   display: flex;

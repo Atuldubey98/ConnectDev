@@ -3,6 +3,7 @@ const Post = require("../../models/Post");
 const Comments = require("../../models/Comments");
 
 const Likes = require("../../models/Likes");
+const User = require("../../models/User");
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
   const post = new Post({ ...req.body, user: req.user._id });
@@ -62,47 +63,51 @@ exports.deleteSinglePostById = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
-  const page = req.query.page ? Number(req.query.page) : 0;
-  const limit = req.query.limit ? Number(req.query.limit) : 10;
-  const s = req.query.s ? req.query.s : "";
-  const myPosts = req.query.myPosts ? true : false;
-  const totalCount = await Post.find({
-    text: { $regex: s },
-  }).countDocuments();
-  let filter = { text: { $regex: s } };
-  if (myPosts) {
-    filter.user = req.user._id;
-  }
-  const posts = await Post.find(filter, undefined, {
-    skip: page * limit,
-    limit,
-  })
-    .sort({
-      date: "desc",
-    })
-    .populate({
-      path: "likes",
-      populate: {
-        path: "user",
-        select: "name email avatar",
+  const page =
+    typeof req.query.page === "string" && !isNaN(Number(req.query.page))
+      ? Number(req.query.page)
+      : 1;
+  const limit =
+    typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
+      ? Number(req.query.limit)
+      : 10;
+  const postRes = await Post.paginate(
+    {},
+    {
+      page,
+      limit,
+      collation: {
+        locale: "en",
       },
-    })
-    .populate({
-      path: "comments",
-      populate: {
-        path: "user",
-        select: "name email avatar",
+      populate: [
+        {
+          path: "likes",
+          populate: {
+            path: "user",
+            select: "name email avatar",
+          },
+        },
+        {
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "name email avatar",
+          },
+        },
+        {
+          path: "user",
+          select: "name email avatar",
+        },
+      ],
+      customLabels: {
+        totalDocs: "totalCount",
+        docs: "posts",
+        nextPage: "next",
+        prevPage: "prev",
       },
-    });
-  const totalPages = Math.ceil(totalCount / limit);
-  return res.status(200).json({
-    totalCount,
-    count: posts.length,
-    totalPages,
-    posts,
-    page: page + 1,
-    status: true,
-  });
+    }
+  );
+  return res.status(200).send(postRes);
 });
 
 exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
@@ -114,6 +119,7 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
   if (!postById) {
     return res.status(400).json({ status: false });
   }
+
   const likes = await Likes.findOne({ post: postId, user: req.user._id });
   if (!likes) {
     const like = new Likes({ user: req.user._id, post: postId });
@@ -126,7 +132,9 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
         },
       }
     );
-    return res.status(200).json({ status: true, message: "Post Liked" });
+    return res
+      .status(200)
+      .json({ status: true, message: "Post Liked", user: req.user });
   }
 
   await Likes.deleteOne({ user: req.user._id, post: postId });
@@ -138,7 +146,9 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
       },
     }
   );
-  return res.status(200).json({ status: false, message: "Post Disliked" });
+  return res
+    .status(200)
+    .json({ status: false, message: "Post Disliked", user: req.user });
 });
 
 exports.postComment = catchAsyncErrors(async (req, res, next) => {

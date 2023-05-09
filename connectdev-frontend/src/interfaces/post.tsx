@@ -2,19 +2,37 @@ export interface IPostResponse {
   totalCount: number
   count: number
   totalPages: number
-  posts?: IPostsEntity[] | null
+  posts?: IPost[] | null
   page: number
   status: boolean
 }
-export interface IPostsEntity {
+export interface ILikes {
+  user: {
+    _id: string
+    name: string
+    email: string
+  }
+  post: string
+}
+export interface IPost {
   _id: string
   text: string
-  user: string
-  likes?: null[] | null
-  comments?: null[] | null
+  user: IUserDetails
+  likes?: ILikes[] | null
+  comments?: IUserDetails[] | null
   date: string
   tags?: string[] | null
   title: string
   color: string
   __v: number
+}
+export interface IUserDetails {
+  name: string
+  email: string
+  _id: string
+  avatar?: string
+}
+export interface ILikePost {
+  postId: string
+  user: IUserDetails
 }
