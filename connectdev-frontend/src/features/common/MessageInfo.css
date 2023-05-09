@@ -1,0 +1,11 @@
+.message__info {
+  font-weight: bold;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  color: white;
+  text-align: center;
+  background-color: rgb(46, 133, 46);
+}
+.isError {
+  background-color: rgb(231, 68, 68);
+}

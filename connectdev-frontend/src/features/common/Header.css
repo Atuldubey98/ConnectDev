@@ -1,0 +1,9 @@
+header {
+  background-color: var(--accent-color);
+  color: white;
+  flex-wrap: wrap;
+}
+.banner {
+  gap: 0.8rem;
+  flex: 3;
+}

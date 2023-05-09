@@ -1,0 +1,9 @@
+.auth__form {
+  display: grid;
+  gap: 0.8rem;
+  max-width: 450px;
+  width: 90%;
+}
+.auth__form a{
+    text-align: center;
+}

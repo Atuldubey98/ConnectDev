@@ -7,12 +7,13 @@ const UserSchema = new Schema({
   name: {
     type: String,
     required: true,
-    index : true
+    index: true,
   },
   email: {
     type: String,
     index: true,
     lowercase: true,
+    unique: true,
     required: [true, "can't be blank"],
   },
   password: {
@@ -32,7 +33,7 @@ UserSchema.methods.getJWTToken = (email, name, id) => {
     {
       email,
       name,
-      id
+      id,
     },
     JWT_SECRET,
     {

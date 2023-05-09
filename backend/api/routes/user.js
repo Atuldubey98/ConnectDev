@@ -5,9 +5,6 @@ const {
   registerUser,
   loginUser,
   logoutUser,
-  postProfile,
-  getProfile,
-  updateProfile,
   getCurrentUserProfile,
   getChatUser,
 } = require("../controller/userController");

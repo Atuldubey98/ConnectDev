@@ -5,3 +5,4 @@
 /logs/access.log
 /logs/error.log
 /logs/combined.log
+/data

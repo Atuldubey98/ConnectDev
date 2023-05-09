@@ -1,0 +1,19 @@
+.header__links > li > a {
+  text-decoration: none;
+  color: white;
+}
+.header__links li {
+  padding: 0.8rem;
+  transition: all 300ms ease-in;
+}
+.header__links li:hover {
+  text-decoration: underline;
+}
+.header__links .active {
+  font-weight: bold;
+}
+.header__links {
+  list-style: none;
+  gap: 1rem;
+  flex: 7;
+}

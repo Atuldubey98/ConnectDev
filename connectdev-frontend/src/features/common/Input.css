@@ -1,0 +1,15 @@
+.input__control {
+  font-size: 1.1rem;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+.input__control > input {
+  width: 100%;
+  font-size: 1.1rem;
+  border-radius: 0.3rem;
+}
+@media screen and (max-width: 540px) {
+  .input__control {
+    grid-template-columns: 1fr;
+  }
+}

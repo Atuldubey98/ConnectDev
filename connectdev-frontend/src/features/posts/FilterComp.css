@@ -1,0 +1,18 @@
+.filter__comp {
+  margin: auto;
+  padding-block: 0.8rem;
+  background-color: rgb(240, 240, 240);
+}
+.filter__comp form {
+  border-radius: 0.8rem;
+  padding: 0.3rem;
+  background-color: white;
+  box-shadow: 2px 2px #888888;
+  border: 2px solid lightgray;
+}
+.filter__comp > form > input {
+  outline: none;
+  border: none;
+  width: 100%;
+  font-size: 1.1rem;
+}

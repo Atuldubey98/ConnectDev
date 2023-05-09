@@ -23,14 +23,13 @@ const PostSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
-  header: {
-    type: String,
-  },
-  subtitle: {
-    type: String,
+  tags: {
+    type: Array,
+    default: [],
   },
   title: {
     type: String,
+    required: true,
   },
   color: {
     type: String,

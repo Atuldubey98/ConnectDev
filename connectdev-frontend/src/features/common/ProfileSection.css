@@ -1,0 +1,43 @@
+.profile__section {
+  flex: 2;
+}
+.profile__section p {
+  font-weight: bold;
+}
+.profile__dropbtn {
+  border-radius: 0.5rem;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+.profile__dropbtn:hover {
+  background-color: var(--hover-color);
+}
+.profile__dropdownItems {
+  position: absolute;
+  list-style: none;
+  display: none;
+  width: 100%;
+  background-color: var(--accent-color);
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+
+.profile__dropwrapper:hover .profile__dropdownItems {
+  display: block;
+}
+.profile__dropwrapper {
+  position: relative;
+}
+
+.profile__dropdownItems  li {
+  padding: 0.3rem;
+  color: white;
+  transition: all 300ms ease-in;
+  font-weight: bold;
+  cursor: pointer;
+  justify-content: flex-start;
+  gap: 0.8rem;
+}
+.profile__dropdownItems li:hover {
+  background-color: var(--hover-color);
+}
