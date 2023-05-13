@@ -1,7 +1,7 @@
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
+import HeaderLink from "./HeaderLink"
 import "./HeaderLinks.css"
-import classNames from "classnames"
-type HeaderLinkType = {
+export type HeaderLinkType = {
   to: string
   label: string
 }
@@ -23,18 +23,5 @@ export default function HeaderLinks() {
         />
       ))}
     </ul>
-  )
-}
-function HeaderLink({
-  headerLink,
-  activeLink,
-}: {
-  headerLink: HeaderLinkType
-  activeLink: string
-}): JSX.Element {
-  return (
-    <li className={classNames({ active: activeLink === headerLink.to })}>
-      <Link to={headerLink.to}>{headerLink.label}</Link>
-    </li>
   )
 }

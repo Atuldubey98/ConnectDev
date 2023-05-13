@@ -2,21 +2,44 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
 
 import { isAxiosError } from "axios"
-import { ILikePost, ILikes, IPostResponse } from "../../interfaces/post"
-import { fetchAllPosts, likeOrDislikePost } from "./postAPI"
+import {
+  ICreatePost,
+  ILikePost,
+  ILikes,
+  IPostResponse,
+} from "../../interfaces/post"
+import { createNewPost, fetchAllPosts, likeOrDislikePost } from "./postAPI"
+import { IPost } from "../../interfaces/post"
 type PostState = {
   status: "success" | "loading" | "failed" | "idle"
+  newPostStatus: "success" | "loading" | "failure" | ""
   postResponse: IPostResponse | null
 }
 const initialState: PostState = {
   status: "idle",
   postResponse: null,
+  newPostStatus: "",
 }
 
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
+    setNewPostLoading: (state) => {
+      state.newPostStatus = "loading"
+    },
+    setNewPostError: (state) => {
+      state.newPostStatus = "failure"
+    },
+    setNewPostSuccess: (state, action: PayloadAction<IPost>) => {
+      state.newPostStatus = "success"
+      if (state.postResponse && state.postResponse?.posts) {
+        state.postResponse!.posts = [
+          action.payload,
+          ...state.postResponse?.posts,
+        ]
+      }
+    },
     setLoading: (state) => {
       state.status = "loading"
     },
@@ -77,6 +100,9 @@ export const {
   setLoading,
   setSuccess,
   setIdle,
+  setNewPostError,
+  setNewPostLoading,
+  setNewPostSuccess,
   setLike,
   setDislike,
 } = postSlice.actions
@@ -116,4 +142,28 @@ export const dolikeorDislikePost =
     }
   }
 
+export const createPostAction =
+  (
+    post: ICreatePost,
+    showToast: (message: string, isError: boolean) => void,
+  ): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setNewPostLoading())
+      const { data } = await createNewPost(post)
+      const newPost: IPost = data.post
+      dispatch(setNewPostSuccess(newPost))
+      showToast("Posted", false)
+    } catch (error) {
+      dispatch(
+        setNewPostError(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
+      )
+      showToast(
+        isAxiosError(error) ? error.response?.data.message : "Error occured",
+        true,
+      )
+    }
+  }
 export default postSlice.reducer

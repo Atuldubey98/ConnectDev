@@ -7,7 +7,8 @@ const User = require("../../models/User");
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
   const post = new Post({ ...req.body, user: req.user._id });
-  await post.save();
+  await (await post.save()).populate("user", "name avatar email");
+
   return res.status(201).json({ status: true, post });
 });
 
@@ -78,6 +79,9 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       limit,
       collation: {
         locale: "en",
+      },
+      sort: {
+        date: -1,
       },
       populate: [
         {

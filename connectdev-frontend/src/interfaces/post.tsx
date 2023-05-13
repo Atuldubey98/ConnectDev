@@ -26,6 +26,17 @@ export interface IPost {
   color: string
   __v: number
 }
+export interface ICreatePost {
+  title: string
+  text: string
+  tags: { id: string; tag: string }[]
+}
+export interface ICreatePostForm extends ICreatePost {
+  tag: string
+  tagErrTxt: string
+  titleErrTxt: string
+  textErrTxt: string
+}
 export interface IUserDetails {
   name: string
   email: string

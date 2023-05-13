@@ -1,0 +1,74 @@
+.create__postForm {
+  display: grid;
+  width: 100%;
+  gap: 1rem;
+  animation: slideIn 400ms ease-in forwards;
+}
+.create__form {
+  width: 100%;
+}
+.create__postForm > .create__same,
+.create__same > input {
+  border: none;
+  outline: none;
+  background-color: var(--secondary-color);
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+.create__postForm > input {
+  width: 100%;
+  border: none;
+}
+.create__postForm > textarea {
+  width: 100%;
+}
+.create__formUser {
+  display: fle;
+}
+.create__postTag {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.create__postTag > .btn {
+  border: 0;
+  padding: 0.3rem;
+  font-size: 1rem;
+  background-color: var(--accent-color);
+  color: white;
+  border-radius: 0.5rem;
+  outline: none;
+}
+.create__errTxt {
+  color: red;
+}
+.create__btn {
+  gap: 0.8rem;
+}
+.tags__list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+.tags__list span {
+  background-color: white;
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+}
+.create__btn > .submit {
+  background-color: var(--accent-color);
+  color: white;
+  transition: all 300ms ease-in;
+}
+.create__btn > .submit:hover {
+  background-color: var(--hover-color);
+}
+.create__btn > .cancel {
+  background-color: black;
+  color: white;
+}

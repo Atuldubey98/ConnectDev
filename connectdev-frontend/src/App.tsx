@@ -8,14 +8,24 @@ import LoginPage from "./features/login"
 import PrivateRoute from "./features/login/PrivateRoute"
 import PostsPage from "./features/posts"
 import RegisterPage from "./features/register"
+import LandingPage from "./features/landing"
 
 export default function App() {
   return (
     <>
       <Header />
       <Routes>
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <LandingPage />
+            </PrivateRoute>
+          }
+        />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+
         <Route
           path="/posts"
           element={

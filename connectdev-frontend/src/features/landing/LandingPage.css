@@ -1,0 +1,35 @@
+.landing__page {
+  min-height: 90svh;
+}
+.landing__page section {
+  display: grid;
+  gap: 1rem;
+}
+.landing__back {
+  text-align: center;
+}
+.landing__banner img {
+  width: 10vw;
+}
+.landing__banner h1 {
+  font-size: 10vw;
+}
+.landing__back p {
+  font-size: 3vw;
+}
+.landing__btns {
+  gap: 1rem;
+}
+.landing__btns a {
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  background-color: var(--accent-color);
+  border-radius: 0.3rem;
+  padding: 0.5rem;
+  transition: all 300ms ease-in;
+}
+.landing__btns a:hover {
+  opacity: 0.8;
+}
+

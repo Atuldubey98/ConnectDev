@@ -11,9 +11,11 @@
 .post__body p {
   text-align: justify;
 }
-
 .post__about > a > p {
   text-align: right;
+}
+.post__about p {
+  color: grey;
 }
 .post__btns {
   border: 1px solid lightgray;
