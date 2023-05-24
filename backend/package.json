@@ -20,6 +20,7 @@
     "gravatar": "^1.8.2",
     "gridfs-stream": "^1.1.1",
     "jsonwebtoken": "^9.0.0",
+    "lorem-ipsum": "^2.0.8",
     "mongoose": "^7.0.0",
     "mongoose-paginate-v2": "^1.7.1",
     "morgan": "^1.10.0",

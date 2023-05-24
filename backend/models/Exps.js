@@ -25,5 +25,4 @@ const ExpSchema = new Schema({
     ref: "users",
   },
 });
-
 module.exports = Exps = mongoose.model("experience", ExpSchema);

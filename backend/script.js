@@ -1,6 +1,16 @@
 const { default: axios, isAxiosError } = require("axios");
+const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 const baseUrl = "http://localhost:9000";
-
+const lorem = new LoremIpsum({
+  sentencesPerParagraph: {
+    max: 8,
+    min: 4,
+  },
+  wordsPerSentence: {
+    max: 16,
+    min: 4,
+  },
+});
 const instance = axios.create({
   baseUrl,
   withCredentials: true,
@@ -179,8 +189,78 @@ async function commentOnPosts() {
     const filtered = responses
       .filter(Boolean)
       .map((response) => response.value);
-    console.log(filtered.length + "Comments");
   } catch (error) {
     throw error;
   }
 }
+
+async function createProfiles(startPostion, endPostion) {
+  const start = isNaN(startPostion) ? 0 : startPostion;
+  const fetchedCookies = await fetchCookiesForUsers();
+  const end = isNaN(endPostion) ? fetchedCookies.length : endPostion;
+  if (start > end) {
+    throw new Error("Start cannot be greater than end");
+  }
+  const consideredCookies = Array.isArray(fetchedCookies)
+    ? fetchedCookies.slice(start, end)
+    : [];
+  const requests = consideredCookies.map((Cookie) => {
+    const skills = [
+      {
+        skill: lorem.generateWords(1),
+        yearsWorked: getRandomInt(5),
+      },
+      {
+        skill: lorem.generateWords(1),
+        yearsWorked: getRandomInt(5),
+      },
+    ];
+    const handle = [
+      {
+        username: lorem.generateWords(1),
+        link: lorem.generateWords(1),
+        platform: "Google",
+      },
+    ];
+    const status = lorem.generateWords(6);
+    const experience = [
+      {
+        title: lorem.generateWords(2),
+        company: lorem.generateWords(2),
+        description: lorem.generateSentences(2),
+      },
+    ];
+    const education = [
+      {
+        degree: lorem.generateWords(1),
+        area: lorem.generateWords(1),
+        school: lorem.generateWords(3),
+        description: lorem.generateSentences(2),
+      },
+    ];
+    const profile = { skills, education, experience, status, handle };
+    const request = instance.post(
+      "http://localhost:9000/api/profile",
+      profile,
+      {
+        headers: {
+          Cookie,
+        },
+      }
+    );
+    return request;
+  });
+  const responses = await Promise.allSettled(requests);
+  const filtered = responses
+    .filter(Boolean)
+    .map((response) => response.value.data);
+  console.log("Profiles Created  : ", filtered.length);
+  console.log(
+    "Profiles Created for :",
+    filtered.map((p) => p.user)
+  );
+}
+
+(async () => {
+  createProfiles(3);
+})();

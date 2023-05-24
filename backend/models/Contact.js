@@ -15,6 +15,6 @@ const ContactSchema = new Schema({
   chatId: {
     type: String,
   },
-});
+}, { timestamps: true });
 
 module.exports = Contact = mongoose.model("contact", ContactSchema);

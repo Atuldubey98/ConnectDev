@@ -18,6 +18,6 @@ const HandleSchema = new Schema({
     ref: "users",
     type: Schema.Types.ObjectId,
   },
-});
+}, { timestamps: true });
 
 module.exports = Handle = mongoose.model("handle", HandleSchema);
