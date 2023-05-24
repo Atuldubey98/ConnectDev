@@ -1,5 +1,5 @@
 const { default: axios, isAxiosError } = require("axios");
-const baseUrl = "http://localhost:8080";
+const baseUrl = "http://localhost:9000";
 
 const instance = axios.create({
   baseUrl,
@@ -52,7 +52,7 @@ async function getLoginCookie(email, password) {
   }
   try {
     const response = await instance.post(
-      "http://localhost:8080/api/users/login",
+      "http://localhost:9000/api/users/login",
       {
         email,
         password,
@@ -64,20 +64,28 @@ async function getLoginCookie(email, password) {
     console.log(error);
   }
 }
+async function fetchCookiesForUsers() {
+  try {
+    const users = await fetchData("users").then((res) => res.users);
+    const cookiesRequests = users.map((user) =>
+      getLoginCookie(user.email, user.password)
+    );
+    const responsesCookies = await Promise.allSettled(cookiesRequests);
+    const cookies = responsesCookies.map((response) =>
+      response.status === "fulfilled" ? response.value : null
+    );
+    return cookies;
+  } catch (error) {
+    throw error;
+  }
+}
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-
-(async () => {
-  const users = await fetchData("users").then((res) => res.users);
+async function createPosts() {
+  const cookies = await fetchCookiesForUsers();
   const posts = await fetchData("posts").then((res) => res.posts);
-  const cookiesRequests = users.map((user) =>
-    getLoginCookie(user.email, user.password)
-  );
-  const responsesCookies = await Promise.allSettled(cookiesRequests);
-  const cookies = responsesCookies.map((response) =>
-    response.status === "fulfilled" ? response.value : null
-  );
+
   const requests = [];
   cookies.forEach((Cookie) => {
     let i = getRandomInt(posts.length),
@@ -87,7 +95,7 @@ function getRandomInt(max) {
     console.log(i, j);
     requests.push(
       instance.post(
-        "http://localhost:8080/api/post",
+        "http://localhost:9000/api/post",
         {
           title: title1,
           text: text1,
@@ -102,7 +110,7 @@ function getRandomInt(max) {
     );
     requests.push(
       instance.post(
-        "http://localhost:8080/api/post",
+        "http://localhost:9000/api/post",
         {
           title: title2,
           text: text2,
@@ -117,4 +125,62 @@ function getRandomInt(max) {
     );
   });
   await Promise.allSettled(requests);
-})();
+}
+async function commentOnPosts() {
+  try {
+    const cookies = await fetchCookiesForUsers();
+    const commentsFetched = await fetchData("comments");
+    const comments = commentsFetched.comments.map((comment) => comment.body);
+    const Cookie =
+      Array.isArray(cookies) && cookies.length > 0 ? cookies[0] : null;
+    const { data } = await instance.get("http://localhost:9000/api/post/all", {
+      headers: {
+        Cookie,
+      },
+    });
+    const { posts } = data;
+    const postIds = Array.isArray(posts) ? posts.map((post) => post._id) : [];
+    const requests = [];
+    postIds.forEach((postId) => {
+      let i = getRandomInt(cookies.length),
+        j = getRandomInt(cookies.length);
+      const Cookie1 = cookies[i],
+        Cookie2 = cookies[j];
+      requests.push(
+        instance.post(
+          "http://localhost:9000/api/post/comment",
+          {
+            postId,
+            text: comments[getRandomInt(comments.length)],
+          },
+          {
+            headers: {
+              Cookie: Cookie1,
+            },
+          }
+        )
+      );
+      requests.push(
+        instance.post(
+          "http://localhost:9000/api/post/comment",
+          {
+            postId,
+            text: comments[getRandomInt(comments.length)],
+          },
+          {
+            headers: {
+              Cookie: Cookie2,
+            },
+          }
+        )
+      );
+    });
+    const responses = await Promise.allSettled(requests);
+    const filtered = responses
+      .filter(Boolean)
+      .map((response) => response.value);
+    console.log(filtered.length + "Comments");
+  } catch (error) {
+    throw error;
+  }
+}

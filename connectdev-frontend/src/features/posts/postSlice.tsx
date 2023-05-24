@@ -3,22 +3,32 @@ import { AppThunk } from "../../app/store"
 
 import { isAxiosError } from "axios"
 import {
+  IComment,
   ICreatePost,
-  ILikePost,
   ILikes,
+  IPost,
   IPostResponse,
 } from "../../interfaces/post"
-import { createNewPost, fetchAllPosts, likeOrDislikePost } from "./postAPI"
-import { IPost } from "../../interfaces/post"
+import {
+  createNewPost,
+  deleteComment,
+  deletePost,
+  fetchAllPosts,
+  likeOrDislikePost,
+  makeNewComment,
+} from "./postAPI"
+import { setPostWasJustAddedAction } from "../ui/uiSlice"
 type PostState = {
   status: "success" | "loading" | "failed" | "idle"
-  newPostStatus: "success" | "loading" | "failure" | ""
+  newPostStatus: "success" | "loading" | "failure" | "idle"
+  newCommentStatus: "success" | "loading" | "failure" | "idle"
   postResponse: IPostResponse | null
 }
 const initialState: PostState = {
   status: "idle",
   postResponse: null,
-  newPostStatus: "",
+  newPostStatus: "idle",
+  newCommentStatus: "idle",
 }
 
 export const postSlice = createSlice({
@@ -31,6 +41,53 @@ export const postSlice = createSlice({
     setNewPostError: (state) => {
       state.newPostStatus = "failure"
     },
+    setNewCommentLoading: (state) => {
+      state.newCommentStatus = "loading"
+    },
+    setNewCommentError: (state) => {
+      state.newCommentStatus = "failure"
+    },
+    setDeletePost: (state, action: PayloadAction<string>) => {
+      if (state.postResponse && state.postResponse.posts) {
+        state.postResponse.posts = state.postResponse.posts.filter(
+          (post) => post._id !== action.payload,
+        )
+      }
+    },
+    setDeleteComment: (
+      state,
+      action: PayloadAction<{ postId: string; commentId: string }>,
+    ) => {
+      if (state.postResponse && state.postResponse.posts) {
+        state.postResponse.posts = state.postResponse.posts.map((post) =>
+          post._id === action.payload.postId
+            ? {
+                ...post,
+                comments: post.comments
+                  ? post.comments.filter(
+                      (co) => co._id !== action.payload.commentId,
+                    )
+                  : [],
+              }
+            : post,
+        )
+      }
+    },
+    setNewCommentLoaded: (state, action: PayloadAction<IComment>) => {
+      state.newCommentStatus = "success"
+      if (state.postResponse && state.postResponse.posts) {
+        state.postResponse.posts = state.postResponse!.posts?.map((post) =>
+          post._id === action.payload.post
+            ? {
+                ...post,
+                comments: post.comments
+                  ? [action.payload, ...post.comments]
+                  : [action.payload],
+              }
+            : post,
+        )
+      }
+    },
     setNewPostSuccess: (state, action: PayloadAction<IPost>) => {
       state.newPostStatus = "success"
       if (state.postResponse && state.postResponse?.posts) {
@@ -40,6 +97,7 @@ export const postSlice = createSlice({
         ]
       }
     },
+
     setLoading: (state) => {
       state.status = "loading"
     },
@@ -49,14 +107,10 @@ export const postSlice = createSlice({
     setSuccess: (state, action: PayloadAction<IPostResponse>) => {
       state.status = "success"
       if (state.postResponse?.posts && action.payload.posts) {
-        state.postResponse.count = action.payload.count
-        state.postResponse.page = action.payload.count
-        state.postResponse.posts = [
-          ...state.postResponse.posts,
-          ...action.payload.posts,
-        ]
-        state.postResponse.totalCount = action.payload.totalCount
-        state.postResponse.totalPages = action.payload.totalPages
+        state.postResponse = {
+          ...action.payload,
+          posts: [...state.postResponse.posts, ...action.payload.posts],
+        }
       } else {
         state.postResponse = action.payload
       }
@@ -105,7 +159,13 @@ export const {
   setNewPostSuccess,
   setLike,
   setDislike,
+  setNewCommentError,
+  setNewCommentLoaded,
+  setNewCommentLoading,
+  setDeleteComment,
+  setDeletePost,
 } = postSlice.actions
+
 export const getAllPosts =
   (page: number): AppThunk =>
   async (dispatch) => {
@@ -146,6 +206,7 @@ export const createPostAction =
   (
     post: ICreatePost,
     showToast: (message: string, isError: boolean) => void,
+    showAnimationOnNewPost: (postId: string) => void,
   ): AppThunk =>
   async (dispatch) => {
     try {
@@ -154,6 +215,7 @@ export const createPostAction =
       const newPost: IPost = data.post
       dispatch(setNewPostSuccess(newPost))
       showToast("Posted", false)
+      showAnimationOnNewPost(newPost._id)
     } catch (error) {
       dispatch(
         setNewPostError(
@@ -163,6 +225,55 @@ export const createPostAction =
       showToast(
         isAxiosError(error) ? error.response?.data.message : "Error occured",
         true,
+      )
+    }
+  }
+export const postCommentAction =
+  (body: { postId: string; text: string }): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setNewCommentLoading())
+      if (body.postId.length === 0 || body.text.length === 0) return
+      const { data } = await makeNewComment(body)
+      dispatch(setNewCommentLoaded(data.comment))
+    } catch (error) {
+      dispatch(
+        setNewCommentError(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
+      )
+    }
+  }
+export const deleteCommentAction =
+  (body: { postId: string; commentId: string }): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (body.postId.length === 0 || body.commentId.length === 0) return
+      await deleteComment(body)
+      dispatch(setDeleteComment(body))
+    } catch (error) {
+      dispatch(
+        setNewCommentError(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
+      )
+    }
+  }
+
+export const deletePostAction =
+  (body: { postId: string }): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (body.postId.length === 0) {
+        return
+      }
+      await deletePost(body)
+      dispatch(setDeletePost(body.postId))
+    } catch (error) {
+      dispatch(
+        setNewCommentError(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
       )
     }
   }

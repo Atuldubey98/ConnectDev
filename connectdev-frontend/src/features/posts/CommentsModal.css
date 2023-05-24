@@ -1,0 +1,36 @@
+.comments__modal {
+  width: 100%;
+}
+.comments__head {
+  display: flex;
+  gap: 0.8rem;
+}
+.comments__form {
+  width: 100%;
+}
+.comment__field {
+  width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 0.5rem;
+}
+
+.comment__field textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  height: 100%;
+  border-radius: 0.5rem;
+
+  padding: 0.5rem;
+  font-size: 1.1rem;
+}
+.comments_footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.comments_footer button {
+  margin-top: 0.5rem;
+  color: white;
+  background-color: var(--accent-color);
+}

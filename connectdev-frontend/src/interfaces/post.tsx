@@ -1,3 +1,5 @@
+import IUser from "./IUser"
+
 export interface IPostResponse {
   totalCount: number
   count: number
@@ -5,6 +7,8 @@ export interface IPostResponse {
   posts?: IPost[] | null
   page: number
   status: boolean
+  hasNextPage: boolean
+  hasPrevPage: boolean
 }
 export interface ILikes {
   user: {
@@ -19,13 +23,21 @@ export interface IPost {
   text: string
   user: IUserDetails
   likes?: ILikes[] | null
-  comments?: IUserDetails[] | null
+  comments?: IComment[] | null
   date: string
   tags?: string[] | null
   title: string
   color: string
   __v: number
 }
+export interface IComment {
+  _id: string
+  user: IUser
+  post: string
+  text: string
+  date: string
+}
+
 export interface ICreatePost {
   title: string
   text: string

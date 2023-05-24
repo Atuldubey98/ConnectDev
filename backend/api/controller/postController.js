@@ -48,15 +48,22 @@ exports.deletePostsById = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-exports.deleteSinglePostById = catchAsyncErrors(async (req, res, next) => {
-  const { id } = req.query;
-  const post = await Post.findById(id);
+exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
+  const { postId } = req.query;
+  const post = await Post.findById(postId);
+
   if (!post)
     return res.status(400).json({
       status: false,
       message: "Not exist",
     });
-  await Post.deleteOne({ _id: id });
+  if (post.likes.length > 0) {
+    await Likes.deleteMany({ _id: { $in: post.likes } });
+  }
+  if (post.comments.length > 0) {
+    await Comments.deleteMany({ _id: { $in: post.comments } });
+  }
+  await Post.deleteOne({ _id: postId });
   return res.status(200).json({
     status: true,
     message: "Deleted",
@@ -79,9 +86,6 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       limit,
       collation: {
         locale: "en",
-      },
-      sort: {
-        date: -1,
       },
       populate: [
         {
@@ -184,7 +188,8 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
-  const { commentId, postId } = req.body;
+  const commentId = req.query.commentId || "";
+  const postId = req.query.postId || "";
   if (!commentId || !postId) {
     return res.status(400).json({ status: false });
   }

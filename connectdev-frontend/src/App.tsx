@@ -3,6 +3,8 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "./App.css"
 import ChatsPage from "./features/chats"
+import ProfilePage from "./features/profile"
+
 import Header from "./features/common/Header"
 import LoginPage from "./features/login"
 import PrivateRoute from "./features/login/PrivateRoute"
@@ -15,14 +17,7 @@ export default function App() {
     <>
       <Header />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <LandingPage />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
@@ -39,6 +34,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <ChatsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />

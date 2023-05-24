@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import "./PostsLists.css"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { getAllPosts } from "./postSlice"
+import { getAllPosts, setIdle } from "./postSlice"
 import { ClockLoader } from "react-spinners"
 import Post from "./Post"
 import useScrollPage from "./useScrollPage"
@@ -10,14 +10,19 @@ export default function PostsList() {
   const appDispatch = useAppDispatch()
   const loading = status === "loading"
   const { page } = useScrollPage()
+
   useEffect(() => {
-    if (postResponse && postResponse.totalPages < page) {
+    if (postResponse && !postResponse.hasNextPage) {
       return
     } else {
       appDispatch(getAllPosts(page))
     }
   }, [page])
-
+  useEffect(() => {
+    return () => {
+      appDispatch(setIdle())
+    }
+  }, [])
   return (
     <section className="posts__list">
       {postResponse && postResponse.posts && postResponse.posts.length === 0 ? (

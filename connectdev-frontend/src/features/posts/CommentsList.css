@@ -1,0 +1,32 @@
+.comments__list {
+  display: grid;
+  gap: 0.8rem;
+  margin-block: 0.5rem;
+  max-height: 40svh;
+  overflow: auto;
+}
+.comment {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem;
+}
+.comment__text {
+  border-radius: 0.3rem;
+  border: 1px solid lightgray;
+  padding: 0.3rem;
+  background-color: lightgray;
+  width: 100%;
+}
+.comment__text > span {
+  font-size: 0.9rem;
+}
+.comment__footer > span {
+  font-size: 0.8rem;
+  color: rgb(129, 128, 128);
+  margin-right: 0.3rem;
+  transition: all 300ms ease-in;
+}
+.comment__del:hover {
+  cursor: pointer;
+  color: darkgray;
+}

@@ -1,18 +1,31 @@
 import { AiFillLike, AiOutlineLike } from "react-icons/ai"
 import { FaRegCommentAlt } from "react-icons/fa"
-import { ILikes, IUserDetails } from "../../interfaces/post"
+import { MdDelete } from "react-icons/md"
+
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { dolikeorDislikePost } from "./postSlice"
+import { IPost } from "../../interfaces/post"
+import { toggleCommentsModal, toggleCommentsModalPost } from "../ui/uiSlice"
+import { deletePostAction, dolikeorDislikePost } from "./postSlice"
 
 type PostBtnsProps = {
-  likes?: ILikes[] | null
-  comments?: IUserDetails[] | null
-  postId: string
+  post: IPost
+  onDelete: () => void
 }
 
-export default function PostBtns({ likes, comments, postId }: PostBtnsProps) {
+export default function PostBtns({ post, onDelete }: PostBtnsProps) {
+  const { comments, likes, _id: postId, user: postUser } = post
   const { user } = useAppSelector((state) => state.login)
   const appDispatch = useAppDispatch()
+  const onCommentsIconClick = () => {
+    appDispatch(toggleCommentsModalPost(postId))
+    appDispatch(toggleCommentsModal())
+  }
+  const onDeleteClick = () => {
+    if (confirm("Are you sure you want to delete the post?")) {
+      onDelete()
+      appDispatch(deletePostAction({ postId }))
+    }
+  }
   return (
     <div className="post__btns">
       <div
@@ -26,7 +39,13 @@ export default function PostBtns({ likes, comments, postId }: PostBtnsProps) {
           <AiFillLike size={20} />
         )}
       </div>
-      <div className="post__btn d-flex-center">
+      {user?._id === postUser._id ? (
+        <div onClick={onDeleteClick} className="post__btn d-flex-center">
+          <MdDelete />
+          <span>Delete</span>
+        </div>
+      ) : null}
+      <div onClick={onCommentsIconClick} className="post__btn d-flex-center">
         <span>{comments?.length}</span>
         <FaRegCommentAlt size={20} />
       </div>

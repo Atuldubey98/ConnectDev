@@ -5,6 +5,7 @@ import { UserAvatarSmall } from "./CreatePost"
 import "./CreatePostForm.css"
 import useNewPost from "./useNewPost"
 import { IoCloseOutline } from "react-icons/io5"
+import { SlTag } from "react-icons/sl"
 type CreatePostFormProps = {
   user: IUser | null
   toggleOpen: () => void
@@ -69,8 +70,12 @@ export default function CreatePostForm({
             placeholder="Tag"
             name="tag"
           />
-          <button type="button" onClick={onAddTag} className="btn">
-            Add tag
+          <button
+            type="button"
+            onClick={onAddTag}
+            className="btn d-flex-center"
+          >
+            <SlTag /> <span>Add tag</span>
           </button>
         </div>
         <div className="create__errTxt">{state.tagErrTxt}</div>

@@ -28,13 +28,15 @@ export default function CreatePost() {
 export function UserAvatarSmall({
   avatar,
   name,
+  size,
 }: {
   avatar?: string
   name: string
+  size?: number
 }) {
   return avatar ? (
-    <img src={avatar} alt={name} width={48} />
+    <img src={avatar} alt={name} width={size || 48} />
   ) : (
-    <RxAvatar size={48} />
+    <RxAvatar size={size || 48} />
   )
 }

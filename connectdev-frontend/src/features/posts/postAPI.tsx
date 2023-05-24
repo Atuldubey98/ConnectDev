@@ -31,3 +31,29 @@ export const createNewPost = (post: ICreatePost) => {
     throw error
   }
 }
+
+export const makeNewComment = (body: { postId: string; text: string }) => {
+  try {
+    return instance.post("/api/post/comment", body)
+  } catch (error) {
+    throw error
+  }
+}
+export const deleteComment = (body: { postId: string; commentId: string }) => {
+  try {
+    return instance.delete("/api/post/comment", {
+      params: body,
+    })
+  } catch (error) {
+    throw error
+  }
+}
+export const deletePost = (body: { postId: string }) => {
+  try {
+    return instance.delete("/api/post", {
+      params: body,
+    })
+  } catch (error) {
+    throw error
+  }
+}

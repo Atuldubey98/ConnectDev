@@ -7,3 +7,7 @@ header {
   gap: 0.8rem;
   flex: 3;
 }
+.banner a {
+  text-decoration: none;
+  color: white;
+}

@@ -3,6 +3,7 @@ import { ICreatePostForm } from "../../interfaces/post"
 import { useAppDispatch } from "../../app/hooks"
 import { createPostAction } from "./postSlice"
 import { toast } from "react-toastify"
+import { setPostWasJustAddedAction } from "../ui/uiSlice"
 
 export default function useNewPost() {
   const appDispatch = useAppDispatch()
@@ -73,9 +74,9 @@ export default function useNewPost() {
           ...state,
           tagErrTxt: state.tag.length === 0 ? "Tag cannot be left blank" : "",
           textErrTxt:
-            state.textErrTxt.length === 0 ? "Title cannot be left blank" : "",
+            state.text.length === 0 ? "Text cannot be left blank" : "",
           titleErrTxt:
-            state.titleErrTxt.length === 0 ? "Title cannot be left blank" : "",
+            state.title.length === 0 ? "Title cannot be left blank" : "",
         }
       case "addtag":
         return {
@@ -108,7 +109,9 @@ export default function useNewPost() {
     const { name, value } = e.target
     dispatch({ type: "change", text: { name, value } })
   }
-
+  function showAnimationOnNewPost(postId: string) {
+    appDispatch(setPostWasJustAddedAction(postId))
+  }
   const onChangeText: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     const { name, value } = e.target
     dispatch({ type: "change", text: { name, value } })
@@ -126,7 +129,13 @@ export default function useNewPost() {
       return
     }
     const { tags, title, text } = state
-    appDispatch(createPostAction({ tags, title, text }, showToast))
+    appDispatch(
+      createPostAction(
+        { tags, title, text },
+        showToast,
+        showAnimationOnNewPost,
+      ),
+    )
     dispatch({ type: "default" })
   }
   return { onChangeInput, state, onAddTag, onChangeText, onSubmit, onRemoveTag }

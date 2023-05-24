@@ -2,6 +2,32 @@
   max-width: 720px;
   margin: 0.5rem auto;
 }
+.beingDeleted {
+  animation: fadeIn 300ms ease-in forwards;
+}
+.justAddedPostId {
+  animation: fadeOut 300ms ease-in forwards;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 .post__body {
   background-color: var(--secondary-color);
   padding: 0.8rem;
