@@ -1,0 +1,27 @@
+.profile__editWrapper {
+  max-width: 920px;
+  margin: auto;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.8rem;
+}
+.profile__formHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profile__mainForm {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+.common__profileList {
+  display: grid;
+  gap: 0.3rem;
+}
+.skill__wrapper {
+  border-radius: 0.3rem;
+  border: 1px solid lightgray;
+  padding: 0.3rem;
+  cursor: pointer;
+}

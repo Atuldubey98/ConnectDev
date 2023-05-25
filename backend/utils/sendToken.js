@@ -7,7 +7,6 @@ const sendToken = async (user, statusCode, res) => {
     httpOnly: true,
     sameSite: true,
     path: "/",
-    expires: new Date(Date.now() + 900000),
     secure: NODE_ENV !== "development",
   };
   res.status(statusCode).cookie("token", token, options).json(user);

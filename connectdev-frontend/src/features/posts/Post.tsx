@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import { IPost } from "../../interfaces/post"
+import { IPost } from "./interfaces"
 import "./Post.css"
 import PostBody from "./PostBody"
 import PostBtns from "./PostBtns"

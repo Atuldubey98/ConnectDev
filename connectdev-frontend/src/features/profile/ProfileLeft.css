@@ -1,0 +1,13 @@
+.profile__status {
+  font-weight: 600;
+}
+.profile__left {
+  text-align: center;
+}
+.profile__email {
+  font-size: 0.9rem;
+  color: gray;
+}
+.common__profileList {
+  list-style: none;
+}

@@ -1,5 +1,5 @@
 import moment from "moment"
-import { IComment } from "../../interfaces/post"
+import { IComment } from "./interfaces"
 import "./CommentsList.css"
 import { UserAvatarSmall } from "./CreatePost"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"

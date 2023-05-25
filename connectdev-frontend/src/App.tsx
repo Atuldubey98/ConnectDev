@@ -11,6 +11,7 @@ import PrivateRoute from "./features/login/PrivateRoute"
 import PostsPage from "./features/posts"
 import RegisterPage from "./features/register"
 import LandingPage from "./features/landing"
+import ProfileEdit from "./features/profileEdit"
 
 export default function App() {
   return (
@@ -42,6 +43,14 @@ export default function App() {
           element={
             <PrivateRoute>
               <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/edit"
+          element={
+            <PrivateRoute>
+              <ProfileEdit />
             </PrivateRoute>
           }
         />

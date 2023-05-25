@@ -1,6 +1,6 @@
 import { BarLoader } from "react-spinners"
 import { useAppSelector } from "../../app/hooks"
-import IUser from "../../interfaces/IUser"
+import IUser from "../login/interfaces"
 import { UserAvatarSmall } from "./CreatePost"
 import "./CreatePostForm.css"
 import useNewPost from "./useNewPost"

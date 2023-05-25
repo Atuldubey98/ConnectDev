@@ -1,4 +1,4 @@
-import IUser from "./IUser"
+import IUser from "../login/interfaces"
 
 export interface IPostResponse {
   totalCount: number

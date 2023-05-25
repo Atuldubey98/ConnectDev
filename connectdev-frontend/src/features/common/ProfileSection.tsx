@@ -1,8 +1,9 @@
 import { AiFillEdit, AiOutlineArrowDown, AiOutlineLogout } from "react-icons/ai"
 import "./ProfileSection.css"
+import { useNavigate } from "react-router-dom"
 
 export default function ProfileSection({ name }: { name: string }) {
- 
+  const navigate = useNavigate()
   return (
     <div className="profile__section">
       <div className="profile__dropwrapper">
@@ -11,8 +12,10 @@ export default function ProfileSection({ name }: { name: string }) {
           <AiOutlineArrowDown />
         </div>
         <ul className="profile__dropdownItems">
-         
-          <li className="d-flex-center">
+          <li
+            onClick={() => navigate("/profile/edit")}
+            className="d-flex-center"
+          >
             <AiFillEdit />
             <span>Edit Profile</span>
           </li>

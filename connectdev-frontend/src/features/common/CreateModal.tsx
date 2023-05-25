@@ -5,7 +5,7 @@ import { setCreateModal } from "../ui/uiSlice"
 import Input from "./Input"
 import { useEffect, useRef, useState } from "react"
 import useAutosizeTextArea from "./useAutosizeTextArea"
-import { IPost } from "../../interfaces/post"
+import { IPost } from "../posts/interfaces"
 
 export default function CreateModal() {
   const [post, setPost] = useState<{

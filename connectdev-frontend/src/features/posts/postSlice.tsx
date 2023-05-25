@@ -8,7 +8,7 @@ import {
   ILikes,
   IPost,
   IPostResponse,
-} from "../../interfaces/post"
+} from "./interfaces"
 import {
   createNewPost,
   deleteComment,

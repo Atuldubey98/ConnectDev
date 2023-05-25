@@ -1,5 +1,5 @@
 import instance from "../../axios"
-import { ICreatePost } from "../../interfaces/post"
+import { ICreatePost } from "./interfaces"
 
 export const fetchAllPosts = (page: number) => {
   try {

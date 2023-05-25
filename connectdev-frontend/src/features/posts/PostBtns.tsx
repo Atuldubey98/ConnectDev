@@ -3,7 +3,7 @@ import { FaRegCommentAlt } from "react-icons/fa"
 import { MdDelete } from "react-icons/md"
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { IPost } from "../../interfaces/post"
+import { IPost } from "./interfaces"
 import { toggleCommentsModal, toggleCommentsModalPost } from "../ui/uiSlice"
 import { deletePostAction, dolikeorDislikePost } from "./postSlice"
 

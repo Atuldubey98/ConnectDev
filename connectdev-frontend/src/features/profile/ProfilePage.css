@@ -1,0 +1,14 @@
+.profile__wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 962px;
+  margin: auto;
+  gap: 1rem;
+  padding: 0.8rem;
+}
+
+@media screen and (max-width: 720px) {
+  .profile__wrapper {
+    grid-template-columns: 1fr;
+  }
+}

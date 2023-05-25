@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useAppSelector } from "../../app/hooks"
 import CommentsModal from "./CommentsModal"
 import CreatePost from "./CreatePost"

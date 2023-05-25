@@ -1,5 +1,5 @@
 import { ChangeEventHandler, useReducer } from "react"
-import { ICreatePostForm } from "../../interfaces/post"
+import { ICreatePostForm } from "./interfaces"
 import { useAppDispatch } from "../../app/hooks"
 import { createPostAction } from "./postSlice"
 import { toast } from "react-toastify"

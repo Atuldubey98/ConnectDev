@@ -28,7 +28,8 @@ exports.getProfile = catchAsyncErrors(async (req, res, next) => {
     .populate("skills")
     .populate("experience")
     .populate("education")
-    .populate("handle");
+    .populate("handle")
+    .populate("user", "name avatar email date");
   return res.status(200).json(profile);
 });
 

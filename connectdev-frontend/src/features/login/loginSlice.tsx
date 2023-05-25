@@ -3,7 +3,7 @@ import { AppThunk } from "../../app/store"
 
 import { isAxiosError } from "axios"
 import { load, login } from "./loginAPI"
-import IUser from "../../interfaces/IUser"
+import IUser from "./interfaces"
 type loginState = {
   loginMessage: {
     isError: boolean
