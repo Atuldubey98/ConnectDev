@@ -11,11 +11,15 @@ import Button from "../common/Button"
 type ProfileSkillsForm = {
   skillErrTxt: string
   skills: SkillBody[]
+  updateSkillDispatch: (skill: SkillBody) => void
+  removeSkillDispatch: (skillId: string) => void
   addSkillDispatch: (skill: SkillBody) => void
 }
 export default function ProfileSkillsForm({
   skills,
+  updateSkillDispatch,
   skillErrTxt,
+  removeSkillDispatch,
   addSkillDispatch,
 }: ProfileSkillsForm) {
   const { edit, toggleEdit } = useEdit()
@@ -32,11 +36,11 @@ export default function ProfileSkillsForm({
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     if (skills.find((s) => s._id === skill._id)) {
+      updateSkillDispatch(skill)
     } else {
       addSkillDispatch(skill)
+      setSkill(defaultSkill)
     }
-    setSkill(defaultSkill)
-    toggleEdit(false)
   }
   function newSkill() {
     setSkill(defaultSkill)
@@ -88,14 +92,24 @@ export default function ProfileSkillsForm({
           {skillErrTxt ? (
             <MessageInfo isError={true} message={skillErrTxt} />
           ) : null}
-          <div className="d-flex-center">
-            <Button
-              label={
-                skills.find((s) => s._id === skill._id)
-                  ? "Update Skill"
-                  : "Add Skill"
-              }
-            />
+          <div className="profile__btns d-flex-center">
+            <button className="primary__btn" type="submit">
+              {skills.find((s) => s._id === skill._id)
+                ? "Update Skill"
+                : "Add Skill"}
+            </button>
+            {skills.find((s) => s._id === skill._id) ? (
+              <button
+                onClick={() => {
+                  removeSkillDispatch(skill._id)
+                  toggleEdit(false)
+                }}
+                type="button"
+                className="btn"
+              >
+                Delete
+              </button>
+            ) : null}
           </div>
         </form>
       ) : null}

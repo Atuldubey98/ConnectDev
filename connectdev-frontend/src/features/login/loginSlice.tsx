@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
 
 import { isAxiosError } from "axios"
-import { load, login } from "./loginAPI"
+import { load, login, logout } from "./loginAPI"
 import IUser from "./interfaces"
 type loginState = {
   loginMessage: {
@@ -10,6 +10,7 @@ type loginState = {
     message: string
   }
   status: "success" | "loading" | "failed" | "idle"
+
   user: IUser | null
 }
 const initialState: loginState = {
@@ -53,6 +54,7 @@ export const loginSlice = createSlice({
         isError: false,
         message: "",
       }
+      state.user = null
     },
   },
 })
@@ -87,5 +89,23 @@ export const loadUser = (): AppThunk => async (dispatch) => {
     )
   }
 }
-
+export const logoutUserAction =
+  (
+    showToast: (message: string) => void,
+    navigateToHome: () => void,
+  ): AppThunk =>
+  async (dispatch) => {
+    try {
+      const { data } = await logout()
+      if (data.status) {
+        dispatch(setIdle())
+        navigateToHome()
+      }
+    } catch (error) {
+      const message = isAxiosError(error)
+        ? error.response?.data.message
+        : "Error occured"
+      showToast(message)
+    }
+  }
 export default loginSlice.reducer

@@ -27,6 +27,10 @@ export default function useProfileEdit() {
     | { type: "add:experience"; payload: ExperienceBody }
     | { type: "add:status"; payload: string }
     | { type: "add:handle"; payload: HandleBody }
+    | { type: "update:skill"; payload: SkillBody }
+    | { type: "update:education"; payload: EducationBody }
+    | { type: "update:experience"; payload: ExperienceBody }
+    | { type: "update:handle"; payload: HandleBody }
     | { type: "remove:skill"; payload: string }
     | { type: "remove:education"; payload: string }
     | { type: "remove:experience"; payload: string }
@@ -48,13 +52,51 @@ export default function useProfileEdit() {
 
   function reducer(state: State, action: Action): State {
     switch (action.type) {
+      case "update:skill":
+        return {
+          ...state,
+          skillErrTxt: validateSkills(action.payload),
+          skills:
+            validateSkills(action.payload).length === 0
+              ? state.skills.map((s) =>
+                  s._id === action.payload._id ? action.payload : s,
+                )
+              : state.skills,
+        }
+      case "update:education":
+        return {
+          ...state,
+          educationErrTxt: validateEducation(action.payload),
+          education:
+            validateEducation(action.payload).length === 0
+              ? state.education.map((s) =>
+                  s._id === action.payload._id ? action.payload : s,
+                )
+              : state.education,
+        }
+      case "update:experience":
+        return {
+          ...state,
+          experienceErrTxt: validateExperience(action.payload),
+          experience: validateExperience(action.payload)
+            ? state.experience.map((s) =>
+                s._id === action.payload._id ? action.payload : s,
+              )
+            : state.experience,
+        }
+
+      case "update:handle":
+        return {
+          ...state,
+          handleErrTxt: validateHandle(action.payload),
+          handle: validateHandle(action.payload)
+            ? state.handle.map((s) =>
+                s._id === action.payload._id ? action.payload : s,
+              )
+            : state.handle,
+        }
       case "add:skill":
-        const validSkills =
-          action.payload.skill.length === 0
-            ? "Skill Cannot be left empty"
-            : action.payload.yearsWorked <= 0
-            ? "Years worked should be greater than 0"
-            : ""
+        const validSkills = validateSkills(action.payload)
         return {
           ...state,
           skills:
@@ -64,12 +106,7 @@ export default function useProfileEdit() {
           skillErrTxt: validSkills,
         }
       case "add:education":
-        const validEducation =
-          action.payload.degree.length === 0
-            ? "Degree should be greater than 0"
-            : action.payload.school.length === 0
-            ? "School should be greater than 0"
-            : ""
+        const validEducation = validateEducation(action.payload)
         return {
           ...state,
           education:
@@ -79,12 +116,7 @@ export default function useProfileEdit() {
           educationErrTxt: validEducation,
         }
       case "add:experience":
-        const experienceErrTxt =
-          action.payload.company.length === 0
-            ? "Company length should be greater than 0"
-            : action.payload.title.length === 0
-            ? "Title should be greater than 0"
-            : ""
+        const experienceErrTxt = validateExperience(action.payload)
         return {
           ...state,
           experience:
@@ -99,10 +131,7 @@ export default function useProfileEdit() {
           status: action.payload,
         }
       case "add:handle":
-        const handleErrTxt =
-          action.payload.platform.length === 0
-            ? "Please mention the platform"
-            : ""
+        const handleErrTxt = validateHandle(action.payload)
         return {
           ...state,
           handle:
@@ -189,8 +218,84 @@ export default function useProfileEdit() {
     dispatch({ type: "add:status", payload: e.currentTarget.value })
   }
   const [state, dispatch] = useReducer(reducer, defaultProfileState)
+  function validateHandle(payload: HandleBody) {
+    return payload.platform.length === 0 ? "Please mention the platform" : ""
+  }
+
+  function validateExperience(payload: ExperienceBody) {
+    return payload.company.length === 0
+      ? "Company length should be greater than 0"
+      : payload.title.length === 0
+      ? "Title should be greater than 0"
+      : ""
+  }
+
+  function validateEducation(payload: EducationBody) {
+    return payload.degree.length === 0
+      ? "Degree should be greater than 0"
+      : payload.school.length === 0
+      ? "School should be greater than 0"
+      : ""
+  }
+
+  function validateSkills(payload: SkillBody) {
+    return payload.skill.length === 0
+      ? "Skill Cannot be left empty"
+      : payload.yearsWorked <= 0
+      ? "Years worked should be greater than 0"
+      : ""
+  }
+
   function addSkillDispatch(skill: SkillBody) {
     dispatch({ type: "add:skill", payload: skill })
   }
-  return { state, onChangeStatus, addSkillDispatch }
+  function removeSkillDispatch(skillId: string) {
+    dispatch({ type: "remove:skill", payload: skillId })
+  }
+  function updateSkillDispatch(skill: SkillBody) {
+    dispatch({ type: "update:skill", payload: skill })
+  }
+  function addExperienceDispatch(experience: ExperienceBody) {
+    dispatch({ type: "add:experience", payload: experience })
+  }
+  function removeexperienceDispatch(experienceId: string) {
+    dispatch({ type: "remove:experience", payload: experienceId })
+  }
+  function updateExperienceDispatch(experience: ExperienceBody) {
+    dispatch({ type: "update:experience", payload: experience })
+  }
+  function addEducationDispatch(education: EducationBody) {
+    dispatch({ type: "add:education", payload: education })
+  }
+  function removeEducationDispatch(educationId: string) {
+    dispatch({ type: "remove:education", payload: educationId })
+  }
+  function updateEducationDispatch(education: EducationBody) {
+    dispatch({ type: "update:education", payload: education })
+  }
+  function addHandleDispatch(handle: HandleBody) {
+    dispatch({ type: "add:handle", payload: handle })
+  }
+  function removeHandleDispatch(handleId: string) {
+    dispatch({ type: "remove:handle", payload: handleId })
+  }
+  function updateHandleDispatch(handle: HandleBody) {
+    dispatch({ type: "update:handle", payload: handle })
+  }
+  return {
+    state,
+    onChangeStatus,
+    addSkillDispatch,
+    removeSkillDispatch,
+    updateSkillDispatch,
+    addExperienceDispatch,
+    removeexperienceDispatch,
+    updateExperienceDispatch,
+    addHandleDispatch,
+    removeEducationDispatch,
+    removeHandleDispatch,
+    updateHandleDispatch,
+    updateEducationDispatch,
+    addEducationDispatch,
+  }
 }

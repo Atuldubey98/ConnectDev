@@ -3,7 +3,22 @@ import ProfileSkillsForm from "./ProfileSkillsForm"
 import ProfileStatusForm from "./ProfileStatusForm"
 import useProfileEdit from "./useProfileEdit"
 export default function ProfileEdit() {
-  const { state, onChangeStatus, addSkillDispatch } = useProfileEdit()
+  const {
+    state,
+    onChangeStatus,
+    addSkillDispatch,
+    removeSkillDispatch,
+    updateSkillDispatch,
+    addExperienceDispatch,
+    removeexperienceDispatch,
+    updateExperienceDispatch,
+    addHandleDispatch,
+    removeEducationDispatch,
+    removeHandleDispatch,
+    updateHandleDispatch,
+    updateEducationDispatch,
+    addEducationDispatch,
+  } = useProfileEdit()
   return (
     <main className="profile__edit">
       <div className="profile__editWrapper">
@@ -13,6 +28,8 @@ export default function ProfileEdit() {
           statusErrTxt={state.statusErrTxt}
         />
         <ProfileSkillsForm
+          updateSkillDispatch={updateSkillDispatch}
+          removeSkillDispatch={removeSkillDispatch}
           addSkillDispatch={addSkillDispatch}
           skills={state.skills}
           skillErrTxt={state.skillErrTxt}

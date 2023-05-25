@@ -23,7 +23,7 @@ export default function ProfileStatusForm({
     <div className="profile__form">
       <div className="profile__formHead">
         <CommonHeading text="Status" />
-        <AiFillEdit  size={30} onClick={toggleEdit} type="button" />
+        <AiFillEdit size={30} onClick={toggleEdit} type="button" />
       </div>
       <InputWithError
         input={

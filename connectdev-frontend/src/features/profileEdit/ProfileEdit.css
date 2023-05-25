@@ -25,3 +25,6 @@
   padding: 0.3rem;
   cursor: pointer;
 }
+.profile__btns {
+  gap: 0.8rem;
+}

@@ -17,3 +17,11 @@ export async function load() {
     throw error
   }
 }
+
+export async function logout() {
+  try {
+    return instance.post("/api/users/logout")
+  } catch (error) {
+    throw error
+  }
+}
