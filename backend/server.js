@@ -27,6 +27,8 @@ const port = PORT || 9000;
 const app = express();
 const server = http.createServer(app);
 if (NODE_ENV === "development") {
+  app.use(morgan("combined"));
+} else {
   const accessLogStream = fs.createWriteStream(
     path.join(__dirname, "logs", "access.log"),
     { flags: "a" }
