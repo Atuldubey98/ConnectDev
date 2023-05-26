@@ -13,19 +13,19 @@ exports.savePost = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
-  const post = await Post.findById(req.query.id)
+  const post = await Post.findById(req.query.postId)
     .populate({
       path: "likes",
       populate: {
         path: "user",
-        select: "name email",
+        select: "name email _id",
       },
     })
     .populate({
       path: "comments",
       populate: {
         path: "user",
-        select: "name email",
+        select: "name email _id",
       },
     });
 
@@ -42,7 +42,7 @@ exports.deletePostsById = catchAsyncErrors(async (req, res, next) => {
       $in: postIds,
     },
   });
-  return res.status(200).json({
+  return res.status(204).json({
     status: true,
     deletedCount,
   });
@@ -64,7 +64,7 @@ exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
     await Comments.deleteMany({ _id: { $in: post.comments } });
   }
   await Post.deleteOne({ _id: postId });
-  return res.status(200).json({
+  return res.status(204).json({
     status: true,
     message: "Deleted",
   });
@@ -180,7 +180,7 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
     }
   );
 
-  return res.status(200).json({
+  return res.status(201).json({
     status: true,
     message: "Commented",
     comment: { ...comment._doc, user: req.user },

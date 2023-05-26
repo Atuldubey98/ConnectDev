@@ -7,10 +7,12 @@ const MessageSchema = new Schema(
     roomId: {
       type: Schema.Types.ObjectId,
       ref: "room",
+      required: true,
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required: true,
     },
     msgBody: {
       type: String,

@@ -13,6 +13,7 @@ const ProfileSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "users",
       index: true,
+      required: true,
     },
     handle: {
       type: Array,

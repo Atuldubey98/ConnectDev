@@ -24,6 +24,7 @@ const EducationSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: "users",
+    required: true,
   },
 }, { timestamps: true });
 

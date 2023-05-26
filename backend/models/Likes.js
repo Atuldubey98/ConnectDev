@@ -6,10 +6,12 @@ const LikesSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: "users",
+      required: true,
     },
     post: {
       type: Schema.Types.ObjectId,
       ref: "post",
+      required: true,
     },
   },
   { timestamps: true }

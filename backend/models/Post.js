@@ -15,9 +15,11 @@ const PostSchema = new Schema(
     likes: {
       type: Array,
       ref: "likes",
+      default: [],
     },
     comments: {
       type: Array,
+      default: [],
       ref: "comments",
     },
     date: {

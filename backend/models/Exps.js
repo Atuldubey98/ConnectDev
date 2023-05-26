@@ -23,6 +23,8 @@ const ExpSchema = new Schema({
   user: {
     type: String,
     ref: "users",
+    required: true,
+
   },
 });
 module.exports = Exps = mongoose.model("experience", ExpSchema);
