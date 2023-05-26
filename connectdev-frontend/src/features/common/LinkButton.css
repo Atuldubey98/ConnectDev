@@ -1,0 +1,11 @@
+.link__btn {
+  text-decoration: none;
+  color: black;
+  gap: 0.3rem;
+  transition: all 300ms ease-in;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+}
+.link__btn:hover {
+  background-color: rgb(241, 238, 238);
+}

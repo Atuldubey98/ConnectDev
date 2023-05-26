@@ -7,10 +7,9 @@ export default function FilterComp() {
   return (
     <section className="filter__comp d-flex-center">
       <form className="d-flex-center" onSubmit={onSubmit}>
-        <input placeholder="Search for post" />
+        <input placeholder="Search for post" type="search" />
         <GoSearch size={18} />
       </form>
-      
     </section>
   )
 }

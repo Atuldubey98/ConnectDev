@@ -5,12 +5,14 @@ import "./ProfileLeft.css"
 type ProfileLeftProps = {
   status: string
   postTags: string[]
-  user: IUser | undefined
+  user: IUser | null
+  children?: React.ReactNode
 }
 export default function ProfileLeft({
   status,
   postTags,
   user,
+  children,
 }: ProfileLeftProps) {
   return (
     <section className="profile__left">
@@ -23,6 +25,7 @@ export default function ProfileLeft({
       <p className="profile__email">{user?.email}</p>
       <p className="profile__status">{status}</p>
       <PostTags tags={postTags} />
+      {children}
     </section>
   )
 }
