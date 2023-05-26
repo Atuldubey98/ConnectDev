@@ -1,40 +1,17 @@
-require("./config/mongoconnection");
-const express = require("express");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const { parse } = require("cookie");
+const app = require("./app");
 const http = require("http");
-const morgan = require("morgan");
-const fs = require("fs");
-const path = require("path");
-const Post = require("./models/Post");
+const { PORT, APP_URL } = require("./config/keys");
+const server = http.createServer(app);
 const { Server } = require("socket.io");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const logger = require("./utils/logger");
-const errorMiddleware = require("./api/middlewares/error");
-const user = require("./api/routes/user");
-const profile = require("./api/routes/profile");
-const post = require("./api/routes/post");
 const User = require("./models/User");
-const chatRouter = require("./api/routes/chat");
 const Contact = require("./models/Contact");
 const Message = require("./models/Message");
 const Room = require("./models/Room");
-const { APP_URL, PORT, JWT_SECRET, NODE_ENV } = require("./config/keys");
+const jwt = require("jsonwebtoken");
+const logger = require("./utils/logger");
+const Post = require("./models/Post");
+const { parse } = require("cookie");
 
-const port = PORT || 9000;
-const app = express();
-const server = http.createServer(app);
-if (NODE_ENV === "development") {
-  app.use(morgan("combined"));
-} else {
-  const accessLogStream = fs.createWriteStream(
-    path.join(__dirname, "logs", "access.log"),
-    { flags: "a" }
-  );
-  app.use(morgan("combined", { stream: accessLogStream }));
-}
 const io = new Server(server, {
   cookie: false,
   cors: {
@@ -149,40 +126,7 @@ io.on("connection", async (socket) => {
   }
 });
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || [APP_URL, "http://localhost:9000"].indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
-app.use(cookieParser());
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  })
-);
-
-app.use("/api/users", user);
-app.use("/api/post", post);
-app.use("/api/profile", profile);
-app.use("/api/chat", chatRouter);
-app.use(errorMiddleware);
-
-app.all("*", (req, res, next) => {
-  return res.status(404).json({
-    status: "fail",
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
-});
-
+const port = PORT || 9000;
 server.listen(port, () => {
   logger.log({ level: "info", message: `Server running on ${port}` });
 });

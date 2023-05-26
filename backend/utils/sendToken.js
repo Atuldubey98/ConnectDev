@@ -9,6 +9,10 @@ const sendToken = async (user, statusCode, res) => {
     path: "/",
     secure: NODE_ENV !== "development",
   };
-  res.status(statusCode).cookie("token", token, options).json(user);
+  const { email, _id, name } = user;
+  res
+    .status(statusCode)
+    .cookie("token", token, options)
+    .json({ email, _id, name });
 };
 module.exports = sendToken;

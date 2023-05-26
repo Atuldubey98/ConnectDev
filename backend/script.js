@@ -35,7 +35,7 @@ async function registerUsers() {
       const email = user.email;
       const password = user.password;
       const avatar = user.image;
-      return axios.post(register, {
+      return axios.post(baseUrl + register, {
         name,
         avatar,
         email,
@@ -262,5 +262,5 @@ async function createProfiles(startPostion, endPostion) {
 }
 
 (async () => {
-  createProfiles(3);
+  await createProfiles(0);
 })();

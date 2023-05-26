@@ -16,6 +16,9 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send("PAYLOAD_ERROR");
+  }
   const user = await User.findOne({ email });
   if (!user) {
     return res
@@ -27,7 +30,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
       .status(401)
       .json({ status: false, message: "User not authenticated" });
   }
-  sendToken(user, 201, res);
+  sendToken(user, 200, res);
 });
 
 exports.logoutUser = catchAsyncErrors(async (req, res, next) => {

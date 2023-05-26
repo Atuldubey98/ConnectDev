@@ -24,14 +24,20 @@ export default function LoginPage() {
           type: "email",
           onChange: onChangeField,
           label: "Email :",
+          minLength: 5,
+          maxLength: 30,
+          required: true,
         }}
         passwordProps={{
+          required: true,
+          minLength: 6,
+          maxLength: 30,
           name: "password",
           type: "password",
           onChange: onChangeField,
           label: "Password :",
         }}
-      ></AuthForm>
+      />
     </main>
   )
 }

@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET, JWT_EXPIRE } = require("../config/keys");
 const Schema = mongoose.Schema;
-
+const validateEmail = (email) => {
+  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(email);
+};
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -14,6 +17,7 @@ const UserSchema = new Schema({
     index: true,
     lowercase: true,
     unique: true,
+    validate: [validateEmail, "Please fill a valid email address"],
     required: [true, "can't be blank"],
   },
   password: {
