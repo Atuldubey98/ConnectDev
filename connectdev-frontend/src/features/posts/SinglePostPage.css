@@ -1,0 +1,35 @@
+.single__postPage {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  padding: 0.8rem;
+}
+
+.single__post > p {
+  text-align: justify;
+}
+.single__avatarAbout {
+  gap: 0.8rem;
+}
+.single__avatarSection > p:first-child {
+  font-weight: bold;
+}
+.post__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.3rem;
+}
+.single__postAvatar {
+  display: grid;
+  gap: 1rem;
+}
+.single__postBtns {
+  justify-content: space-around !important;
+  gap: 0.8rem;
+}
+
+@media screen and (max-width: 720px) {
+  .single__postPage {
+    grid-template-columns: 1fr;
+  }
+}

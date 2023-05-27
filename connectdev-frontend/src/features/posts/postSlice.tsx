@@ -14,27 +14,45 @@ import {
   deleteComment,
   deletePost,
   fetchAllPosts,
+  fetchPost,
   likeOrDislikePost,
   makeNewComment,
 } from "./postAPI"
-import { setPostWasJustAddedAction } from "../ui/uiSlice"
 type PostState = {
   status: "success" | "loading" | "failed" | "idle"
   newPostStatus: "success" | "loading" | "failure" | "idle"
+  singlePostStatus: "success" | "loading" | "failure" | "idle"
   newCommentStatus: "success" | "loading" | "failure" | "idle"
   postResponse: IPostResponse | null
+  singlePostError: string
+  post: IPost | null
 }
 const initialState: PostState = {
   status: "idle",
   postResponse: null,
   newPostStatus: "idle",
   newCommentStatus: "idle",
+  singlePostStatus: "idle",
+  singlePostError: "",
+  post: null,
 }
 
 export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
+    setSiglePostLoading: (state) => {
+      state.singlePostStatus = "loading"
+    },
+    setSinglePostError: (state, action: PayloadAction<string>) => {
+      state.singlePostStatus = "failure"
+      state.singlePostError = action.payload
+    },
+    setPost: (state, action: PayloadAction<IPost>) => {
+      state.post = action.payload
+      state.singlePostStatus = "success"
+      state.singlePostError = ""
+    },
     setNewPostLoading: (state) => {
       state.newPostStatus = "loading"
     },
@@ -164,8 +182,29 @@ export const {
   setNewCommentLoading,
   setDeleteComment,
   setDeletePost,
+  setSinglePostError,
+  setSiglePostLoading,
+  setPost,
 } = postSlice.actions
 
+export const getPostAction =
+  (postId: string | undefined): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (!postId) {
+        return
+      }
+      dispatch(setSiglePostLoading())
+      const { data } = await fetchPost(postId)
+      dispatch(setPost(data))
+    } catch (error) {
+      dispatch(
+        setFailed(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
+      )
+    }
+  }
 export const getAllPosts =
   (page: number): AppThunk =>
   async (dispatch) => {
@@ -229,13 +268,19 @@ export const createPostAction =
     }
   }
 export const postCommentAction =
-  (body: { postId: string; text: string }): AppThunk =>
+  (
+    body: { postId: string; text: string },
+    scrollCommentsOnPost: () => void,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setNewCommentLoading())
       if (body.postId.length === 0 || body.text.length === 0) return
       const { data } = await makeNewComment(body)
       dispatch(setNewCommentLoaded(data.comment))
+      setTimeout(() => {
+        scrollCommentsOnPost()
+      }, 500)
     } catch (error) {
       dispatch(
         setNewCommentError(

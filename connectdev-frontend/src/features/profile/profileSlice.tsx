@@ -24,6 +24,7 @@ const profileSlice = createSlice({
     },
     setProfileError: (state) => {
       state.profileStatus = "failure"
+      state.profile = null
     },
   },
 })
@@ -31,13 +32,15 @@ const profileSlice = createSlice({
 export const { setProfileError, setProfileLoading, setProfileSuccess } =
   profileSlice.actions
 
-export const loadProfileAction = (): AppThunk => async (dispatch) => {
-  try {
-    dispatch(setProfileLoading())
-    const { data } = await loadProfile()
-    dispatch(setProfileSuccess(data))
-  } catch (error) {
-    dispatch(setProfileError())
+export const loadProfileAction =
+  (userId: string | undefined): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setProfileLoading())
+      const { data } = await loadProfile(userId)
+      dispatch(setProfileSuccess(data))
+    } catch (error) {
+      dispatch(setProfileError())
+    }
   }
-}
 export default profileSlice.reducer

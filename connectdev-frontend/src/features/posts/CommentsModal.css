@@ -1,6 +1,9 @@
 .comments__modal {
   width: 100%;
 }
+.comments__modal > h1 {
+  text-align: center;
+}
 .comments__head {
   display: flex;
   gap: 0.8rem;

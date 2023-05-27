@@ -10,14 +10,35 @@ export default function ProfileExperience(props: ProfileExperienceProps) {
     <div>
       <CommonHeading text="Experience" />
       <ul className="common__profileList">
-        {props.experience.map((exp) => (
-          <li key={exp._id}>
-            <CommonField head="Title" text={exp.title} />
-            <CommonField head="Company" text={exp.company} />
-            <CommonField head="Description" text={exp.description} />
-          </li>
+        {props.experience.map(({ _id, title, company, description }) => (
+          <Experience
+            key={_id}
+            title={title}
+            company={company}
+            description={description}
+          />
         ))}
       </ul>
     </div>
+  )
+}
+export type ExperienceProps = {
+  title: string
+  company: string
+  description: string
+  onClick?: () => void
+}
+export function Experience({
+  title,
+  onClick,
+  company,
+  description,
+}: ExperienceProps): JSX.Element {
+  return (
+    <li onClick={onClick}>
+      <CommonField head="Title" text={title} />
+      <CommonField head="Company" text={company} />
+      <CommonField head="Description" text={description} />
+    </li>
   )
 }

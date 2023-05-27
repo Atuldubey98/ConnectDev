@@ -1,18 +1,20 @@
 import ReactModal from "react-modal"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { toggleCommentsModal } from "../ui/uiSlice"
-import CommentsForm from "./CommentsForm"
-import CommentsList from "./CommentsList"
+import CommentSection from "./CommentSection"
 import "./CommentsModal.css"
 
 export default function CommentsModal() {
   const { commentsModal } = useAppSelector((state) => state.ui)
+  const { isCommentsModalOpen, postId } = commentsModal
   const { postResponse } = useAppSelector((state) => state.post)
   const appDispatch = useAppDispatch()
-  const { isCommentsModalOpen, postId } = commentsModal
+
   const post = postResponse?.posts
     ? postResponse.posts.find((post) => post._id === postId)
     : null
+  const comments = post && post.comments ? post.comments : []
+
   const customStyles = {
     content: {
       top: "50%",
@@ -25,16 +27,14 @@ export default function CommentsModal() {
       transform: "translate(-50%, -50%)",
     },
   }
+
   return (
     <ReactModal
       style={customStyles}
       onRequestClose={() => appDispatch(toggleCommentsModal())}
       isOpen={isCommentsModalOpen}
     >
-      <section className="comments__modal">
-        <CommentsForm postId={post?._id || ""} />
-        <CommentsList comments={post?.comments || []} />
-      </section>
+      <CommentSection comments={comments} user={post?.user} postId={postId}/>
     </ReactModal>
   )
 }

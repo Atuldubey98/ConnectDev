@@ -1,4 +1,3 @@
-import IUser from "../login/interfaces"
 
 export interface IPostResponse {
   totalCount: number
@@ -29,13 +28,17 @@ export interface IPost {
   title: string
   color: string
   __v: number
+  createdAt: Date
+  updatedAt: Date
 }
 export interface IComment {
   _id: string
-  user: IUser
+  user: IUserDetails
   post: string
   text: string
   date: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface ICreatePost {

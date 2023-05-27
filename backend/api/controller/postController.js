@@ -25,9 +25,10 @@ exports.getPost = catchAsyncErrors(async (req, res, next) => {
       path: "comments",
       populate: {
         path: "user",
-        select: "name email _id",
+        select: "name email _id avatar",
       },
-    });
+    })
+    .populate("user", "_id name avatar email");
 
   return res.status(200).json(post);
 });

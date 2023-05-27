@@ -27,10 +27,11 @@ export default function Post({ post }: PostProps) {
       className={classNames("post__wrapper", { beingDeleted, justAddedPostId })}
     >
       <PostBody
+        postId={post._id}
         text={post.text}
         title={post.title}
-        name={post.user.name}
-        date={moment(post.date).fromNow()}
+        user={post.user}
+        date={moment(post.createdAt).fromNow()}
       />
       {post.tags && post.tags.length > 0 ? <PostTags tags={post.tags} /> : null}
       <PostBtns post={post} onDelete={callbackOnDelete} />

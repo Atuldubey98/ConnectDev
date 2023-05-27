@@ -10,15 +10,39 @@ export default function ProfileEducation(props: ProfileEducationProps) {
     <div>
       <CommonHeading text="Education" />
       <ul className="common__profileList">
-        {props.educations.map((edu) => (
-          <li key={edu._id}>
-            <CommonField head="Degree" text={edu.degree} />
-            <CommonField head="Area or Field of Study" text={edu.area} />
-            <CommonField head="School or Institute" text={edu.school} />
-            <CommonField head="Description" text={edu.description} />
-          </li>
+        {props.educations.map(({ degree, description, school, area, _id }) => (
+          <Education
+            key={_id}
+            degree={degree}
+            area={area}
+            school={school}
+            description={description}
+          />
         ))}
       </ul>
     </div>
+  )
+}
+export type EducationProps = {
+  degree: string
+  area: string
+  school: string
+  onClick?: VoidFunction
+  description: string
+}
+export function Education({
+  degree,
+  description,
+  onClick,
+  school,
+  area,
+}: EducationProps): JSX.Element {
+  return (
+    <li onClick={onClick}>
+      <CommonField head="Degree" text={degree} />
+      <CommonField head="Area or Field of Study" text={area} />
+      <CommonField head="School or Institute" text={school} />
+      <CommonField head="Description" text={description} />
+    </li>
   )
 }

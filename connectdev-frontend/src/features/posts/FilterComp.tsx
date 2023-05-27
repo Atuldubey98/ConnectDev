@@ -1,13 +1,22 @@
-import "./FilterComp.css"
 import { GoSearch } from "react-icons/go"
+import "./FilterComp.css"
+import useSearchFocus from "./useSearchFocus"
 export default function FilterComp() {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
   }
+  const { searchRef, large } = useSearchFocus()
   return (
     <section className="filter__comp d-flex-center">
-      <form className="d-flex-center" onSubmit={onSubmit}>
-        <input placeholder="Search for post" type="search" />
+      <form
+        style={{
+          maxWidth: large ? "450px" : "400px",
+          border: `2px solid ${large ? "darkgray" : "lightgray"}`,
+        }}
+        className="d-flex-center"
+        onSubmit={onSubmit}
+      >
+        <input ref={searchRef} placeholder="Search for post" type="search" />
         <GoSearch size={18} />
       </form>
     </section>

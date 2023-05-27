@@ -22,17 +22,21 @@ export default function ProfileHandles(props: ProfileHandlesProps) {
     </div>
   )
 }
-export function Handle({
-  username,
-  platform,
-  link,
-}: {
+type HandleProps = {
   username: string
   platform: string
   link: string
-}): JSX.Element {
+  onClick?: () => void
+}
+
+export function Handle({
+  onClick,
+  username,
+  platform,
+  link,
+}: HandleProps): JSX.Element {
   return (
-    <li>
+    <li onClick={onClick}>
       <CommonField head="Username or Email Id" text={username} />
       <CommonField head="Platform" text={platform} />
       <CommonField head="Profile Link" text={link} />

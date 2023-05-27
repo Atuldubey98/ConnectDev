@@ -12,6 +12,7 @@ export default function ProfileSkills({ skills }: ProfileSkillsProps) {
       <ul className="common__profileList">
         {skills.map((skill) => (
           <Skill
+            key={skill._id}
             _id={skill._id}
             skill={skill.skill}
             yearsWorked={skill.yearsWorked}

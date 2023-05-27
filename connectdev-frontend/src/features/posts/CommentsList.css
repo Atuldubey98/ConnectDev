@@ -2,7 +2,6 @@
   display: grid;
   gap: 0.8rem;
   margin-block: 0.5rem;
-  max-height: 40svh;
   overflow: auto;
 }
 .comment {
@@ -29,4 +28,7 @@
 .comment__del:hover {
   cursor: pointer;
   color: darkgray;
+}
+.comment__wrap > p {
+  font-size: 0.7rem;
 }

@@ -1,25 +1,27 @@
-import { ChangeEventHandler, useEffect, useRef, useState } from "react"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { ChangeEventHandler, useRef, useState } from "react"
+import { useAppSelector } from "../../app/hooks"
 import { UserAvatarSmall } from "./CreatePost"
-import { postCommentAction } from "./postSlice"
 
 type CommentsFormProps = {
   postId: string
+  onSubmitDispatch: (postId: string, comment: string) => void
 }
-export default function CommentsForm({ postId }: CommentsFormProps) {
+export default function CommentsForm({
+  postId,
+  onSubmitDispatch,
+}: CommentsFormProps) {
   const { user } = useAppSelector((state) => state.login)
   const { newCommentStatus } = useAppSelector((state) => state.post)
   const loading: boolean = newCommentStatus === "loading"
   const [comment, setComment] = useState<string>("")
   const formRef = useRef<HTMLFormElement>(null)
 
-  const appDispatch = useAppDispatch()
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setComment(e.target.value)
   }
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
-    appDispatch(postCommentAction({ postId, text: comment }))
+    onSubmitDispatch(postId, comment)
     setComment("")
   }
   const onKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {

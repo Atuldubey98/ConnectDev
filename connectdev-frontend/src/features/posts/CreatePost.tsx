@@ -35,7 +35,7 @@ export function UserAvatarSmall({
   size?: number
 }) {
   return avatar ? (
-    <img src={avatar} alt={name} width={size || 48} />
+    <img src={avatar} alt={name} width={size || 48} loading="lazy" />
   ) : (
     <RxAvatar size={size || 48} />
   )

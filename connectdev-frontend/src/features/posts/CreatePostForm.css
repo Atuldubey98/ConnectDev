@@ -2,7 +2,7 @@
   display: grid;
   width: 100%;
   gap: 0.2rem;
-  animation: slideIn 400ms ease-in forwards;
+  animation: slideIn 100ms ease-in forwards;
 }
 .create__form {
   width: 100%;

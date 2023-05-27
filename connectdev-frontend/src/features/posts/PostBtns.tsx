@@ -9,7 +9,7 @@ import { deletePostAction, dolikeorDislikePost } from "./postSlice"
 
 type PostBtnsProps = {
   post: IPost
-  onDelete: () => void
+  onDelete?: () => void
 }
 
 export default function PostBtns({ post, onDelete }: PostBtnsProps) {
@@ -22,7 +22,9 @@ export default function PostBtns({ post, onDelete }: PostBtnsProps) {
   }
   const onDeleteClick = () => {
     if (confirm("Are you sure you want to delete the post?")) {
-      onDelete()
+      if (onDelete) {
+        onDelete()
+      }
       appDispatch(deletePostAction({ postId }))
     }
   }

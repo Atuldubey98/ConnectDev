@@ -1,4 +1,11 @@
-
 export default function CommonHeading({ text }: { text: string }) {
-  return <h2>{text}</h2>
+  return (
+    <h2
+      style={{
+        textTransform: "capitalize",
+      }}
+    >
+      {text}
+    </h2>
+  )
 }

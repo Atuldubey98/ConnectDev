@@ -36,9 +36,7 @@
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
 }
-.post__body p {
-  text-align: justify;
-}
+
 .post__about > a > p {
   text-align: right;
 }
@@ -75,4 +73,14 @@
   border-radius: 0.3rem;
   border: 1px solid lightgray;
   padding: 0.3rem;
+}
+.post__date {
+  font-size: 0.8rem;
+}
+.post__body > a {
+  text-decoration: none;
+  color: black;
+}
+.post__body > a > p {
+  text-align: justify;
 }

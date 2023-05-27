@@ -12,6 +12,7 @@ import PostsPage from "./features/posts"
 import RegisterPage from "./features/register"
 import LandingPage from "./features/landing"
 import ProfileEdit from "./features/profileEdit"
+import SinglePostPage from "./features/posts/SinglePostPage"
 
 export default function App() {
   return (
@@ -31,6 +32,14 @@ export default function App() {
           }
         />
         <Route
+          path="/posts/:postId"
+          element={
+            <PrivateRoute>
+              <SinglePostPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/chats"
           element={
             <PrivateRoute>
@@ -40,6 +49,14 @@ export default function App() {
         />
         <Route
           path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile/:userId"
           element={
             <PrivateRoute>
               <ProfilePage />

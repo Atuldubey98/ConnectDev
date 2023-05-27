@@ -8,13 +8,15 @@
   padding: 0.3rem;
   background-color: white;
   box-shadow: 2px 2px #888888;
-  border: 2px solid lightgray;
+  
   width: 100%;
-  max-width: 450px;
+  transition: all 300ms ease-in;
+  pointer-events: none;
 }
 .filter__comp > form > input {
   outline: none;
   border: none;
   width: 100%;
   font-size: 1.1rem;
+  pointer-events: all;
 }

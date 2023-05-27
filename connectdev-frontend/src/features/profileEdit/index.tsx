@@ -2,6 +2,10 @@ import "./ProfileEdit.css"
 import ProfileSkillsForm from "./ProfileSkillsForm"
 import ProfileStatusForm from "./ProfileStatusForm"
 import useProfileEdit from "./useProfileEdit"
+import EditFormWrapper from "./EditFormWrapper"
+import ProfileHandlesForm from "./ProfileHandlesForm"
+import ProfileExperience from "../profile/ProfileExperience"
+import ProfileExpForm from "./ProfileExpForm"
 export default function ProfileEdit() {
   const {
     state,
@@ -12,8 +16,8 @@ export default function ProfileEdit() {
     addExperienceDispatch,
     removeexperienceDispatch,
     updateExperienceDispatch,
-    addHandleDispatch,
     removeEducationDispatch,
+    addHandleDispatch,
     removeHandleDispatch,
     updateHandleDispatch,
     updateEducationDispatch,
@@ -33,6 +37,24 @@ export default function ProfileEdit() {
           addSkillDispatch={addSkillDispatch}
           skills={state.skills}
           skillErrTxt={state.skillErrTxt}
+        />
+        <ProfileHandlesForm
+          formType={{
+            type: "handles",
+            body: state.handle,
+            add: addHandleDispatch,
+            remove: removeHandleDispatch,
+            update: updateHandleDispatch,
+          }}
+        />
+        <ProfileExpForm
+          formType={{
+            type: "experiences",
+            body: state.experience,
+            add: addExperienceDispatch,
+            remove: removeexperienceDispatch,
+            update: updateExperienceDispatch,
+          }}
         />
       </div>
     </main>

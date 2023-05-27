@@ -89,11 +89,12 @@ export default function useProfileEdit() {
         return {
           ...state,
           handleErrTxt: validateHandle(action.payload),
-          handle: validateHandle(action.payload)
-            ? state.handle.map((s) =>
-                s._id === action.payload._id ? action.payload : s,
-              )
-            : state.handle,
+          handle:
+            validateHandle(action.payload).length === 0
+              ? state.handle.map((s) =>
+                  s._id === action.payload._id ? action.payload : s,
+                )
+              : state.handle,
         }
       case "add:skill":
         const validSkills = validateSkills(action.payload)
@@ -210,7 +211,7 @@ export default function useProfileEdit() {
 
   useEffect(() => {
     ;(async () => {
-      const { data } = await loadProfile()
+      const { data } = await loadProfile(undefined)
       dispatch({ type: "set:profile", payload: data })
     })()
   }, [])

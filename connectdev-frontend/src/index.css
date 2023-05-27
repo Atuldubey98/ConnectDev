@@ -3,6 +3,10 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+.cursor__pointer {
+  cursor: pointer;
 }
 body {
   font-family: "Poppins", sans-serif;
@@ -28,8 +32,10 @@ body {
 @keyframes slideIn {
   0% {
     transform: translateY(-10%);
+    scale: 0;
   }
   100% {
+    scale: 1;
     transform: translateY(0%);
   }
 }

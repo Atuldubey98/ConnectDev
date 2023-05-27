@@ -12,6 +12,17 @@ export const fetchAllPosts = (page: number) => {
     throw error
   }
 }
+export const fetchPost = (postId: string) => {
+  try {
+    return instance.get("/api/post", {
+      params: {
+        postId,
+      },
+    })
+  } catch (error) {
+    throw error
+  }
+}
 export const likeOrDislikePost = (postId: string) => {
   try {
     return instance.post("/api/post/like", {
