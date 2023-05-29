@@ -13,6 +13,7 @@ import "./SinglePostPage.css"
 import { ILikes, IPost } from "./interfaces"
 import { fetchPost, likeOrDislikePost, makeNewComment } from "./postAPI"
 import PostTags from "./PostTags"
+import useEdit from "../profileEdit/useEdit"
 export default function SinglePostPage() {
   const { postId } = useParams()
   const [post, setPost] = useState<IPost | null>(null)
@@ -53,7 +54,7 @@ export default function SinglePostPage() {
         : [...(post.likes || [])].filter((like) => like.user._id !== user?._id),
     })
   }
-
+  const { edit, toggleEdit } = useEdit()
   useEffect(() => {
     ;(async () => {
       if (!postId) return
@@ -92,22 +93,26 @@ export default function SinglePostPage() {
           </div>
           <div className="single__postBtns d-flex-center">
             <Like liked={liked} createLikeOrDislike={createLikeOrDislike} />
-            <ButtonWithIcon onClick={undefined}>
+            <ButtonWithIcon onClick={() => toggleEdit(!edit)}>
               <FaRegCommentAlt size={20} />
               <span>Comment</span>
             </ButtonWithIcon>
           </div>
         </div>
+        
         <CommentsList
           comments={post?.comments || []}
           onDeleteComment={() => {}}
-          maxHeight="60svh"
+          maxHeight="50svh"
           ref={lastCommentRef}
         />
-        <CommentsForm
-          postId={postId || ""}
-          onSubmitDispatch={onSubmitDispatch}
-        />
+
+        {edit ? (
+          <CommentsForm
+            postId={postId || ""}
+            onSubmitDispatch={onSubmitDispatch}
+          />
+        ) : null}
       </div>
     </main>
   )

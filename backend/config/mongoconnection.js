@@ -3,6 +3,7 @@ const MONGO_URI = require("./keys").MONGO_URI;
 const { GridFsStorage } = require("multer-gridfs-storage");
 const multer = require("multer");
 mongoose.connect(MONGO_URI);
+
 const storage = new GridFsStorage({
   url: MONGO_URI,
   file: (req, file) => {

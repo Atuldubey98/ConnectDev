@@ -20,26 +20,31 @@ const CommentsList = forwardRef(
     const { user } = useAppSelector((state) => state.login)
 
     return (
-      <div
-        style={{
-          height: maxHeight || "40svh",
-        }}
-        className="comments__list"
-      >
-        {storedComments
-          .sort(
-            (a, b) =>
-              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-          )
-          .map((comment) => (
-            <Comment
-              key={comment._id}
-              comment={comment}
-              userId={user?._id || ""}
-              onClickDelete={onDeleteComment}
-            />
-          ))}
-        <div ref={ref}></div>
+      <div>
+        <div
+          style={{
+            height: maxHeight || "40svh",
+          }}
+          className="comments__list"
+        >
+          <div>
+            {storedComments
+              .sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              )
+              .map((comment) => (
+                <Comment
+                  key={comment._id}
+                  comment={comment}
+                  userId={user?._id || ""}
+                  onClickDelete={onDeleteComment}
+                />
+              ))}
+          </div>
+          <div ref={ref}></div>
+        </div>
       </div>
     )
   },

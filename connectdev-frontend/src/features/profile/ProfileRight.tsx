@@ -5,10 +5,10 @@ import ProfileSkills from "./ProfileSkills"
 import { IProfile } from "./interfaces"
 import "./ProfileRight.css"
 type ProfileRightProps = {
-  profile: IProfile
+  profile: IProfile | null
 }
 export default function ProfileRight({ profile }: ProfileRightProps) {
-  return (
+  return profile ? (
     <section className="profile__right">
       {profile?.skills && profile.skills.length > 0 ? (
         <ProfileSkills skills={profile.skills} />
@@ -23,5 +23,9 @@ export default function ProfileRight({ profile }: ProfileRightProps) {
         <ProfileEducation educations={profile.education} />
       ) : null}
     </section>
+  ) : (
+    <div className="profle__null">
+      <h3>Profile does not exist</h3>
+    </div>
   )
 }

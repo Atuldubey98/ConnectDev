@@ -80,42 +80,49 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
     typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
       ? Number(req.query.limit)
       : 10;
-  const postRes = await Post.paginate(
-    {},
-    {
-      page,
-      limit,
-      collation: {
-        locale: "en",
-      },
-      populate: [
-        {
-          path: "likes",
-          populate: {
-            path: "user",
-            select: "name email avatar",
-          },
-        },
-        {
-          path: "comments",
-          populate: {
-            path: "user",
-            select: "name email avatar",
-          },
-        },
-        {
+  const search = typeof req.params.search === "string" ? req.params.search : "";
+  const query =
+    search.length === 0
+      ? {}
+      : {
+          $or: [
+            { text: { $regex: search, $options: "i" } },
+            { title: { $regex: search, $options: "i" } },
+          ],
+        };
+  const postRes = await Post.paginate(query, {
+    page,
+    limit,
+    collation: {
+      locale: "en",
+    },
+    populate: [
+      {
+        path: "likes",
+        populate: {
           path: "user",
           select: "name email avatar",
         },
-      ],
-      customLabels: {
-        totalDocs: "totalCount",
-        docs: "posts",
-        nextPage: "next",
-        prevPage: "prev",
       },
-    }
-  );
+      {
+        path: "comments",
+        populate: {
+          path: "user",
+          select: "name email avatar",
+        },
+      },
+      {
+        path: "user",
+        select: "name email avatar",
+      },
+    ],
+    customLabels: {
+      totalDocs: "totalCount",
+      docs: "posts",
+      nextPage: "next",
+      prevPage: "prev",
+    },
+  });
   return res.status(200).send(postRes);
 });
 

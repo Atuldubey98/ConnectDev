@@ -22,6 +22,8 @@
 .single__postAvatar {
   display: grid;
   gap: 1rem;
+  border-bottom: 1px dashed lightgray;
+  padding: 0.8rem;
 }
 .single__postBtns {
   justify-content: space-around !important;

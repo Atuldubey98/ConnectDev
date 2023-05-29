@@ -49,7 +49,7 @@ export default function ProfileSkillsForm({
     <div className="profile__form">
       <div className="profile__formHead">
         <CommonHeading text="Skills" />
-        <GrAddCircle size={30} onClick={newSkill} />
+        <GrAddCircle size={30} onClick={newSkill} className="cursor__pointer" />
       </div>
       <ul className="common__profileList">
         {skills.map((skill) => (

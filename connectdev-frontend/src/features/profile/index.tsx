@@ -36,7 +36,7 @@ export default function ProfilePage() {
               </div>
             ) : null}
           </ProfileLeft>
-          {profile ? <ProfileRight profile={profile} /> : null}
+          <ProfileRight profile={profile} />
         </div>
       )}
     </main>

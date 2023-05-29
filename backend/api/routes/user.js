@@ -7,6 +7,7 @@ const {
   logoutUser,
   getCurrentUserProfile,
   getChatUser,
+  searchUser,
 } = require("../controller/userController");
 
 router.post("/register", registerUser);
@@ -19,4 +20,5 @@ router.get("/", isAuthenticated, getCurrentUserProfile);
 
 router.get("/all", isAuthenticated, getChatUser);
 
+router.get("/search/:search", isAuthenticated, searchUser);
 module.exports = router;

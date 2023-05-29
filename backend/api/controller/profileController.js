@@ -44,42 +44,54 @@ exports.postProfile = catchAsyncErrors(async (req, res, next) => {
     await Handle.deleteMany({ user });
   }
   let { skills, experience, education, handle } = req.body;
-  const insertedHandles = await Handle.insertMany(
-    handle.map((handle) => {
-      const { _id, ...other } = handle;
-      return {
-        ...other,
-        user,
-      };
-    })
-  );
-  const insertedSkills = await Skill.insertMany(
-    skills.map((skill) => {
-      const { _id, ...other } = skill;
-      return {
-        ...other,
-        user,
-      };
-    })
-  );
-  const insertedExps = await Exps.insertMany(
-    experience.map((exp) => {
-      const { _id, ...other } = exp;
-      return {
-        ...other,
-        user,
-      };
-    })
-  );
-  const insertedEducation = await Education.insertMany(
-    education.map((edu) => {
-      const { _id, ...other } = edu;
-      return {
-        ...other,
-        user,
-      };
-    })
-  );
+  let insertedSkills = [];
+  let insertedHandles = [];
+  let insertedExps = [];
+  let insertedEducation = [];
+  if (skills && Array.isArray(skills)) {
+    insertedSkills = await Skill.insertMany(
+      skills.map((skill) => {
+        const { _id, ...other } = skill;
+        return {
+          ...other,
+          user,
+        };
+      })
+    );
+  }
+  if (handle && Array.isArray(handle)) {
+    insertedHandles = await Handle.insertMany(
+      handle.map((handle) => {
+        const { _id, ...other } = handle;
+        return {
+          ...other,
+          user,
+        };
+      })
+    );
+  }
+  if (experience && Array.isArray(experience)) {
+    insertedExps = await Exps.insertMany(
+      experience.map((exp) => {
+        const { _id, ...other } = exp;
+        return {
+          ...other,
+          user,
+        };
+      })
+    );
+  }
+  if (education && Array.isArray(education)) {
+    insertedEducation = await Education.insertMany(
+      education.map((edu) => {
+        const { _id, ...other } = edu;
+        return {
+          ...other,
+          user,
+        };
+      })
+    );
+  }
   const newProfile = new Profile({
     ...req.body,
     skills: insertedSkills.map((skill) => skill._id),

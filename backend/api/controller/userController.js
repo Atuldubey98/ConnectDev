@@ -101,3 +101,28 @@ exports.getChatUser = catchAsyncErrors(async (req, res, next) => {
     },
   });
 });
+
+exports.searchUser = catchAsyncErrors(async (req, res, next) => {
+  const page =
+    typeof req.query.page === "string" && !isNaN(Number(req.query.page))
+      ? Number(req.query.page)
+      : 1;
+  const limit =
+    typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
+      ? Number(req.query.limit)
+      : 10;
+  const search = typeof req.params.search === "string" ? req.params.search : "";
+  const query = {
+    $or: [
+      { email: { $regex: search, $options: "i" } },
+      { name: { $regex: search, $options: "i" } },
+    ],
+  };
+  const options = {
+    limit,
+    page,
+    select: "_id name avatar email",
+  };
+  const users = await User.paginate(query, options);
+  return res.status(200).send(users);
+});

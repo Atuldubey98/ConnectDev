@@ -22,6 +22,7 @@ router
   .get("/all", isAuthenticated, getAllPosts)
   .delete("/all", isAuthenticated, deletePostsById);
 
+router.get("/search/:search", isAuthenticated, getAllPosts);
 router.post("/like", isAuthenticated, likeOrDislikePost);
 
 router
