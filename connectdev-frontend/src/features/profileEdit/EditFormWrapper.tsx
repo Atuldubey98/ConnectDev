@@ -67,6 +67,8 @@ export default function EditFormWrapper({
     formType.type === "handles" && formType.body.find((s) => s._id === id)
   const isExpUpdate =
     formType.type === "experiences" && formType.body.find((s) => s._id === id)
+  const isEducationUpdate =
+    formType.type === "educations" && formType.body.find((s) => s._id === id)
   const onDelete = () => {
     formType.remove(id)
     toggleEdit(false)
@@ -77,9 +79,11 @@ export default function EditFormWrapper({
   }
   const onExpClick = (exp: ExperienceBody) => {
     setEntity({ type: "experiences", payload: exp })
+    toggleEdit(true)
   }
   const onEducationClick = (education: EducationBody) => {
     setEntity({ type: "education", payload: education })
+    toggleEdit(true)
   }
   const onAddNew = () => {
     onSetFresh()
@@ -94,7 +98,7 @@ export default function EditFormWrapper({
       <ul className="common__profileList">
         {formType.type === "handles" ? (
           formType.body.map((listItem) => (
-            <div key={listItem._id} className="cursor__pointer">
+            <div key={listItem._id} className="cursor__pointer border__wrapper">
               <Handle
                 onClick={() => onHandleClick(listItem)}
                 username={listItem.username}
@@ -105,7 +109,7 @@ export default function EditFormWrapper({
           ))
         ) : formType.type === "experiences" ? (
           formType.body.map((listItem) => (
-            <div key={listItem._id} className="cursor__pointer">
+            <div key={listItem._id} className="cursor__pointer border__wrapper">
               <Experience
                 onClick={() => onExpClick(listItem)}
                 company={listItem.company}
@@ -116,7 +120,7 @@ export default function EditFormWrapper({
           ))
         ) : formType.type === "educations" ? (
           formType.body.map((listItem) => (
-            <div key={listItem._id} className="cursor__pointer">
+            <div key={listItem._id} className="cursor__pointer border__wrapper">
               <Education
                 onClick={() => onEducationClick(listItem)}
                 degree={listItem.degree}
@@ -135,9 +139,11 @@ export default function EditFormWrapper({
           {children}
           <div className="profile__btns d-flex-center">
             <button className="primary__btn" type="submit">
-              {isHandleUpdate || isExpUpdate ? "Update" : "Add"}
+              {isHandleUpdate || isExpUpdate || isEducationUpdate
+                ? "Update"
+                : "Add"}
             </button>
-            {isHandleUpdate || isExpUpdate ? (
+            {isHandleUpdate || isExpUpdate || isEducationUpdate ? (
               <button onClick={onDelete} type="button" className="btn">
                 Delete
               </button>

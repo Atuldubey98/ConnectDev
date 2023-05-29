@@ -6,7 +6,12 @@ import {
   HandleBody,
   ExperienceBody,
   EducationBody,
+  UpdateProfileBody,
 } from "./interfaces"
+import { useNavigate } from "react-router-dom"
+import { useAppDispatch } from "../../app/hooks"
+import { updateProfileAction } from "../profile/profileSlice"
+import { toast } from "react-toastify"
 
 export default function useProfileEdit() {
   type State = {
@@ -78,11 +83,12 @@ export default function useProfileEdit() {
         return {
           ...state,
           experienceErrTxt: validateExperience(action.payload),
-          experience: validateExperience(action.payload)
-            ? state.experience.map((s) =>
-                s._id === action.payload._id ? action.payload : s,
-              )
-            : state.experience,
+          experience:
+            validateExperience(action.payload).length === 0
+              ? state.experience.map((s) =>
+                  s._id === action.payload._id ? action.payload : s,
+                )
+              : state.experience,
         }
 
       case "update:handle":
@@ -208,7 +214,7 @@ export default function useProfileEdit() {
         return state
     }
   }
-
+  const appDispatch = useAppDispatch()
   useEffect(() => {
     ;(async () => {
       const { data } = await loadProfile(undefined)
@@ -283,8 +289,37 @@ export default function useProfileEdit() {
   function updateHandleDispatch(handle: HandleBody) {
     dispatch({ type: "update:handle", payload: handle })
   }
+  async function onSubmitProfile() {
+    const { skills, status, education, experience, handle } = state
+    const profile: UpdateProfileBody = {
+      skills,
+      status,
+      education,
+      experience,
+      handle,
+    }
+    appDispatch(updateProfileAction(profile, navigateToProfile, showToast))
+  }
+  const navigate = useNavigate()
+  function navigateToProfile() {
+    navigate("/profile", { replace: true })
+  }
+
+  function showToast() {
+    toast.success("Profile Updated", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    })
+  }
   return {
     state,
+    onSubmitProfile,
     onChangeStatus,
     addSkillDispatch,
     removeSkillDispatch,

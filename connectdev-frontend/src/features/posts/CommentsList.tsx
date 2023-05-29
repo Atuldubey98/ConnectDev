@@ -22,7 +22,7 @@ const CommentsList = forwardRef(
     return (
       <div
         style={{
-          maxHeight: maxHeight || "40svh",
+          height: maxHeight || "40svh",
         }}
         className="comments__list"
       >

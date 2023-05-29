@@ -1,13 +1,12 @@
 import { useState } from "react"
 import { GrAddCircle } from "react-icons/gr"
-import CommonHeading from "../profile/CommonHeading"
-import { SkillBody } from "./interfaces"
-import { Skill } from "../profile/ProfileSkills"
-import Input from "../common/Input"
 import { v4 as uuidv4 } from "uuid"
-import useEdit from "./useEdit"
+import Input from "../common/Input"
 import MessageInfo from "../common/MessageInfo"
-import Button from "../common/Button"
+import CommonHeading from "../profile/CommonHeading"
+import { Skill } from "../profile/ProfileSkills"
+import { SkillBody } from "./interfaces"
+import useEdit from "./useEdit"
 type ProfileSkillsForm = {
   skillErrTxt: string
   skills: SkillBody[]
@@ -54,7 +53,7 @@ export default function ProfileSkillsForm({
       </div>
       <ul className="common__profileList">
         {skills.map((skill) => (
-          <div key={skill._id} className="skill__wrapper">
+          <div key={skill._id} className="border__wrapper">
             <Skill
               onSkillClick={onSkillClick}
               skill={skill.skill}
@@ -73,7 +72,8 @@ export default function ProfileSkillsForm({
             }
             value={skill.skill}
             type="text"
-            label={"Skill"}
+            required
+            label={"Skill Name :"}
           />
           <Input
             name="yearsWorked"
@@ -85,9 +85,10 @@ export default function ProfileSkillsForm({
                   : Number(e.currentTarget.value),
               })
             }}
+            required
             value={skill.yearsWorked}
             type="number"
-            label={"Years Worked"}
+            label={"Years Worked :"}
           />
           {skillErrTxt ? (
             <MessageInfo isError={true} message={skillErrTxt} />

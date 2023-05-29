@@ -25,3 +25,10 @@ export type EducationBody = {
   area: string
   description: string
 }
+export type UpdateProfileBody = {
+  skills: SkillBody[]
+  handle: HandleBody[]
+  experience: ExperienceBody[]
+  education: EducationBody[]
+  status: string
+}

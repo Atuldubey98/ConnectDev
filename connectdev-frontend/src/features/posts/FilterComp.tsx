@@ -16,7 +16,11 @@ export default function FilterComp() {
         className="d-flex-center"
         onSubmit={onSubmit}
       >
-        <input ref={searchRef} placeholder="Search for post" type="search" />
+        <input
+          ref={searchRef}
+          placeholder="Search for post or user"
+          type="search"
+        />
         <GoSearch size={18} />
       </form>
     </section>

@@ -1,11 +1,12 @@
 export default function CommonHeading({ text }: { text: string }) {
   return (
-    <h2
+    <p
       style={{
+        fontWeight: "700",
         textTransform: "capitalize",
       }}
     >
       {text}
-    </h2>
+    </p>
   )
 }

@@ -3,10 +3,13 @@ import { v4 as uuidv4 } from "uuid"
 import Input from "../common/Input"
 import EditFormWrapper, { EntityType, FormType } from "./EditFormWrapper"
 import { HandleBody } from "./interfaces"
+import MessageInfo from "../common/MessageInfo"
 
 export default function ProfileHandlesForm({
   formType,
+  handleErrTxt,
 }: {
+  handleErrTxt: string
   formType: FormType
 }) {
   const defaultHandle = {
@@ -50,18 +53,29 @@ export default function ProfileHandlesForm({
       onSubmit={onSubmit}
     >
       <Input
-        label="username"
+        label="Username or Email Id :"
         value={handle.username}
         name="username"
         onChange={onChange}
+        required
       />
       <Input
-        label="platform"
+        label="Platform :"
         value={handle.platform}
         name="platform"
+        required
         onChange={onChange}
       />
-      <Input label="link" value={handle.link} name="link" onChange={onChange} />
+      <Input
+        label="Link of the handle :"
+        value={handle.link}
+        name="link"
+        onChange={onChange}
+        required
+      />
+      {handleErrTxt.length > 0 ? (
+        <MessageInfo isError={true} message={handleErrTxt} />
+      ) : null}
     </EditFormWrapper>
   )
 }

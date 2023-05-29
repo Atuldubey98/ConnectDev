@@ -3,6 +3,9 @@
 }
 .profile__left {
   text-align: center;
+  background-color: rgb(245, 239, 239);
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
 }
 .profile__email {
   font-size: 0.9rem;

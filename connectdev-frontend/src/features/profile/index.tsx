@@ -19,7 +19,7 @@ export default function ProfilePage() {
       ) : (
         <div
           style={{
-            gridTemplateColumns: profile ? "1fr 1fr" : "1fr",
+            gridTemplateColumns: "1fr",
           }}
           className="profile__wrapper"
         >
