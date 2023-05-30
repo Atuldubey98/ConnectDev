@@ -1,30 +1,27 @@
 import { useEffect } from "react"
+import { BsFillFilePostFill } from "react-icons/bs"
 import { ClockLoader } from "react-spinners"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import Notfound from "../common/Notfound"
+import useInfiniteScroll from "../common/useInfiniteScroll"
 import Post from "./Post"
 import "./PostsLists.css"
 import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
-import useScrollPage from "./useScrollPage"
-import Notfound from "../common/Notfound"
-import { BsFillFilePostFill } from "react-icons/bs"
 export type PostListProps = {
   search: string
 }
 export default function PostsList(props: PostListProps) {
   const { search } = props
-  const { status, postResponse } = useAppSelector((state) => state.post)
+  const { status, postResponse, hasNextPost } = useAppSelector(
+    (state) => state.post,
+  )
+  const { page, setElement } = useInfiniteScroll(hasNextPost)
   const appDispatch = useAppDispatch()
   const loading = status === "loading"
-  const { page } = useScrollPage()
-
   useEffect(() => {
-    if (postResponse && !postResponse.hasNextPage) {
-      return
-    } else {
-      appDispatch(
-        search ? searchPostByNameAction(page, search) : getAllPosts(page),
-      )
-    }
+    appDispatch(
+      search ? searchPostByNameAction(page, search) : getAllPosts(page),
+    )
   }, [page])
   useEffect(() => {
     return () => {
@@ -38,9 +35,13 @@ export default function PostsList(props: PostListProps) {
       ) : (
         <div className="posts">
           {postResponse?.posts &&
-            postResponse.posts.map((post) => (
-              <Post key={post._id} post={post} />
-            ))}
+            postResponse.posts.map((post, index) =>
+              index === postResponse.posts!.length - 1 ? (
+                <Post key={post._id} post={post} ref={setElement} />
+              ) : (
+                <Post key={post._id} post={post} />
+              ),
+            )}
         </div>
       )}
       <div className="d-flex-center">

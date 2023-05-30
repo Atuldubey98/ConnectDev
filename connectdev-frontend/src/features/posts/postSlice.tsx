@@ -25,11 +25,13 @@ type PostState = {
   singlePostStatus: "success" | "loading" | "failure" | "idle"
   newCommentStatus: "success" | "loading" | "failure" | "idle"
   postResponse: IPostResponse | null
+  hasNextPost: boolean
   singlePostError: string
   post: IPost | null
 }
 const initialState: PostState = {
   status: "idle",
+  hasNextPost: true,
   postResponse: null,
   newPostStatus: "idle",
   newCommentStatus: "idle",
@@ -133,6 +135,7 @@ export const postSlice = createSlice({
       } else {
         state.postResponse = action.payload
       }
+      state.hasNextPost = action.payload.hasNextPage
     },
     setLike: (state, action: PayloadAction<ILikes>) => {
       if (state.postResponse && state.postResponse.posts) {
