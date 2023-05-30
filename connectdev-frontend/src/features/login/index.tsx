@@ -9,6 +9,9 @@ export default function LoginPage() {
   const loading = status === "loading"
   return (
     <main className="login__page d-flex-center">
+      <section className="auth__head">
+        <h1>Login</h1>
+      </section>
       <AuthForm
         loading={loading}
         onSubmit={onSubmit}

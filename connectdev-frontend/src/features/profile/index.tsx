@@ -1,30 +1,25 @@
-import { Link, useParams } from "react-router-dom"
+import { AiFillEdit } from "react-icons/ai"
+import { useParams } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
 import FullLoading from "../common/FullLoading"
+import LinkButton from "../common/LinkButton"
 import ProfileLeft from "./ProfileLeft"
 import "./ProfilePage.css"
 import ProfileRight from "./ProfileRight"
 import useProfile from "./useProfile"
-import LinkButton from "../common/LinkButton"
-import { AiFillEdit } from "react-icons/ai"
 export default function ProfilePage() {
   const { userId } = useParams()
   const { loading, profile } = useProfile(userId)
-  const postTags = ["Java", "C++", "Hammmer"]
   const { user } = useAppSelector((state) => state.login)
   return (
     <main className="profile__page">
       {loading ? (
         <FullLoading />
       ) : (
-        <div
-          
-          className="profile__wrapper"
-        >
+        <div className="profile__wrapper">
           <ProfileLeft
             user={profile?.user || null}
             status={profile?.status || "Here is using your website"}
-            postTags={postTags}
           >
             {(userId && userId === user?._id) || !userId ? (
               <div className="d-flex-center">

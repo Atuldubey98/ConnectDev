@@ -127,6 +127,6 @@ io.on("connection", async (socket) => {
 });
 
 const port = PORT || 9000;
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   logger.log({ level: "info", message: `Server running on ${port}` });
 });

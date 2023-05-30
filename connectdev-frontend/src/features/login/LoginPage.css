@@ -1,3 +1,8 @@
 .login__page {
+  gap: 0.8rem;
   min-height: 80svh;
+  flex-direction: column;
+}
+.login__page > section > h1 {
+  font-size: 4rem;
 }

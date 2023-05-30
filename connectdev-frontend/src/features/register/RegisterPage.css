@@ -1,3 +1,8 @@
 .register__page {
   min-height: 80svh;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.register__page > section > h1 {
+  font-size: 4rem;
 }

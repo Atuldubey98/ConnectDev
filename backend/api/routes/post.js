@@ -17,7 +17,6 @@ router
   .post("/", isAuthenticated, savePost)
   .get("/", isAuthenticated, getPost)
   .delete("/", isAuthenticated, deleteSinglePostById);
-
 router
   .get("/all", isAuthenticated, getAllPosts)
   .delete("/all", isAuthenticated, deletePostsById);

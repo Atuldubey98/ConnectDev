@@ -1,5 +1,5 @@
 import axios, { isAxiosError } from "axios"
-export const baseURL = import.meta.env.DEV ? "http://localhost:9000" : "/"
+export const baseURL = import.meta.env.DEV ? "http://192.168.1.15:9000" : "/"
 const instance = axios.create({
   baseURL,
   withCredentials: true,

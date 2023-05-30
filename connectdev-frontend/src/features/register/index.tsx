@@ -13,6 +13,9 @@ export default function RegisterPage() {
 
   return (
     <main className="d-flex-center register__page">
+      <section className="auth__head">
+        <h1>Register</h1>
+      </section>
       <AuthForm
         state={state}
         messageInfo={registerMessage}
