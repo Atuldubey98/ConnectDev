@@ -1,0 +1,16 @@
+.people {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  background-color: var(--secondary-color);
+  border-radius: 0.5rem;
+  margin: 0.3rem;
+  border: 1px solid var(--shadow-color);
+}
+.people__about > p {
+  font-size: 0.8rem;
+}
+.people__about > h4 > a {
+  text-decoration: none;
+  color: var(--black-color);
+}

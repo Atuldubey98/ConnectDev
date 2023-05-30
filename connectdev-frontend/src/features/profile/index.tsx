@@ -18,9 +18,7 @@ export default function ProfilePage() {
         <FullLoading />
       ) : (
         <div
-          style={{
-            gridTemplateColumns: "1fr",
-          }}
+          
           className="profile__wrapper"
         >
           <ProfileLeft

@@ -1,11 +1,17 @@
 import { useEffect } from "react"
-import "./PostsLists.css"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { getAllPosts, setIdle } from "./postSlice"
 import { ClockLoader } from "react-spinners"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import Post from "./Post"
+import "./PostsLists.css"
+import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
 import useScrollPage from "./useScrollPage"
-export default function PostsList() {
+import Notfound from "../common/Notfound"
+import { BsFillFilePostFill } from "react-icons/bs"
+export type PostListProps = {
+  search: string
+}
+export default function PostsList(props: PostListProps) {
+  const { search } = props
   const { status, postResponse } = useAppSelector((state) => state.post)
   const appDispatch = useAppDispatch()
   const loading = status === "loading"
@@ -15,7 +21,9 @@ export default function PostsList() {
     if (postResponse && !postResponse.hasNextPage) {
       return
     } else {
-      appDispatch(getAllPosts(page))
+      appDispatch(
+        search ? searchPostByNameAction(page, search) : getAllPosts(page),
+      )
     }
   }, [page])
   useEffect(() => {
@@ -26,7 +34,7 @@ export default function PostsList() {
   return (
     <section className="posts__list">
       {postResponse && postResponse.posts && postResponse.posts.length === 0 ? (
-        <div></div>
+        <Notfound icon={BsFillFilePostFill} message="Posts Not found" />
       ) : (
         <div className="posts">
           {postResponse?.posts &&

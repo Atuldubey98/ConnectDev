@@ -38,12 +38,12 @@
   padding: 0.3rem;
   font-size: 1rem;
   background-color: var(--accent-color);
-  color: white;
+  color: var(--white-color);
   border-radius: 0.5rem;
   outline: none;
 }
 .create__errTxt {
-  color: red;
+  color: var(--red-color);
 }
 .create__btn {
   gap: 0.8rem;
@@ -56,19 +56,19 @@
   gap: 0.8rem;
 }
 .tags__list span {
-  background-color: white;
+  background-color: var(--white-color);
   border-radius: 0.3rem;
   padding: 0.5rem;
 }
 .create__btn > .submit {
   background-color: var(--accent-color);
-  color: white;
+  color: var(--white-color);
   transition: all 300ms ease-in;
 }
 .create__btn > .submit:hover {
   background-color: var(--hover-color);
 }
 .create__btn > .cancel {
-  background-color: black;
-  color: white;
+  background-color: var(--black-color);
+  color: var(--white-color);
 }

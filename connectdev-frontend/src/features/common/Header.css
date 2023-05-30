@@ -1,6 +1,6 @@
 header {
   background-color: var(--accent-color);
-  color: white;
+  color: var(--white-color);
   flex-wrap: wrap;
 }
 .banner {
@@ -9,5 +9,5 @@ header {
 }
 .banner a {
   text-decoration: none;
-  color: white;
+  color: var(--white-color);
 }

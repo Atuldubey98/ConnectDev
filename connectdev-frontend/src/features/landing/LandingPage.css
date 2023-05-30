@@ -23,7 +23,7 @@
 .landing__btns a {
   text-decoration: none;
   font-weight: bold;
-  color: white;
+  color: var(--white-color);
   background-color: var(--accent-color);
   border-radius: 0.3rem;
   padding: 0.5rem;
@@ -32,4 +32,3 @@
 .landing__btns a:hover {
   opacity: 0.8;
 }
-

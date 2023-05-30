@@ -1,4 +1,4 @@
 .input__errMsg {
-  color: red;
+  color: var(--red-color);
   font-weight: 600;
 }

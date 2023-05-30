@@ -9,7 +9,7 @@
   padding: 0.3rem;
   cursor: pointer;
 }
-.profile__dropbtn > p{
+.profile__dropbtn > p {
   white-space: nowrap;
 }
 .profile__dropbtn:hover {
@@ -34,7 +34,7 @@
 
 .profile__dropdownItems li {
   padding: 0.3rem;
-  color: white;
+  color: var(--white-color);
   transition: all 300ms ease-in;
   font-weight: bold;
   cursor: pointer;

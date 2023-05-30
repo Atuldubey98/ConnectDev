@@ -1,11 +1,10 @@
 import { GoSearch } from "react-icons/go"
 import "./FilterComp.css"
-import useSearchFocus from "./useSearchFocus"
+import useSearchForm from "./useSearchForm"
+import { useParams } from "react-router-dom"
 export default function FilterComp() {
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault()
-  }
-  const { searchRef, large } = useSearchFocus()
+  const { searchRef, large, onSubmit } = useSearchForm()
+  const { search } = useParams()
   return (
     <section className="filter__comp d-flex-center">
       <form
@@ -20,6 +19,7 @@ export default function FilterComp() {
           ref={searchRef}
           placeholder="Search for post or user"
           type="search"
+          defaultValue={search}
         />
         <GoSearch size={18} />
       </form>

@@ -1,14 +1,14 @@
 .filter__comp {
   margin: auto;
   padding-block: 0.8rem;
-  background-color: rgb(240, 240, 240);
+  background-color: var(--secondary-color);
 }
 .filter__comp form {
   border-radius: 0.8rem;
   padding: 0.3rem;
-  background-color: white;
-  box-shadow: 2px 2px #888888;
-  
+  background-color: var(--white-color);
+  box-shadow: 2px 2px var(--shadow-color);
+
   width: 100%;
   transition: all 300ms ease-in;
   pointer-events: none;

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom"
 import TextTruncate from "react-text-truncate"
 import { IUserDetails } from "./interfaces"
+import PostTitle from "./PostTitle"
+import PostAuthor from "./PostAuthor"
+import moment from "moment"
+import PostText from "./PostText"
 
 type PostBodyProps = {
   text: string
@@ -20,18 +24,11 @@ export default function PostBody({
   return (
     <div className="post__body">
       <div className="post__about">
-        <TextTruncate text={title} element={"h3"} truncateText="..." line={2} />
+        <PostTitle title={title} />
 
-        <p className="post__author">
-          <span>
-            By <Link to={`/profile/${user?._id}`}>{user?.name}</Link>
-          </span>
-          <span className="post__date"> {date}</span>
-        </p>
+        <PostAuthor user={user} date={date} />
       </div>
-      <Link to={`/posts/${postId}`}>
-        <TextTruncate text={text} element={"p"} truncateText="..." line={5} />
-      </Link>
+      <PostText postId={postId} text={text} />
     </div>
   )
 }

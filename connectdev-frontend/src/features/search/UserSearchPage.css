@@ -1,7 +1,7 @@
-.profile__wrapper {
-  display: grid;
-  gap: 0.3rem;
+.user__searchWrapper {
   max-width: 962px;
   margin: auto;
+  gap: 1rem;
   padding: 0.8rem;
+  min-height: 90svh;
 }

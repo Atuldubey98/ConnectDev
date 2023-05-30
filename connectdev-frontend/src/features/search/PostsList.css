@@ -1,0 +1,5 @@
+.post__list {
+  list-style: none;
+  display: grid;
+  gap: 0.8rem;
+}

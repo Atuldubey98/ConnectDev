@@ -41,7 +41,7 @@
   text-align: right;
 }
 .post__about p {
-  color: grey;
+  color: var(--shadow-color);
 }
 .post__btns {
   padding: 0.8rem;
@@ -50,7 +50,7 @@
   justify-content: space-between;
   border-bottom-left-radius: 0.8rem;
   border-bottom-right-radius: 0.8rem;
-  border-top: 1px solid lightgray;
+  border-top: 1px solid var(--secondary-color);
 }
 .post__btn {
   cursor: pointer;
@@ -71,7 +71,7 @@
 }
 .post__tagsList span {
   border-radius: 0.3rem;
-  border: 1px solid lightgray;
+  border: 1px solid var(--secondary-color);
   padding: 0.3rem;
 }
 .post__date {
@@ -79,7 +79,7 @@
 }
 .post__body > a {
   text-decoration: none;
-  color: black;
+  color: var(--black-color);
 }
 .post__body > a > p {
   text-align: justify;

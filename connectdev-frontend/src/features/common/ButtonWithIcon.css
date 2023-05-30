@@ -1,5 +1,6 @@
 .btn__icon {
   transition: all 300ms ease-in-out;
+  background-color: white;
 }
 .btn__icon:hover {
   background-color: var(--secondary-color);

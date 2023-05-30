@@ -5,14 +5,18 @@ import "./App.css"
 import ChatsPage from "./features/chats"
 import ProfilePage from "./features/profile"
 
+import { TbError404Off } from "react-icons/tb"
 import Header from "./features/common/Header"
+import Notfound from "./features/common/Notfound"
+import LandingPage from "./features/landing"
 import LoginPage from "./features/login"
 import PrivateRoute from "./features/login/PrivateRoute"
 import PostsPage from "./features/posts"
-import RegisterPage from "./features/register"
-import LandingPage from "./features/landing"
-import ProfileEdit from "./features/profileEdit"
 import SinglePostPage from "./features/posts/SinglePostPage"
+import ProfileEdit from "./features/profileEdit"
+import RegisterPage from "./features/register"
+import SearchPage from "./features/search"
+import UserSearchPage from "./features/search/UserSearchPage"
 
 export default function App() {
   return (
@@ -36,6 +40,30 @@ export default function App() {
           element={
             <PrivateRoute>
               <SinglePostPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/search/:search"
+          element={
+            <PrivateRoute>
+              <SearchPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/search/posts/:search"
+          element={
+            <PrivateRoute>
+              <PostsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/search/users/:search"
+          element={
+            <PrivateRoute>
+              <UserSearchPage />
             </PrivateRoute>
           }
         />
@@ -70,6 +98,10 @@ export default function App() {
               <ProfileEdit />
             </PrivateRoute>
           }
+        />
+        <Route
+          path="*"
+          element={<Notfound icon={TbError404Off} message="Not found" />}
         />
       </Routes>
 

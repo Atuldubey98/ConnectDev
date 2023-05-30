@@ -86,7 +86,7 @@ export default function ProfileEdit() {
         {updateError ? (
           <MessageInfo isError={true} message={updateError} />
         ) : null}
-        <div className="d-flex-center">
+        <div id="submit__profile" className="d-flex-center">
           <Button label="Submit" onClick={onSubmitProfile} />
         </div>
       </div>

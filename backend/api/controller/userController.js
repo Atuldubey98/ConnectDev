@@ -122,6 +122,9 @@ exports.searchUser = catchAsyncErrors(async (req, res, next) => {
     limit,
     page,
     select: "_id name avatar email",
+    customLabels: {
+      docs: "users",
+    },
   };
   const users = await User.paginate(query, options);
   return res.status(200).send(users);

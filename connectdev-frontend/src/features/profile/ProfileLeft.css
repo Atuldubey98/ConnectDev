@@ -3,13 +3,13 @@
 }
 .profile__left {
   text-align: center;
-  background-color: rgb(245, 239, 239);
+  background-color: var(--secondary-color);
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
 }
 .profile__email {
   font-size: 0.9rem;
-  color: gray;
+  color: var(--shadow-color);
 }
 .common__profileList {
   list-style: none;

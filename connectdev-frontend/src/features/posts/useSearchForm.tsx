@@ -1,8 +1,14 @@
 import React, { useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-export default function useSearchFocus() {
+export default function useSearchForm() {
   const searchRef = useRef<HTMLInputElement>(null)
-
+  const navigate = useNavigate()
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault()
+    const search: string = searchRef.current ? searchRef.current.value : ""
+    navigate(`/search/${search}`)
+  }
   const [large, setLarge] = useState<boolean>(false)
   function focusIn() {
     setLarge(true)
@@ -20,5 +26,5 @@ export default function useSearchFocus() {
       searchRef.current?.addEventListener("focusin", focusIn)
     }
   }, [])
-  return { large, searchRef }
+  return { large, searchRef, onSubmit }
 }

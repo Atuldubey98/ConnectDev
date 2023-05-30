@@ -11,9 +11,16 @@ import CommentsList from "./CommentsList"
 import { UserAvatarSmall } from "./CreatePost"
 import "./SinglePostPage.css"
 import { ILikes, IPost } from "./interfaces"
-import { fetchPost, likeOrDislikePost, makeNewComment } from "./postAPI"
+import {
+  deleteComment,
+  fetchPost,
+  likeOrDislikePost,
+  makeNewComment,
+} from "./postAPI"
 import PostTags from "./PostTags"
 import useEdit from "../profileEdit/useEdit"
+import Notfound from "../common/Notfound"
+import { BsFillFilePostFill } from "react-icons/bs"
 export default function SinglePostPage() {
   const { postId } = useParams()
   const [post, setPost] = useState<IPost | null>(null)
@@ -54,6 +61,23 @@ export default function SinglePostPage() {
         : [...(post.likes || [])].filter((like) => like.user._id !== user?._id),
     })
   }
+  async function onDeleteComment(postId: string, commentId: string) {
+    try {
+      await deleteComment({ postId, commentId })
+      setPost(
+        post
+          ? {
+              ...post,
+              comments: (post?.comments || []).filter(
+                (comment) => comment._id !== commentId,
+              ),
+            }
+          : post,
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const { edit, toggleEdit } = useEdit()
   useEffect(() => {
     ;(async () => {
@@ -69,7 +93,7 @@ export default function SinglePostPage() {
   }, [])
   return loading ? (
     <FullLoading />
-  ) : (
+  ) : post ? (
     <main className="single__postPage">
       <div className="single__postWrapper">
         <div className="single__post">
@@ -99,10 +123,10 @@ export default function SinglePostPage() {
             </ButtonWithIcon>
           </div>
         </div>
-        
+
         <CommentsList
           comments={post?.comments || []}
-          onDeleteComment={() => {}}
+          onDeleteComment={onDeleteComment}
           maxHeight="50svh"
           ref={lastCommentRef}
         />
@@ -115,6 +139,8 @@ export default function SinglePostPage() {
         ) : null}
       </div>
     </main>
+  ) : (
+    <Notfound icon={BsFillFilePostFill} message="Post not found" />
   )
 }
 

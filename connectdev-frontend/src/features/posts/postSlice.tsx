@@ -18,6 +18,7 @@ import {
   likeOrDislikePost,
   makeNewComment,
 } from "./postAPI"
+import { searchByPost } from "../search/searchAPI"
 type PostState = {
   status: "success" | "loading" | "failed" | "idle"
   newPostStatus: "success" | "loading" | "failure" | "idle"
@@ -210,7 +211,23 @@ export const getAllPosts =
   async (dispatch) => {
     try {
       dispatch(setLoading())
+
       const { data } = await fetchAllPosts(page)
+      dispatch(setSuccess(data))
+    } catch (error) {
+      dispatch(
+        setFailed(
+          isAxiosError(error) ? error.response?.data.message : "Error occured",
+        ),
+      )
+    }
+  }
+export const searchPostByNameAction =
+  (page: number, search: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading())
+      const { data } = await searchByPost(search, page)
       dispatch(setSuccess(data))
     } catch (error) {
       dispatch(

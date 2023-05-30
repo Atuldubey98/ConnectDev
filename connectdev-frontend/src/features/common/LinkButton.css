@@ -1,6 +1,6 @@
 .link__btn {
   text-decoration: none;
-  color: black;
+  color: var(--black-color);
   gap: 0.3rem;
   transition: all 300ms ease-in;
   padding: 0.5rem;

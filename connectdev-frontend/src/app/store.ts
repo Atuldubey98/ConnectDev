@@ -4,6 +4,7 @@ import loginReducer from "../features/login/loginSlice"
 import postReducer from "../features/posts/postSlice"
 import uiReducer from "../features/ui/uiSlice"
 import profileReducer from "../features/profile/profileSlice"
+import searchReducer from "../features/search/searchSlice"
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     post: postReducer,
     ui: uiReducer,
     profile: profileReducer,
+    search: searchReducer,
   },
 })
 

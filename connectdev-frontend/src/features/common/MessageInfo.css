@@ -2,9 +2,9 @@
   font-weight: bold;
   border-radius: 0.3rem;
   padding: 0.5rem;
-  color: white;
+  color: var(--white-color);
   text-align: center;
-  background-color: rgb(46, 133, 46);
+  background-color: var(--success-color);
 }
 .isError {
   background-color: rgb(231, 68, 68);

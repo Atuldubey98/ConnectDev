@@ -15,6 +15,11 @@ body {
   --accent-color: #5c79ff;
   --hover-color: #4c6cf7;
   --secondary-color: rgb(240, 240, 240);
+  --white-color: white;
+  --red-color: red;
+  --black-color: black;
+  --shadow-color: #888888;
+  --success-color: rgb(46, 133, 46);
 }
 .d-flex-center {
   display: flex;
