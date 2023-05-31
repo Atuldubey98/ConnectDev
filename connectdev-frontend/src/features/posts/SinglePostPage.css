@@ -1,6 +1,6 @@
-.single__postPage {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+.single__postContainer {
+  margin: auto;
+  max-width: 925px;
   padding: 0.8rem;
 }
 

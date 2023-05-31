@@ -1,6 +1,6 @@
 function sanitizeFilterUtil(filter) {
   let sanitized = {};
-  if (!filter || typeof filter === "string") {
+  if (!filter || typeof filter === "string" || !filter.user) {
     return sanitized;
   }
   sanitized = { ...filter };

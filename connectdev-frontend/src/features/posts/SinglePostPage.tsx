@@ -1,14 +1,17 @@
 import moment from "moment"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { AiFillLike, AiOutlineLike } from "react-icons/ai"
+import { BsFillFilePostFill } from "react-icons/bs"
 import { FaRegCommentAlt } from "react-icons/fa"
 import { useParams } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
 import ButtonWithIcon from "../common/ButtonWithIcon"
 import FullLoading from "../common/FullLoading"
+import Notfound from "../common/Notfound"
 import CommentsForm from "./CommentsForm"
 import CommentsList from "./CommentsList"
 import { UserAvatarSmall } from "./CreatePost"
+import PostTags from "./PostTags"
 import "./SinglePostPage.css"
 import { ILikes, IPost } from "./interfaces"
 import {
@@ -17,13 +20,10 @@ import {
   likeOrDislikePost,
   makeNewComment,
 } from "./postAPI"
-import PostTags from "./PostTags"
-import useEdit from "../profileEdit/useEdit"
-import Notfound from "../common/Notfound"
-import { BsFillFilePostFill } from "react-icons/bs"
 export default function SinglePostPage() {
   const { postId } = useParams()
   const [post, setPost] = useState<IPost | null>(null)
+  const commentInputRef = useRef<HTMLTextAreaElement>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const { user } = useAppSelector((state) => state.login)
   const liked: boolean | undefined = post?.likes
@@ -78,7 +78,11 @@ export default function SinglePostPage() {
       console.log(error)
     }
   }
-  const { edit, toggleEdit } = useEdit()
+  function onCommentClick() {
+    if (commentInputRef.current) {
+      commentInputRef.current.focus()
+    }
+  }
   useEffect(() => {
     ;(async () => {
       if (!postId) return
@@ -95,48 +99,49 @@ export default function SinglePostPage() {
     <FullLoading />
   ) : post ? (
     <main className="single__postPage">
-      <div className="single__postWrapper">
-        <div className="single__post">
-          <h2>{post?.title}</h2>
-          <p>{post?.text}</p>
+      <div className="single__postContainer">
+        <div className="single__postWrapper">
+          <div className="single__post">
+            <h2>{post?.title}</h2>
+            <p>{post?.text}</p>
+          </div>
+          <PostTags tags={post?.tags || []} />
         </div>
-        <PostTags tags={post?.tags || []} />
-      </div>
-      <div className="single__postAbout">
-        <div className="single__postAvatar">
-          <div className="post__avatar">
-            <UserAvatarSmall
-              name={post?.user.name || ""}
-              avatar={post?.user.avatar}
-              size={40}
-            />
-            <div className="single__avatarSection">
-              <p>{post?.user.name}</p>
-              <p className="post__date">{moment(post?.createdAt).fromNow()}</p>
+        <div className="single__postAbout">
+          <div className="single__postAvatar">
+            <div className="post__avatar">
+              <UserAvatarSmall
+                name={post?.user.name || ""}
+                avatar={post?.user.avatar}
+                size={40}
+              />
+              <div className="single__avatarSection">
+                <p>{post?.user.name}</p>
+                <p className="post__date">
+                  {moment(post?.createdAt).fromNow()}
+                </p>
+              </div>
+            </div>
+            <div className="single__postBtns d-flex-center">
+              <Like liked={liked} createLikeOrDislike={createLikeOrDislike} />
+              <ButtonWithIcon onClick={onCommentClick}>
+                <FaRegCommentAlt size={20} />
+                <span>Comment</span>
+              </ButtonWithIcon>
             </div>
           </div>
-          <div className="single__postBtns d-flex-center">
-            <Like liked={liked} createLikeOrDislike={createLikeOrDislike} />
-            <ButtonWithIcon onClick={() => toggleEdit(!edit)}>
-              <FaRegCommentAlt size={20} />
-              <span>Comment</span>
-            </ButtonWithIcon>
-          </div>
-        </div>
-
-        <CommentsList
-          comments={post?.comments || []}
-          onDeleteComment={onDeleteComment}
-          maxHeight="30svh"
-          ref={lastCommentRef}
-        />
-
-        {edit ? (
+          <CommentsList
+            comments={post?.comments || []}
+            onDeleteComment={onDeleteComment}
+            maxHeight="30svh"
+            ref={lastCommentRef}
+          />
           <CommentsForm
+            ref={commentInputRef}
             postId={postId || ""}
             onSubmitDispatch={onSubmitDispatch}
           />
-        ) : null}
+        </div>
       </div>
     </main>
   ) : (
