@@ -39,7 +39,7 @@ export default function PostsList(props: PostListProps) {
         <div className="posts">
           {postResponse?.posts &&
             postResponse.posts.map((post, index) =>
-              index === postResponse.posts!.length - 1 ? (
+              index === postResponse.posts!.length - 2 ? (
                 <Post key={post._id} post={post} ref={setElement} />
               ) : (
                 <Post key={post._id} post={post} />
