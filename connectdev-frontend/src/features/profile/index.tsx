@@ -7,10 +7,11 @@ import ProfileLeft from "./ProfileLeft"
 import "./ProfilePage.css"
 import ProfileRight from "./ProfileRight"
 import useProfile from "./useProfile"
+import TotalPosts from "./TotalPosts"
 export default function ProfilePage() {
   const { userId } = useParams()
-  const { loading, profile } = useProfile(userId)
   const { user } = useAppSelector((state) => state.login)
+  const { loading, profile, totalPostByUser } = useProfile(userId)
   return (
     <main className="profile__page">
       {loading ? (
@@ -28,6 +29,10 @@ export default function ProfilePage() {
                 </LinkButton>
               </div>
             ) : null}
+            <TotalPosts
+              total={totalPostByUser}
+              userId={userId || user?._id || ""}
+            />
           </ProfileLeft>
           <ProfileRight profile={profile} />
         </div>

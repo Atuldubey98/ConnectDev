@@ -68,6 +68,14 @@ export default function App() {
           }
         />
         <Route
+          path="/search/users/:user/posts"
+          element={
+            <PrivateRoute>
+              <PostsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/chats"
           element={
             <PrivateRoute>

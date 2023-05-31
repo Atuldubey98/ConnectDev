@@ -4,6 +4,8 @@ const Comments = require("../../models/Comments");
 
 const Likes = require("../../models/Likes");
 const User = require("../../models/User");
+const { sanitizeFilter } = require("mongoose");
+const { sanitizeFilterUtil } = require("../../utils/sanitize");
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
   const post = new Post({ ...req.body, user: req.user._id });
@@ -81,16 +83,18 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       ? Number(req.query.limit)
       : 10;
   const search = typeof req.params.search === "string" ? req.params.search : "";
-  
+  const filter = sanitizeFilterUtil(req.query.filter);
   const query =
     search.length === 0
-      ? {}
+      ? { ...filter }
       : {
+          ...filter,
           $or: [
             { text: { $regex: search, $options: "i" } },
             { title: { $regex: search, $options: "i" } },
           ],
         };
+
   const postRes = await Post.paginate(query, {
     page,
     limit,
@@ -219,4 +223,13 @@ exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
     }
   );
   return res.status(200).json({ status: true, message: "Deleted" });
+});
+
+exports.getCountofPostsByUser = catchAsyncErrors(async (req, res, next) => {
+  const { userId: userParams } = req.params;
+  const userId = userParams || "";
+  const user = await User.findById(userId);
+  console.log(user);
+  const count = await Post.count({ user: user ? userId : req.user._id });
+  return res.status(200).json(count);
 });

@@ -1,14 +1,21 @@
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import { loadProfileAction } from "./profileSlice"
+import {
+  getCountOfPostsByUserIdAction,
+  loadProfileAction,
+} from "./profileSlice"
 
 export default function useProfile(userId: string | undefined) {
-  const { profile, profileStatus } = useAppSelector((state) => state.profile)
+  const { profile, profileStatus, totalPostByUser } = useAppSelector(
+    (state) => state.profile,
+  )
+  const { user : userLoggedIn } = useAppSelector((state) => state.login)
   const appDispatch = useAppDispatch()
-
+  const user = userId || userLoggedIn?._id || ""
   const loading: boolean = profileStatus === "loading"
   useEffect(() => {
     appDispatch(loadProfileAction(userId))
+    appDispatch(getCountOfPostsByUserIdAction(user))
   }, [userId])
-  return { loading, profile }
+  return { loading, profile, totalPostByUser }
 }

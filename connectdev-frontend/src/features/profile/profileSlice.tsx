@@ -1,7 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { IProfile } from "./interfaces"
 import { AppThunk } from "../../app/store"
-import { loadProfile, updateProfile } from "./profileAPI"
+import {
+  countTotalPostByUserId,
+  loadProfile,
+  updateProfile,
+} from "./profileAPI"
 import { UpdateProfileBody } from "../profileEdit/interfaces"
 import { isAxiosError } from "axios"
 
@@ -10,12 +14,14 @@ type State = {
   profile: IProfile | null
   updateStatus: "loading" | "success" | "failure" | "idle"
   updateError: string
+  totalPostByUser: number
 }
 const initialState: State = {
   profileStatus: "idle",
   profile: null,
   updateStatus: "idle",
   updateError: "",
+  totalPostByUser: 0,
 }
 const profileSlice = createSlice({
   initialState,
@@ -40,6 +46,9 @@ const profileSlice = createSlice({
       state.profileStatus = "failure"
       state.profile = null
     },
+    setTotalPostByUser: (state, action: PayloadAction<number>) => {
+      state.totalPostByUser = action.payload
+    },
   },
 })
 
@@ -48,6 +57,7 @@ export const {
   setProfileLoading,
   setProfileSuccess,
   setUpdateError,
+  setTotalPostByUser,
 } = profileSlice.actions
 
 export const loadProfileAction =
@@ -56,9 +66,20 @@ export const loadProfileAction =
     try {
       dispatch(setProfileLoading())
       const { data } = await loadProfile(userId)
+
       dispatch(setProfileSuccess(data))
     } catch (error) {
       dispatch(setProfileError())
+    }
+  }
+export const getCountOfPostsByUserIdAction =
+  (userId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const { data: count } = await countTotalPostByUserId(userId)
+      dispatch(setTotalPostByUser(count))
+    } catch (error) {
+      console.log(error)
     }
   }
 export const updateProfileAction =

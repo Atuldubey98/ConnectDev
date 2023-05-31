@@ -9,6 +9,7 @@ const {
   deleteSinglePostById,
   postComment,
   deleteComment,
+  getCountofPostsByUser,
 } = require("../controller/postController");
 
 const router = Router();
@@ -28,4 +29,5 @@ router
   .post("/comment", isAuthenticated, postComment)
   .delete("/comment", isAuthenticated, deleteComment);
 
+router.get("/count/:userId", isAuthenticated, getCountofPostsByUser);
 module.exports = router;

@@ -1,13 +1,20 @@
 import instance from "../../axios"
 import { ICreatePost } from "./interfaces"
 
-export const fetchAllPosts = (page: number) => {
+export const fetchAllPosts = (page: number, user: string) => {
   try {
-    return instance.get("/api/post/all", {
-      params: {
-        page,
-      },
-    })
+    return user
+      ? instance.get("/api/post/all", {
+          params: {
+            page,
+            filter: { user },
+          },
+        })
+      : instance.get("/api/post/all", {
+          params: {
+            page,
+          },
+        })
   } catch (error) {
     throw error
   }

@@ -9,3 +9,7 @@ export const loadProfile = async (userId: string | undefined) => {
 export const updateProfile = async (profile: UpdateProfileBody) => {
   return instance.post("/api/profile", profile)
 }
+
+export const countTotalPostByUserId = async (userId: string | undefined) => {
+  return instance.get(`/api/post/count/${userId}`)
+}

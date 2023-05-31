@@ -9,13 +9,14 @@ export default function PostsPage() {
   const { commentsModal } = useAppSelector((state) => state.ui)
   const { postResponse } = useAppSelector((state) => state.post)
   const { isCommentsModalOpen, postId } = commentsModal
-  const { search: searchParams } = useParams()
+  const { search: searchParams, user: userParam } = useParams()
   const search: string = searchParams || ""
+  const user: string = userParam || ""
   return (
     <main className="posts__page">
       <FilterComp />
       <CreatePost />
-      <PostsList search={search} />
+      <PostsList search={search} user={user} />
       {isCommentsModalOpen &&
       postResponse &&
       postResponse.posts &&

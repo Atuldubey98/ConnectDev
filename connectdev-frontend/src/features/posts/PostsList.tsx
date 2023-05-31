@@ -9,9 +9,10 @@ import "./PostsLists.css"
 import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
 export type PostListProps = {
   search: string
+  user: string
 }
 export default function PostsList(props: PostListProps) {
-  const { search } = props
+  const { search, user } = props
   const { status, postResponse, hasNextPost } = useAppSelector(
     (state) => state.post,
   )
@@ -20,14 +21,16 @@ export default function PostsList(props: PostListProps) {
   const loading = status === "loading"
   useEffect(() => {
     appDispatch(
-      search ? searchPostByNameAction(page, search) : getAllPosts(page),
+      search
+        ? searchPostByNameAction(page, search, user)
+        : getAllPosts(page, user),
     )
-  }, [page])
+  }, [page, user])
   useEffect(() => {
     return () => {
       appDispatch(setIdle())
     }
-  }, [])
+  }, [user])
   return (
     <section className="posts__list">
       {postResponse && postResponse.posts && postResponse.posts.length === 0 ? (

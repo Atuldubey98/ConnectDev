@@ -210,12 +210,12 @@ export const getPostAction =
     }
   }
 export const getAllPosts =
-  (page: number): AppThunk =>
+  (page: number, user: string): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading())
 
-      const { data } = await fetchAllPosts(page)
+      const { data } = await fetchAllPosts(page, user)
       dispatch(setSuccess(data))
     } catch (error) {
       dispatch(
@@ -226,7 +226,7 @@ export const getAllPosts =
     }
   }
 export const searchPostByNameAction =
-  (page: number, search: string): AppThunk =>
+  (page: number, search: string, user: string): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading())

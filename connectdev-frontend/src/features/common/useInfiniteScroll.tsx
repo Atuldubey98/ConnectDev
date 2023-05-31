@@ -14,7 +14,7 @@ export default function useInfiniteScroll(hasNext: boolean) {
         }
       },
       {
-        threshold: 1,
+        threshold: 0.6,
       },
     ),
   )
