@@ -81,6 +81,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
       ? Number(req.query.limit)
       : 10;
   const search = typeof req.params.search === "string" ? req.params.search : "";
+  
   const query =
     search.length === 0
       ? {}
@@ -96,6 +97,9 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
     collation: {
       locale: "en",
     },
+    sort: {
+      createdAt: -1,
+    },
     populate: [
       {
         path: "likes",
@@ -110,6 +114,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
           path: "user",
           select: "name email avatar",
         },
+        sort: { createdAt: -1 },
       },
       {
         path: "user",

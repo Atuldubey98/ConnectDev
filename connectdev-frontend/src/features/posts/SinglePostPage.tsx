@@ -127,7 +127,7 @@ export default function SinglePostPage() {
         <CommentsList
           comments={post?.comments || []}
           onDeleteComment={onDeleteComment}
-          maxHeight="50svh"
+          maxHeight="30svh"
           ref={lastCommentRef}
         />
 
