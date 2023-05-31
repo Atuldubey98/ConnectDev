@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const logger = require("./utils/logger");
 const Post = require("./models/Post");
 const { parse } = require("cookie");
+const ErrorHandler = require("./utils/errorhandler");
 
 const io = new Server(server, {
   cookie: false,
@@ -25,7 +26,7 @@ io.use((socket, next) => {
   if (fetchedToken) {
     const token = parse(fetchedToken).token;
     if (!token) {
-      next(new Error("Unauthorized request"));
+      next(new ErrorHandler("UNAUTHORIZED", 404));
     }
     if (token) {
       const decodedData = jwt.verify(token, JWT_SECRET);
@@ -33,7 +34,7 @@ io.use((socket, next) => {
       next();
     }
   } else {
-    next(new Error("Unauthorized request"));
+    next(new ErrorHandler("UNAUTHORIZED", 404));
   }
 });
 io.on("connection", async (socket) => {
