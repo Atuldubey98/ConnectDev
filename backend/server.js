@@ -106,7 +106,6 @@ io.on("connection", async (socket) => {
           comments.length > 1
             ? `${name} and ${comments.length} others commented on your post`
             : `${name} commented on your post`,
-        post,
       });
     }
   });
