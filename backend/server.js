@@ -15,13 +15,14 @@ const ErrorHandler = require("./utils/errorhandler");
 
 const io = new Server(server, {
   cors: {
-    origin: APP_URL,
+    origin: [APP_URL, "http://192.168.1.15:5173"],
     methods: ["GET", "POST"],
     credentials: true,
   },
   cookie: true,
   transports: ["polling"],
 });
+io.set;
 io.use((socket, next) => {
   const fetchedToken = socket.handshake.headers.cookie;
   console.log(fetchedToken);
@@ -129,6 +130,6 @@ io.on("connection", async (socket) => {
 });
 
 const port = PORT || 9000;
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   logger.log({ level: "info", message: `Server running on ${port}` });
 });
