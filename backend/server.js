@@ -47,8 +47,8 @@ io.on("connection", async (socket) => {
       user: socket.user.id,
       msgBody,
     });
-    logger.log({
-      level: "info",
+    logger.info({
+      level: "log",
       message: `${socket.user.id} messaging to room---- >${room._id}`,
     });
     const newMessage = await message.save();
@@ -69,7 +69,7 @@ io.on("connection", async (socket) => {
   });
   socket.on("like", async (data) => {
     const { _id, user, liked } = data;
-    logger.log({
+    logger.info({
       level: "info",
       message: `${socket.user.id} liked post with id---- >${_id}`,
     });
@@ -112,10 +112,10 @@ io.on("connection", async (socket) => {
     }
   });
   socket.on("disconnect", () => {
-    logger.log({ level: "info", message: `Disconnecting ---- >${socket.id}` });
+    logger.warn({ level: "info", message: `Disconnecting ---- >${socket.id}` });
   });
   try {
-    logger.log({ level: "info", message: `Connecting ---- >${socket.id}` });
+    logger.info({ level: "info", message: `Connected ---- >${socket.id}` });
 
     const posts = await Post.find({ user: socket.user.id }).select("_id");
     const chatRooms = await Contact.find({ user: socket.user.id }).select(
