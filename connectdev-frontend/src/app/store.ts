@@ -5,7 +5,7 @@ import postReducer from "../features/posts/postSlice"
 import uiReducer from "../features/ui/uiSlice"
 import profileReducer from "../features/profile/profileSlice"
 import searchReducer from "../features/search/searchSlice"
-
+import chatsReducer from "../features/chats/chatsSlice"
 export const store = configureStore({
   reducer: {
     register: registerReducer,
@@ -14,6 +14,7 @@ export const store = configureStore({
     ui: uiReducer,
     profile: profileReducer,
     search: searchReducer,
+    chats: chatsReducer,
   },
 })
 

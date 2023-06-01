@@ -1,17 +1,19 @@
-import React from "react"
 import ReactDOM from "react-dom/client"
+import Modal from "react-modal"
 import { Provider } from "react-redux"
-import { store } from "./app/store"
-import App from "./App"
-import "./index.css"
 import { BrowserRouter } from "react-router-dom"
-import Modal from 'react-modal';
-Modal.setAppElement('#root');
+import App from "./App"
+import { store } from "./app/store"
+import "./index.css"
+import WebsocketContextProvider from "./features/context/WebsocketContext"
+Modal.setAppElement("#root")
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <Provider store={store}>
-      <App />
+      <WebsocketContextProvider>
+        <App />
+      </WebsocketContextProvider>
     </Provider>
   </BrowserRouter>,
 )

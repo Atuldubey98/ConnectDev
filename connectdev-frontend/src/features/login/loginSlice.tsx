@@ -59,14 +59,22 @@ export const loginSlice = createSlice({
   },
 })
 export const { setFailed, setLoading, setSuccess, setIdle } = loginSlice.actions
-export const loginUser =
-  (email: string, password: string, navigateToPosts: () => void): AppThunk =>
+export const loginUserAction =
+  (
+    email: string,
+    password: string,
+    navigateToPosts: () => void,
+    tryConnectingToServer: VoidFunction | null,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setLoading())
       const { data } = await login(email, password)
       dispatch(setSuccess(data))
-      navigateToPosts()
+      if (tryConnectingToServer) {
+        tryConnectingToServer()
+        navigateToPosts()
+      }
     } catch (error) {
       dispatch(
         setFailed(

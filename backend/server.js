@@ -1,6 +1,6 @@
 const app = require("./app");
 const http = require("http");
-const { PORT, APP_URL } = require("./config/keys");
+const { PORT, APP_URL, JWT_SECRET } = require("./config/keys");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const User = require("./models/User");
@@ -14,15 +14,17 @@ const { parse } = require("cookie");
 const ErrorHandler = require("./utils/errorhandler");
 
 const io = new Server(server, {
-  cookie: false,
   cors: {
     origin: APP_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
+  cookie: true,
+  transports: ["polling"],
 });
 io.use((socket, next) => {
   const fetchedToken = socket.handshake.headers.cookie;
+  console.log(fetchedToken);
   if (fetchedToken) {
     const token = parse(fetchedToken).token;
     if (!token) {
@@ -127,6 +129,6 @@ io.on("connection", async (socket) => {
 });
 
 const port = PORT || 9000;
-server.listen(port, "0.0.0.0", () => {
+server.listen(port, () => {
   logger.log({ level: "info", message: `Server running on ${port}` });
 });

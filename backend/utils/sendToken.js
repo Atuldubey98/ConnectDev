@@ -5,7 +5,7 @@ const sendToken = async (user, statusCode, res) => {
   // options for cookie
   const options = {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: true,
     path: "/",
     secure: NODE_ENV !== "development",
   };

@@ -1,9 +1,11 @@
-import React, { ChangeEventHandler, useReducer } from "react"
+import React, { ChangeEventHandler, useContext, useReducer } from "react"
 import { useAppDispatch } from "../../app/hooks"
-import { loginUser } from "./loginSlice"
+import { loginUserAction } from "./loginSlice"
 import { useNavigate } from "react-router-dom"
+import { WebsocketContext } from "../context/WebsocketContext"
 
 export default function useLoginForm() {
+  const socketContext = useContext(WebsocketContext)
   const appDispatch = useAppDispatch()
   const navigate = useNavigate()
   function navigateToPosts() {
@@ -66,7 +68,14 @@ export default function useLoginForm() {
   }
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
-    appDispatch(loginUser(state.email, state.password, navigateToPosts))
+    appDispatch(
+      loginUserAction(
+        state.email,
+        state.password,
+        navigateToPosts,
+        socketContext && socketContext.tryConnectingToServer,
+      ),
+    )
   }
   return { onSubmit, onChangeField, state }
 }

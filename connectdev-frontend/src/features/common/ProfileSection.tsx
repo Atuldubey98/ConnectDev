@@ -1,13 +1,15 @@
-import { AiFillEdit, AiOutlineArrowDown, AiOutlineLogout } from "react-icons/ai"
-import "./ProfileSection.css"
+import { AiFillEdit, AiOutlineLogout } from "react-icons/ai"
+import { TbCircleDotFilled } from "react-icons/tb"
 import { useNavigate } from "react-router-dom"
-import { useAppDispatch } from "../../app/hooks"
-import { logoutUserAction } from "../login/loginSlice"
 import { toast } from "react-toastify"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { logoutUserAction } from "../login/loginSlice"
 import { setIdle } from "../posts/postSlice"
+import "./ProfileSection.css"
 
 export default function ProfileSection({ name }: { name: string }) {
   const navigate = useNavigate()
+  const { connected } = useAppSelector((state) => state.chats)
   const appDispatch = useAppDispatch()
   function onLogout() {
     if (confirm("Do you want to logout ?")) {
@@ -30,12 +32,13 @@ export default function ProfileSection({ name }: { name: string }) {
       theme: "light",
     })
   }
+
   return (
     <div className="profile__section">
       <div className="profile__dropwrapper">
         <div className="profile__dropbtn d-flex-center">
           <p>{name}</p>
-          <AiOutlineArrowDown />
+          <TbCircleDotFilled color={connected ? "green" : "red"} />
         </div>
         <ul className="profile__dropdownItems">
           <li

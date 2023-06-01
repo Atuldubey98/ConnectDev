@@ -1,6 +1,6 @@
 import axios, { isAxiosError } from "axios"
 export const baseURL = import.meta.env.DEV
-  ? "http://192.168.1.15:9000"
+  ? "http://localhost:9000"
   : import.meta.env.VITE_API_URL
 const instance = axios.create({
   baseURL,
