@@ -1,37 +1,14 @@
 import { ChangeEventHandler, useReducer } from "react"
-import { ICreatePostForm } from "./interfaces"
 import { useAppDispatch } from "../../app/hooks"
-import { createPostAction } from "./postSlice"
-import { toast } from "react-toastify"
+import useUserToast from "../common/useUserToast"
 import { setPostWasJustAddedAction } from "../ui/uiSlice"
+import { ICreatePostForm, SubscribePostPayload } from "./interfaces"
+import { createPostAction } from "./postSlice"
+import socket from "../../socket"
 
 export default function useNewPost() {
   const appDispatch = useAppDispatch()
-  function showToast(message: string, isError: boolean) {
-    if (isError) {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    } else {
-      toast.success(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      })
-    }
-  }
+  const { showToast } = useUserToast()
   const defaultState: ICreatePostForm = {
     title: "",
     titleErrTxt: "",
@@ -122,6 +99,10 @@ export default function useNewPost() {
   const onRemoveTag = (id: string) => {
     dispatch({ type: "removetag", id })
   }
+
+  function subscribeToNewPost(payload: SubscribePostPayload) {
+    socket.emit("join", payload)
+  }
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     if (state.text.length === 0 || state.title.length === 0) {
@@ -134,6 +115,7 @@ export default function useNewPost() {
         { tags, title, text },
         showToast,
         showAnimationOnNewPost,
+        subscribeToNewPost,
       ),
     )
     dispatch({ type: "default" })

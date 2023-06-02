@@ -2,12 +2,15 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
 
 import { isAxiosError } from "axios"
+import { searchByPost } from "../search/searchAPI"
 import {
   IComment,
   ICreatePost,
   ILikes,
   IPost,
   IPostResponse,
+  LikeNotificationPayload,
+  SubscribePostPayload,
 } from "./interfaces"
 import {
   createNewPost,
@@ -18,7 +21,6 @@ import {
   likeOrDislikePost,
   makeNewComment,
 } from "./postAPI"
-import { searchByPost } from "../search/searchAPI"
 type PostState = {
   status: "success" | "loading" | "failed" | "idle"
   newPostStatus: "success" | "loading" | "failure" | "idle"
@@ -241,23 +243,29 @@ export const searchPostByNameAction =
     }
   }
 export const dolikeorDislikePost =
-  (postId: string): AppThunk =>
+  (
+    postId: string,
+    sendLikeNotification: (data: LikeNotificationPayload) => void,
+    showToast: (message: string, isError: boolean) => void,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       const { data } = await likeOrDislikePost(postId)
       const likePostorDislike: ILikes = { user: data.user, post: postId }
-
-      if (data.status) {
-        dispatch(setLike(likePostorDislike))
-      } else {
-        dispatch(setDislike(likePostorDislike))
-      }
-    } catch (error) {
+      const liked = data.status
+      const post = postId
       dispatch(
-        setFailed(
-          isAxiosError(error) ? error.response?.data.message : "Error occured",
-        ),
+        data.status
+          ? setLike(likePostorDislike)
+          : setDislike(likePostorDislike),
       )
+      sendLikeNotification({ liked, _id: post })
+    } catch (error) {
+      const errorMessage = isAxiosError(error)
+        ? error.response?.data.message
+        : "Error occured"
+      dispatch(setFailed())
+      showToast(errorMessage, true)
     }
   }
 
@@ -266,6 +274,7 @@ export const createPostAction =
     post: ICreatePost,
     showToast: (message: string, isError: boolean) => void,
     showAnimationOnNewPost: (postId: string) => void,
+    subscribeToNewPost: (subs: SubscribePostPayload) => void,
   ): AppThunk =>
   async (dispatch) => {
     try {
@@ -275,6 +284,7 @@ export const createPostAction =
       dispatch(setNewPostSuccess(newPost))
       showToast("Posted", false)
       showAnimationOnNewPost(newPost._id)
+      subscribeToNewPost({ type: "post", _id: newPost._id })
     } catch (error) {
       dispatch(
         setNewPostError(
@@ -291,9 +301,11 @@ export const postCommentAction =
   (
     body: { postId: string; text: string },
     scrollCommentsOnPost: () => void,
+    sendCommentNotification: (postId: string) => void,
   ): AppThunk =>
   async (dispatch) => {
     try {
+      sendCommentNotification(body.postId)
       dispatch(setNewCommentLoading())
       if (body.postId.length === 0 || body.text.length === 0) return
       const { data } = await makeNewComment(body)

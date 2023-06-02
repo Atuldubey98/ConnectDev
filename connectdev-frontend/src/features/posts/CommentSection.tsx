@@ -6,6 +6,8 @@ import CommentsForm from "./CommentsForm"
 import CommentsList from "./CommentsList"
 import { IComment, IUserDetails } from "./interfaces"
 import { deleteCommentAction, postCommentAction } from "./postSlice"
+import useUserToast from "../common/useUserToast"
+import socket from "../../socket"
 
 type CommentSectionProps = {
   user: IUserDetails | undefined
@@ -21,6 +23,7 @@ export default function CommentSection({
 }: CommentSectionProps) {
   const lastCommentRef = useRef<HTMLDivElement>(null)
   const appDispatch = useAppDispatch()
+  const { showToast } = useUserToast()
   function onDeleteComment(postId: string, commentId: string) {
     appDispatch(deleteCommentAction({ postId, commentId }))
   }
@@ -32,8 +35,15 @@ export default function CommentSection({
   }
   function onSubmitDispatch(postId: string, comment: string) {
     appDispatch(
-      postCommentAction({ postId, text: comment }, scrollCommentsOnPost),
+      postCommentAction(
+        { postId, text: comment },
+        scrollCommentsOnPost,
+        sendCommentNotification,
+      ),
     )
+  }
+  function sendCommentNotification(postId: string) {
+    socket.emit("comment", { _id: postId })
   }
   return (
     <section className="comments__modal">
