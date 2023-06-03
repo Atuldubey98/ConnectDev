@@ -1,0 +1,14 @@
+.notification {
+  background-color: var(--secondary-color);
+  padding: 0.5rem;
+  transition: all 300ms ease-in-out;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+.notification__read {
+  border: 1px solid var(--shadow-color);
+  background-color: white;
+}
+.notification > p:nth-child(1) {
+  font-weight: 600;
+}

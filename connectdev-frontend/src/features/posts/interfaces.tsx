@@ -6,11 +6,9 @@ export interface SubscribePostPayload {
   type: string
   _id: string
 }
-export type Notification = {
-  _id: string
-  href: string
+
+export type ErrorNotification = {
   message: string
-  isError: boolean
 }
 export interface IPostResponse {
   totalCount: number

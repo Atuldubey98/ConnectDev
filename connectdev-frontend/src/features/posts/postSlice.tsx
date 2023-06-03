@@ -301,15 +301,15 @@ export const postCommentAction =
   (
     body: { postId: string; text: string },
     scrollCommentsOnPost: () => void,
-    sendCommentNotification: (postId: string) => void,
+    sendCommentNotification: (postId: string, commentId: string) => void,
   ): AppThunk =>
   async (dispatch) => {
     try {
-      sendCommentNotification(body.postId)
       dispatch(setNewCommentLoading())
       if (body.postId.length === 0 || body.text.length === 0) return
       const { data } = await makeNewComment(body)
       dispatch(setNewCommentLoaded(data.comment))
+      sendCommentNotification(body.postId, data.comment._id)
       setTimeout(() => {
         scrollCommentsOnPost()
       }, 500)

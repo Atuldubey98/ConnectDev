@@ -42,8 +42,8 @@ export default function CommentSection({
       ),
     )
   }
-  function sendCommentNotification(postId: string) {
-    socket.emit("comment", { _id: postId })
+  function sendCommentNotification(postId: string, commentId: string) {
+    socket.emit("comment", { _id: postId, commentId })
   }
   return (
     <section className="comments__modal">

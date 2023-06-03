@@ -5,6 +5,7 @@ import postReducer from "../features/posts/postSlice"
 import uiReducer from "../features/ui/uiSlice"
 import profileReducer from "../features/profile/profileSlice"
 import searchReducer from "../features/search/searchSlice"
+import notificationRedcuer from "../features/notifications/notificationSlice"
 import chatsReducer from "../features/chats/chatsSlice"
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     profile: profileReducer,
     search: searchReducer,
     chats: chatsReducer,
+    notification: notificationRedcuer,
   },
 })
 

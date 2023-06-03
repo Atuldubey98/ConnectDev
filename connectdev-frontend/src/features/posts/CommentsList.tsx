@@ -1,9 +1,10 @@
 import moment from "moment"
-import { LegacyRef, forwardRef } from "react"
+import { LegacyRef, forwardRef, useEffect, useRef } from "react"
 import { useAppSelector } from "../../app/hooks"
 import "./CommentsList.css"
 import { UserAvatarSmall } from "./CreatePost"
 import { IComment } from "./interfaces"
+import { useLocation } from "react-router-dom"
 type CommentsListProps = {
   comments: IComment[]
   maxHeight?: string
@@ -58,8 +59,10 @@ function Comment({
   userId: string
   onClickDelete?: (postId: string, commentId: string) => void
 }) {
+  const _id = `comment-${comment._id}`
+
   return (
-    <div className="comment">
+    <div id={_id} className="comment">
       <UserAvatarSmall
         size={20}
         name={comment.user.name}

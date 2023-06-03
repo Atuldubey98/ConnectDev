@@ -123,10 +123,15 @@ export default function SinglePostPage() {
               </div>
             </div>
             <div className="single__postBtns d-flex-center">
-              <Like liked={liked} createLikeOrDislike={createLikeOrDislike} />
+              <Like
+                totalLikes={post.likes?.length || 0}
+                liked={liked}
+                createLikeOrDislike={createLikeOrDislike}
+              />
               <ButtonWithIcon onClick={onCommentClick}>
                 <FaRegCommentAlt size={20} />
                 <span>Comment</span>
+                <span>{post.comments?.length || 0}</span>
               </ButtonWithIcon>
             </div>
           </div>
@@ -145,15 +150,17 @@ export default function SinglePostPage() {
       </div>
     </main>
   ) : (
-    <Notfound icon={BsFillFilePostFill} message="Post not found" />
+    <Notfound icon={BsFillFilePostFill} message="Post was deleted" />
   )
 }
 
 function Like({
   liked,
   createLikeOrDislike,
+  totalLikes,
 }: {
   liked: boolean
+  totalLikes: number
   createLikeOrDislike: () => void
 }) {
   return (
@@ -169,6 +176,13 @@ function Like({
         }}
       >
         Like
+      </span>
+      <span
+        style={{
+          color: liked ? "var(--accent-color)" : undefined,
+        }}
+      >
+        {totalLikes}
       </span>
     </ButtonWithIcon>
   )

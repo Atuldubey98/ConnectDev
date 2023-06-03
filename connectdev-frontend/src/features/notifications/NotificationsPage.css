@@ -1,0 +1,10 @@
+.notifications__pageWrapper {
+  max-width: 925px;
+  margin: auto;
+  padding: 0.5rem;
+}
+.notifications {
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}

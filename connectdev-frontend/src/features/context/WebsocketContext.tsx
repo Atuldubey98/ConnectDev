@@ -1,12 +1,14 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useEffect } from "react"
 
 import React from "react"
-import socket from "../../socket"
 import { useAppDispatch } from "../../app/hooks"
+import socket from "../../socket"
 import { setConnectionState } from "../chats/chatsSlice"
 import useUserToast from "../common/useUserToast"
-import { Notification } from "../posts/interfaces"
+import { ErrorNotification } from "../posts/interfaces"
 import { setDislike, setLike } from "../posts/postSlice"
+import { NotificationsEntity } from "../notifications/interfaces"
+import { setAddNotification } from "../notifications/notificationSlice"
 
 export type WebsocketContextProps = {
   tryConnectingToServer: VoidFunction
@@ -27,9 +29,14 @@ export default function WebsocketContextProvider({
     socket.on("connect", () => {
       appDispatch(setConnectionState(socket.connected))
     })
-    socket.on("notify", (data) => {
-      const notification: Notification = data
-      showToast(notification.message, notification.isError)
+    socket.on("notify:success", (data) => {
+      const notification: NotificationsEntity = data
+      appDispatch(setAddNotification(notification))
+      showToast(notification.message, false)
+    })
+    socket.on("notify:error", (data) => {
+      const notification: ErrorNotification = data
+      showToast(notification.message, true)
     })
     socket.on("like", (data) => {
       appDispatch(setLike(data))
@@ -42,7 +49,10 @@ export default function WebsocketContextProvider({
     })
     ;() => {
       socket.disconnect()
-      socket.off("notify", () => {})
+      socket.off("notify:success", () => {})
+      socket.off("notify:error", () => {})
+      socket.off("like", () => {})
+      socket.off("unlike", () => {})
     }
   }, [])
 

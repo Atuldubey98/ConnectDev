@@ -15,5 +15,5 @@
 .header__links {
   list-style: none;
   gap: 1rem;
-  flex: 7;
+  flex-wrap: wrap;
 }

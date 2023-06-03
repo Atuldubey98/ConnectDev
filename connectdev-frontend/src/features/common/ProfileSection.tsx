@@ -1,5 +1,7 @@
 import { AiFillEdit, AiOutlineLogout } from "react-icons/ai"
 import { TbCircleDotFilled } from "react-icons/tb"
+import { CgProfile } from "react-icons/cg"
+
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
@@ -41,6 +43,10 @@ export default function ProfileSection({ name }: { name: string }) {
           <TbCircleDotFilled color={connected ? "green" : "red"} />
         </div>
         <ul className="profile__dropdownItems">
+          <li onClick={() => navigate("/profile")} className="d-flex-center">
+            <CgProfile />
+            <span>Profile</span>
+          </li>
           <li
             onClick={() => navigate("/profile/edit")}
             className="d-flex-center"

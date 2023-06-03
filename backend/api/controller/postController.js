@@ -1,10 +1,9 @@
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const Post = require("../../models/Post");
 const Comments = require("../../models/Comments");
-
+const ErrorHandler = require("../../utils/errorhandler");
 const Likes = require("../../models/Likes");
 const User = require("../../models/User");
-const { sanitizeFilter } = require("mongoose");
 const { sanitizeFilterUtil } = require("../../utils/sanitize");
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
@@ -55,11 +54,10 @@ exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
   const { postId } = req.query;
   const post = await Post.findById(postId);
 
-  if (!post)
-    return res.status(400).json({
-      status: false,
-      message: "Not exist",
-    });
+  if (!post) {
+    next(new ErrorHandler("Post not found", 400));
+    return;
+  }
   if (post.likes.length > 0) {
     await Likes.deleteMany({ _id: { $in: post.likes } });
   }
@@ -138,11 +136,13 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
 exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
   const { postId } = req.body;
   if (!postId) {
-    return res.status(400).json({ status: false });
+    next(new ErrorHandler("Post not found !", 400));
+    return;
   }
   const postById = await Post.findById(postId);
   if (!postById) {
-    return res.status(400).json({ status: false });
+    next(new ErrorHandler("Post not found !", 400));
+    return;
   }
 
   const likes = await Likes.findOne({ post: postId, user: req.user._id });

@@ -9,7 +9,7 @@ export default function HeaderLinks() {
   const headerLinks: HeaderLinkType[] = [
     { to: "/posts", label: "Posts" },
     { to: "/chats", label: "Chats" },
-    { to: "/profile", label: "Profile" },
+    { to: "/notifications", label: "Notifications" },
   ]
   const location = useLocation()
   const activeLink = location.pathname
