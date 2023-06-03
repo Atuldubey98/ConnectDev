@@ -1,0 +1,24 @@
+.chat__textField > textarea {
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: 1.1rem;
+  font-family: "Poppins", sans-serif;
+  resize: none;
+  border-radius: 0.5rem;
+}
+
+.chat__textField {
+  padding: 0.5rem;
+  background-color: var(--secondary-color);
+  border: 3px solid var(--shadow-color);
+  border-radius: 0.5rem;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  max-width: 768px;
+}
+.chat__textField > button {
+  font-weight: 600;
+  margin-inline: 0.2rem;
+}

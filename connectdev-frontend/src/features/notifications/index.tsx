@@ -11,10 +11,11 @@ import {
 
 import NotificationComp from "./NotificationComp"
 import { useNavigate } from "react-router-dom"
+import ClockLoader from "react-spinners/ClockLoader"
 export default function NotificationsPage() {
-  const { notificationsResponse, hasNextNotification } = useAppSelector(
-    (state) => state.notification,
-  )
+  const { notificationsResponse, hasNextNotification, notificationStatus } =
+    useAppSelector((state) => state.notification)
+  const loading: boolean = notificationStatus === "loading"
   const notifications: NotificationsEntity[] =
     notificationsResponse?.notifications || []
   const { setElement, page } = useInfiniteScroll(hasNextNotification)
@@ -65,6 +66,9 @@ export default function NotificationsPage() {
             )
           })}
         </ul>
+        <div className="d-flex-center">
+          <ClockLoader loading={loading} color="var(--accent-color)" />
+        </div>
       </div>
     </main>
   )

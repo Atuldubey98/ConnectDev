@@ -23,7 +23,6 @@ const io = new Server(server, {
   cookie: true,
   transports: ["polling"],
 });
-io.set;
 io.use((socket, next) => {
   const fetchedToken = socket.handshake.headers.cookie;
   if (fetchedToken) {
@@ -46,11 +45,11 @@ io.on("connection", async (socket) => {
     socket.join(`${type}:` + _id);
   });
   socket.on("message", async (data) => {
-    const { room, msgBody } = data;
+    const { room, body } = data;
     const message = new Message({
       roomId: room._id,
       user: socket.user.id,
-      msgBody,
+      body,
     });
     logger.info({
       level: "log",

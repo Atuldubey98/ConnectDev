@@ -14,12 +14,9 @@ const MessageSchema = new Schema(
       ref: "users",
       required: true,
     },
-    msgBody: {
+    body: {
       type: String,
       required: true,
-    },
-    fileId: {
-      type: Schema.Types.ObjectId,
     },
     read: {
       type: Boolean,

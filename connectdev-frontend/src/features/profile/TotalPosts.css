@@ -1,6 +1,3 @@
-.total__posts > span {
-  font-weight: 300;
-}
-.total__posts > span:nth-child(2) {
-  border-radius: 1px solid black;
+.total__posts > a {
+  font-weight: 600;
 }

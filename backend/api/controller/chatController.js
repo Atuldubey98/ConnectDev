@@ -1,6 +1,9 @@
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const Contact = require("../../models/Contact");
+const User = require("../../models/User");
+
 const Room = require("../../models/Room");
+const ErrorHandler = require("../../utils/errorhandler");
 exports.getChatsByRoomId = catchAsyncErrors(async (req, res, next) => {
   const roomId = req.params.roomId;
   const user = req.user._id;
@@ -32,54 +35,41 @@ exports.getChatsByRoomId = catchAsyncErrors(async (req, res, next) => {
 exports.createContact = catchAsyncErrors(async (req, res, next) => {
   const users = req.body;
   if (!Array.isArray(users)) {
-    throw new Error("Schema error");
+    throw new ErrorHandler("PAYLOAD_ERROR", 400);
   }
   const roomSize = users.length;
-  if (roomSize <= 1) {
-    throw new Error("Schema error");
+  if (roomSize !== 2) {
+    throw new ErrorHandler("Chat id cannot be created !", 400);
   }
-  if (roomSize === 2) {
-    const chatId =
-      users[1] < users[0]
-        ? users[1] + "_" + users[0]
-        : users[0] + "_" + users[1];
-    const existingContact = await Contact.findOne({ chatId });
-    if (existingContact) {
-      return res.status(201).json({
-        status: true,
-        message: `The chat id ${chatId} already exists`,
-        room: existingContact.room,
-      });
-    }
-    const room = new Room({ users, messages: [] });
-    const newRoom = await room.save();
-    const contacts = users.map((user) => {
-      return {
-        user,
-        room: newRoom._id,
-        chatId,
-      };
-    });
-    await Contact.insertMany(contacts);
+  const checkIfStrs = users.some((u) => typeof u !== "string");
+  if (checkIfStrs) {
+    throw new ErrorHandler("PAYLOAD_ERROR", 400);
+  }
+  const chatId =
+    users[1] < users[0] ? users[1] + "_" + users[0] : users[0] + "_" + users[1];
+  const existingContact = await Contact.findOne({ chatId });
+  if (existingContact) {
     return res.status(201).json({
       status: true,
-      message: `New contact created !`,
-      roomId: newRoom._id,
+      message: `The chat id ${chatId} already exists`,
+      room: existingContact.room,
     });
-  } else {
-    const room = new Room({ users, messages: [] });
-    const { _id } = await room.save();
-    const contacts = users.map((user) => {
-      return {
-        user,
-        room: _id,
-      };
-    });
-    await Contact.insertMany(contacts);
-    return res
-      .status(201)
-      .json({ status: true, message: `New group created !` });
   }
+  const room = new Room({ users, messages: [] });
+  const newRoom = await room.save();
+  const contacts = users.map((user) => {
+    return {
+      user,
+      room: newRoom._id,
+      chatId,
+    };
+  });
+  await Contact.insertMany(contacts);
+  return res.status(201).json({
+    status: true,
+    message: `New contact created !`,
+    roomId: newRoom._id,
+  });
 });
 exports.getContacts = catchAsyncErrors(async (req, res, next) => {
   const user = req.user._id;
@@ -92,4 +82,8 @@ exports.getContacts = catchAsyncErrors(async (req, res, next) => {
     },
   });
   return res.status(200).json(contacts);
+});
+
+exports.getAllChatsByUserId = catchAsyncErrors(async (req, res, next) => {
+  const userId = req.user._id;
 });
