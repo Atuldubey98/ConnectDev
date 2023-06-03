@@ -1,5 +1,4 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { IPost } from "../posts/interfaces"
 import { AppThunk } from "../../app/store"
 
 type State = {

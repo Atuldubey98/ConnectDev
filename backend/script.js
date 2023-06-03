@@ -30,12 +30,12 @@ const login = "/api/users/login";
 async function registerUsers() {
   try {
     const users = await fetchData("users").then((res) => res.users);
-    const requests = await users.map((user) => {
+    const requests = users.map((user) => {
       const name = `${user.firstName} ${user.maidenName}  ${user.lastName}`;
       const email = user.email;
       const password = user.password;
       const avatar = user.image;
-      return axios.post(baseUrl + register, {
+      return axios.post("http://127.0.0.1:9000/api/users/register", {
         name,
         avatar,
         email,
@@ -43,10 +43,8 @@ async function registerUsers() {
       });
     });
     const responses = await Promise.allSettled(requests);
-    const created = responses.map(
-      (response) => response.status === "fulfilled"
-    );
-    console.log(created.length + " users created");
+    const data = responses.filter(Boolean).map((r) => r.value);
+    console.log("Users created " + data.length);
   } catch (error) {
     console.log(error);
   }
@@ -62,7 +60,7 @@ async function getLoginCookie(email, password) {
   }
   try {
     const response = await instance.post(
-      "http://localhost:9000/api/users/login",
+      "http://127.0.0.1:9000/api/users/login",
       {
         email,
         password,
@@ -105,7 +103,7 @@ async function createPosts() {
     console.log(i, j);
     requests.push(
       instance.post(
-        "http://localhost:9000/api/post",
+        "http://127.0.0.1:9000/api/post",
         {
           title: title1,
           text: text1,
@@ -120,7 +118,7 @@ async function createPosts() {
     );
     requests.push(
       instance.post(
-        "http://localhost:9000/api/post",
+        "http://127.0.0.1:9000/api/post",
         {
           title: title2,
           text: text2,
@@ -143,7 +141,7 @@ async function commentOnPosts() {
     const comments = commentsFetched.comments.map((comment) => comment.body);
     const Cookie =
       Array.isArray(cookies) && cookies.length > 0 ? cookies[0] : null;
-    const { data } = await instance.get("http://localhost:9000/api/post/all", {
+    const { data } = await instance.get("http://127.0.0.1:9000/api/post/all", {
       headers: {
         Cookie,
       },
@@ -158,7 +156,7 @@ async function commentOnPosts() {
         Cookie2 = cookies[j];
       requests.push(
         instance.post(
-          "http://localhost:9000/api/post/comment",
+          "http://127.0.0.1:9000/api/post/comment",
           {
             postId,
             text: comments[getRandomInt(comments.length)],
@@ -172,7 +170,7 @@ async function commentOnPosts() {
       );
       requests.push(
         instance.post(
-          "http://localhost:9000/api/post/comment",
+          "http://127.0.0.1:9000/api/post/comment",
           {
             postId,
             text: comments[getRandomInt(comments.length)],
@@ -240,7 +238,7 @@ async function createProfiles(startPostion, endPostion) {
     ];
     const profile = { skills, education, experience, status, handle };
     const request = instance.post(
-      "http://localhost:9000/api/profile",
+      "http://127.0.0.1:9000/api/profile",
       profile,
       {
         headers: {
@@ -262,5 +260,5 @@ async function createProfiles(startPostion, endPostion) {
 }
 
 (async () => {
-  await createProfiles(0);
+  await createProfiles();
 })();
