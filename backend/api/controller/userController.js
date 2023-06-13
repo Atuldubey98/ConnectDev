@@ -110,10 +110,10 @@ exports.searchUser = catchAsyncErrors(async (req, res, next) => {
       : 10;
   const search = typeof req.params.search === "string" ? req.params.search : "";
   const query = {
-    $or: [
-      { email: { $regex: search, $options: "i" } },
-      { name: { $regex: search, $options: "i" } },
-    ],
+    $text: {
+      $search: search,
+      $caseSensitive: false,
+    },
   };
   const options = {
     limit,

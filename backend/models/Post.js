@@ -44,4 +44,5 @@ const PostSchema = new Schema(
 );
 
 PostSchema.plugin(mongoosePaginate);
+PostSchema.index({title : "text", text : "text"});
 module.exports = Post = mongoose.model("post", PostSchema);

@@ -34,6 +34,7 @@ const UserSchema = new Schema({
     default: Date.now,
   },
 });
+UserSchema.index({ email: "text", name: "text" });
 UserSchema.methods.getJWTToken = (email, name, id) => {
   return jwt.sign(
     {
