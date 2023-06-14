@@ -1,9 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { IProfile } from "./interfaces"
+import { FriendRequest, IProfile } from "./interfaces"
 import { AppThunk } from "../../app/store"
 import {
+  acceptFriendRequest,
+  cancelFriendRequest,
   countTotalPostByUserId,
+  loadFriendshipStatus,
   loadProfile,
+  sendFriendRequest,
   updateProfile,
 } from "./profileAPI"
 import { UpdateProfileBody } from "../profileEdit/interfaces"
@@ -14,6 +18,7 @@ type State = {
   profile: IProfile | null
   updateStatus: "loading" | "success" | "failure" | "idle"
   updateError: string
+  friendRequest: FriendRequest | null
   totalPostByUser: number
 }
 const initialState: State = {
@@ -22,6 +27,7 @@ const initialState: State = {
   updateStatus: "idle",
   updateError: "",
   totalPostByUser: 0,
+  friendRequest: null,
 }
 const profileSlice = createSlice({
   initialState,
@@ -49,6 +55,12 @@ const profileSlice = createSlice({
     setTotalPostByUser: (state, action: PayloadAction<number>) => {
       state.totalPostByUser = action.payload
     },
+    setFriendRequest: (state, action: PayloadAction<FriendRequest>) => {
+      state.friendRequest = action.payload
+    },
+    setFriendRequestIdle: (state) => {
+      state.friendRequest = null
+    },
   },
 })
 
@@ -58,15 +70,66 @@ export const {
   setProfileSuccess,
   setUpdateError,
   setTotalPostByUser,
+  setFriendRequest,
+  setFriendRequestIdle,
+  setUpdateLoading,
 } = profileSlice.actions
 
+export const loadFriendshipStatusAction =
+  (friendUserId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (!friendUserId) {
+        return
+      }
+      const { data } = await loadFriendshipStatus(friendUserId)
+      dispatch(setFriendRequest(data))
+    } catch (error) {}
+  }
+
+export const sendFriendRequestAction =
+  (friendUserId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (!friendUserId) {
+        return
+      }
+      const { data } = await sendFriendRequest(friendUserId)
+      dispatch(setFriendRequest(data))
+    } catch (error) {}
+  }
+
+export const cancelFriendRequestAction =
+  (friendRequestId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (!friendRequestId) {
+        return
+      }
+      const response = await cancelFriendRequest(friendRequestId)
+      if (response.status === 204) {
+        dispatch(setFriendRequestIdle())
+      }
+    } catch (error) {}
+  }
+
+export const acceptFriendRequestAction =
+  (friendRequestId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      if (!friendRequestId) {
+        return
+      }
+      const { data } = await acceptFriendRequest(friendRequestId)
+      dispatch(setFriendRequest(data))
+    } catch (error) {}
+  }
 export const loadProfileAction =
   (userId: string | undefined): AppThunk =>
   async (dispatch) => {
     try {
       dispatch(setProfileLoading())
       const { data } = await loadProfile(userId)
-
       dispatch(setProfileSuccess(data))
     } catch (error) {
       dispatch(setProfileError())

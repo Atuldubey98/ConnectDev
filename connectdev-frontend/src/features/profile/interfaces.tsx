@@ -1,6 +1,22 @@
 import IUser from "../login/interfaces"
+import { IUserDetails } from "../posts/interfaces"
 import { SkillBody } from "../profileEdit/interfaces"
+type FriendshipStatus = "accepted" | "requested" | "rejected"
+export interface FriendRequestModel {
+  _id: string
+  recipient: string
+  status: FriendshipStatus
+  createdAt: string
+  updatedAt: string
+}
 
+export interface FriendRequest extends FriendRequestModel {
+  requestor: string
+}
+
+export interface FriendRequestEntity extends FriendRequestModel {
+  requestor: IUserDetails
+}
 export interface IProfile {
   _id: string
   skills?: SkillsEntity[] | null

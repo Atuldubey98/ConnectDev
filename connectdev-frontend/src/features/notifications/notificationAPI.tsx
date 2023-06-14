@@ -10,3 +10,6 @@ export function getNotificationsByUser(page: number) {
 export function updateReadNotification(notificationId: string) {
   return instance.patch(`/api/notifications/${notificationId}`)
 }
+export const loadAllFriendRequests = async () => {
+  return instance.get("/api/friend-request")
+}

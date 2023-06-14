@@ -100,7 +100,6 @@ async function createPosts() {
       j = getRandomInt(posts.length);
     const { title: title1, body: text1, tags: tags1 } = posts[i];
     const { title: title2, body: text2, tags: tags2 } = posts[j];
-    console.log(i, j);
     requests.push(
       instance.post(
         "http://127.0.0.1:9000/api/post",
@@ -259,6 +258,41 @@ async function createProfiles(startPostion, endPostion) {
   );
 }
 
+async function sendFriendRequest() {
+  const Cookie = await getLoginCookie("test@test.com", "12345678");
+  const { data } = await instance.get(
+    "http://127.0.0.1:9000/api/users/search/test@test.com",
+    {
+      headers: {
+        Cookie,
+      },
+    }
+  );
+  const requests = data.users.map((user) => {
+    const { _id: friendUserId } = user;
+    return instance.post(
+      "http://127.0.0.1:9000/api/friend-request",
+      {
+        friendUserId,
+      },
+      {
+        headers: {
+          Cookie,
+        },
+      }
+    );
+  });
+  await Promise.allSettled(requests);
+}
+async function getAllFriendRequests() {
+  const Cookie = await getLoginCookie("test@test.com", "12345678");
+  const friendRequestsResponse = await instance.get("http://127.0.0.1:9000/api/friend-request", {
+    headers: {
+      Cookie,
+    },
+  });
+  console.log(friendRequestsResponse.data);
+}
 (async () => {
-  await createProfiles();
+  await getAllFriendRequests();
 })();

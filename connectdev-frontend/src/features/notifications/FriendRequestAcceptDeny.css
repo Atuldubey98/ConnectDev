@@ -1,0 +1,15 @@
+.friend__request {
+  display: flex;
+  gap: 0.8rem;
+}
+.friend__requestAbout {
+  flex: 1;
+}
+.friend__requestBtns {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.friend__requestAbout > p {
+  font-size: 0.9rem;
+}

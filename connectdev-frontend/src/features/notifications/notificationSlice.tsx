@@ -3,16 +3,21 @@ import { NotificationsEntity, NotificationsResponse } from "./interfaces"
 import { AppThunk } from "../../app/store"
 import {
   getNotificationsByUser,
+  loadAllFriendRequests,
   updateReadNotification,
 } from "./notificationAPI"
+import { FriendRequestEntity } from "../profile/interfaces"
+import { acceptFriendRequest, cancelFriendRequest } from "../profile/profileAPI"
 type Type = {
   unreadCount: number
   notificationStatus: "idle" | "failure" | "loading" | "success"
   notificationsResponse: null | NotificationsResponse
   hasNextNotification: boolean
+  friendRequests: FriendRequestEntity[] | null
 }
 const initialState: Type = {
   unreadCount: 0,
+  friendRequests: null,
   hasNextNotification: true,
   notificationStatus: "idle",
   notificationsResponse: null,
@@ -21,6 +26,26 @@ const notificationSlice = createSlice({
   initialState,
   name: "notification",
   reducers: {
+    setFriendRequests: (
+      state,
+      action: PayloadAction<FriendRequestEntity[]>,
+    ) => {
+      state.friendRequests = action.payload
+    },
+    setAcceptFriendRequest: (state, action: PayloadAction<string>) => {
+      state.friendRequests = state.friendRequests
+        ? state.friendRequests.filter(
+            (request) => request._id !== action.payload,
+          )
+        : null
+    },
+    setDeniedFriendRequest: (state, action: PayloadAction<string>) => {
+      state.friendRequests = state.friendRequests
+        ? state.friendRequests.filter(
+            (request) => request._id !== action.payload,
+          )
+        : null
+    },
     setNotificationsLoading: (state) => {
       state.notificationStatus = "loading"
     },
@@ -50,7 +75,7 @@ const notificationSlice = createSlice({
               : [...(action.payload.notifications || [])],
           }
         : action.payload
-      state.hasNextNotification = action.payload.hasNextPage;
+      state.hasNextNotification = action.payload.hasNextPage
     },
     setNotificationsError: (state) => {
       state.notificationStatus = "failure"
@@ -74,6 +99,9 @@ export const {
   setNotificationsError,
   setAddNotification,
   setNotificationsIdle,
+  setFriendRequests,
+  setAcceptFriendRequest,
+  setDeniedFriendRequest,
   setUpdateReadNotification,
 } = notificationSlice.actions
 export default notificationSlice.reducer
@@ -89,6 +117,24 @@ export const loadNotificationsAction =
     }
   }
 
+export const acceptFriendRequestNotificationAction =
+  (friendRequestId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      await acceptFriendRequest(friendRequestId)
+      dispatch(setAcceptFriendRequest(friendRequestId))
+    } catch (error) {}
+  }
+export const cancelFriendRequestNotificationAction =
+  (friendRequestId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const response = await cancelFriendRequest(friendRequestId)
+      if (response.status === 204) {
+        dispatch(setDeniedFriendRequest(friendRequestId))
+      }
+    } catch (error) {}
+  }
 export const updateReadNotificationAction =
   (
     notificationId: string,
@@ -106,3 +152,10 @@ export const updateReadNotificationAction =
       console.log(error)
     }
   }
+
+export const loadFriendRequestsAction = (): AppThunk => async (dispatch) => {
+  try {
+    const { data } = await loadAllFriendRequests()
+    dispatch(setFriendRequests(data))
+  } catch (error) {}
+}

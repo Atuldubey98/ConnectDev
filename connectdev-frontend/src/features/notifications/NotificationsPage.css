@@ -8,3 +8,17 @@
   display: grid;
   gap: 0.5rem;
 }
+.notification__requestsWrapper {
+  max-width: 925px;
+  margin: auto;
+  padding: 0.5rem;
+}
+.notification__null {
+  min-height: 60svh;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+.requests {
+  display: grid;
+  gap: 0.8rem;
+}

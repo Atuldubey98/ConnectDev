@@ -8,10 +8,13 @@ import "./ProfilePage.css"
 import ProfileRight from "./ProfileRight"
 import useProfile from "./useProfile"
 import TotalPosts from "./TotalPosts"
+import FriendRequestWrapper from "./FriendRequestWrapper"
 export default function ProfilePage() {
   const { userId } = useParams()
   const { user } = useAppSelector((state) => state.login)
-  const { loading, profile, totalPostByUser } = useProfile(userId)
+  const { loading, profile, totalPostByUser, friendRequest } =
+    useProfile(userId)
+  const isCurrentUserSameForProfile = user?._id === profile?.user._id
   return (
     <main className="profile__page">
       {loading ? (
@@ -34,6 +37,12 @@ export default function ProfilePage() {
               userId={userId || user?._id || ""}
             />
           </ProfileLeft>
+          {isCurrentUserSameForProfile ? null : (
+            <FriendRequestWrapper
+              friendUserId={userId || ""}
+              friendRequest={friendRequest}
+            />
+          )}
           <ProfileRight profile={profile} />
         </div>
       )}
