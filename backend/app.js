@@ -4,7 +4,6 @@ const errorMiddleware = require("./api/middlewares/error");
 const user = require("./api/routes/user");
 const profile = require("./api/routes/profile");
 const post = require("./api/routes/post");
-const chatRouter = require("./api/routes/chat");
 const loadMiddlewares = require("./api/middlewares/loadMiddleware");
 const notificationRouter = require("./api/routes/notification");
 const friendRequestRouter = require("./api/routes/friendRequest");
@@ -20,7 +19,6 @@ app.get("/api/health", (req, res) => {
 app.use("/api/users", user);
 app.use("/api/post", post);
 app.use("/api/profile", profile);
-app.use("/api/chat", chatRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/friend-request", friendRequestRouter);
 app.use("/api/friends", isAuthenticated, getCurrentUserAllFriends);

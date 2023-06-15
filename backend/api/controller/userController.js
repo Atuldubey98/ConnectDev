@@ -1,9 +1,7 @@
 const User = require("../../models/User");
-const Profile = require("../../models/Profile");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const bcryptjs = require("bcryptjs");
 const sendToken = require("../../utils/sendToken");
-const Contact = require("../../models/Contact");
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const { password, ...others } = req.body;
   const user = new User({

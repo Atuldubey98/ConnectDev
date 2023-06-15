@@ -4,9 +4,6 @@ const { PORT, APP_URL, JWT_SECRET } = require("./config/keys");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const User = require("./models/User");
-const Contact = require("./models/Contact");
-const Message = require("./models/Message");
-const Room = require("./models/Room");
 const jwt = require("jsonwebtoken");
 const logger = require("./utils/logger");
 const Post = require("./models/Post");
@@ -45,33 +42,7 @@ io.on("connection", async (socket) => {
     const { type, _id } = data;
     socket.join(`${type}:` + _id);
   });
-  socket.on("message", async (data) => {
-    const { room, body } = data;
-    const message = new Message({
-      roomId: room._id,
-      user: socket.user.id,
-      body,
-    });
-    logger.info({
-      level: "log",
-      message: `${socket.user.id} messaging to room---- >${room._id}`,
-    });
-    const newMessage = await message.save();
-    await Room.updateOne(
-      { _id: room._id },
-      {
-        $push: {
-          messages: newMessage._id,
-        },
-      }
-    );
 
-    const messageFetch = await Message.findById(newMessage._id).populate({
-      path: "user",
-      select: "name avatar _id email",
-    });
-    io.to("room:" + room._id).emit("private", messageFetch);
-  });
   socket.on("like", async (data) => {
     const { _id, liked } = data;
     const post = await Post.findById(_id).select("likes user");
@@ -112,15 +83,6 @@ io.on("connection", async (socket) => {
       }
     }
   });
-  socket.on("subscribe", async (roomId) => {
-    const room = await Room.findById(roomId);
-    const users = new Set(room.users);
-    const sockets = await io.fetchSockets();
-    const requiredSockets = sockets.filter((socket) =>
-      users.has(socket.user.id)
-    );
-    for (const socket of requiredSockets) socket.join(`room:${roomId}`);
-  });
   socket.on("friendRequest:send", async (friendRequestId) => {
     const friendRequest = await FriendRequest.findById(
       friendRequestId
@@ -132,18 +94,36 @@ io.on("connection", async (socket) => {
       "friendRequest:recieved",
       friendRequest
     );
+    logger.info({
+      level: "info",
+      message: `Friend request sent to ---- >${friendRequest.recipient.toString()} --> ${
+        socket.user.name
+      }`,
+    });
   });
   socket.on("friendRequest:accept", async (friendRequest) => {
     io.to(friendRequest.requestor._id.toString()).emit(
       "friendRequest:accepted",
       `${friendRequest.requestor.name} accepted your friend request`
     );
+    logger.info({
+      level: "info",
+      message: `Friend request accepted by ---- >${friendRequest.recipient.toString()} --> ${
+        socket.user.name
+      }`,
+    });
   });
   socket.on("friendRequest:cancel", async (friendRequest) => {
     io.to(friendRequest.recipient.toString()).emit(
       "friendRequest:cancelled",
       friendRequest._id
     );
+    logger.info({
+      level: "info",
+      message: `Friend request cancelled by ---- >${friendRequest.requestor.toString()} --> ${
+        socket.user.name
+      }`,
+    });
   });
   socket.on("comment", async (data) => {
     const { _id, commentId } = data;
@@ -186,12 +166,7 @@ io.on("connection", async (socket) => {
       level: "info",
       message: `Connected ---- >${socket.id} --> ${socket.user.name}`,
     });
-
     const posts = await Post.find({ user: socket.user.id }).select("_id");
-    const chatRooms = await Contact.find({ user: socket.user.id }).select(
-      "room"
-    );
-    chatRooms.forEach(({ room }) => socket.join("room:" + room));
     socket.join(socket.user.id);
     posts.forEach((post) => socket.join("post:" + post._id));
   } catch (error) {
