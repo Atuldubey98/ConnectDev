@@ -88,7 +88,10 @@ export const loadFriendshipStatusAction =
   }
 
 export const sendFriendRequestAction =
-  (friendUserId: string): AppThunk =>
+  (
+    friendUserId: string,
+    sendNotificationForFriendRequestSent: (friendRequestId: string) => void,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       if (!friendUserId) {
@@ -96,11 +99,15 @@ export const sendFriendRequestAction =
       }
       const { data } = await sendFriendRequest(friendUserId)
       dispatch(setFriendRequest(data))
+      sendNotificationForFriendRequestSent(data._id)
     } catch (error) {}
   }
 
 export const cancelFriendRequestAction =
-  (friendRequestId: string): AppThunk =>
+  (
+    friendRequestId: string,
+    cancelFriendRequestSendNotificaition: () => void,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       if (!friendRequestId) {
@@ -109,6 +116,7 @@ export const cancelFriendRequestAction =
       const response = await cancelFriendRequest(friendRequestId)
       if (response.status === 204) {
         dispatch(setFriendRequestIdle())
+        cancelFriendRequestSendNotificaition()
       }
     } catch (error) {}
   }

@@ -8,6 +8,8 @@ import {
   acceptFriendRequestNotificationAction,
   cancelFriendRequestNotificationAction,
 } from "./notificationSlice"
+import UserFriendDetail from "./UserFriendDetail"
+import socket from "../../socket"
 export type FriendRequestAcceptDenyProps = {
   request: FriendRequestEntity
 }
@@ -18,24 +20,22 @@ export default function FriendRequestAcceptDeny(
   const { requestor } = request
   const appDispatch = useAppDispatch()
   const onAcceptFriendRequest = () => {
-    appDispatch(acceptFriendRequestNotificationAction(request._id))
+    appDispatch(
+      acceptFriendRequestNotificationAction(
+        request._id,
+        sendFriendRequestAcceptedNotification,
+      ),
+    )
   }
   const onCancelFriendRequest = () => {
     appDispatch(cancelFriendRequestNotificationAction(request._id))
   }
+  function sendFriendRequestAcceptedNotification() {
+    socket.emit("friendRequest:accept", request)
+  }
   return (
     <li className="friend__request">
-      <UserAvatarSmall
-        name={requestor.name}
-        avatar={requestor.avatar}
-        size={40}
-      />
-      <div className="friend__requestAbout">
-        <Link to={`/profile/${requestor._id}`}>
-          <p>{requestor.name}</p>
-        </Link>
-        <p>{requestor.email}</p>
-      </div>
+      <UserFriendDetail user={requestor} />
       <FriendRequestBtns
         onCancelFriendRequest={onCancelFriendRequest}
         onAcceptFriendRequest={onAcceptFriendRequest}

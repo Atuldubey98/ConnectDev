@@ -13,6 +13,7 @@ const Post = require("./models/Post");
 const { parse } = require("cookie");
 const ErrorHandler = require("./utils/errorhandler");
 const Notification = require("./models/Notification");
+const FriendRequest = require("./models/FriendRequest");
 
 const io = new Server(server, {
   cors: {
@@ -120,6 +121,30 @@ io.on("connection", async (socket) => {
     );
     for (const socket of requiredSockets) socket.join(`room:${roomId}`);
   });
+  socket.on("friendRequest:send", async (friendRequestId) => {
+    const friendRequest = await FriendRequest.findById(
+      friendRequestId
+    ).populate({
+      path: "requestor",
+      select: "name email _id avatar",
+    });
+    io.to(friendRequest.recipient.toString()).emit(
+      "friendRequest:recieved",
+      friendRequest
+    );
+  });
+  socket.on("friendRequest:accept", async (friendRequest) => {
+    io.to(friendRequest.requestor._id.toString()).emit(
+      "friendRequest:accepted",
+      `${friendRequest.requestor.name} accepted your friend request`
+    );
+  });
+  socket.on("friendRequest:cancel", async (friendRequest) => {
+    io.to(friendRequest.recipient.toString()).emit(
+      "friendRequest:cancelled",
+      friendRequest._id
+    );
+  });
   socket.on("comment", async (data) => {
     const { _id, commentId } = data;
     logger.log({
@@ -167,6 +192,7 @@ io.on("connection", async (socket) => {
       "room"
     );
     chatRooms.forEach(({ room }) => socket.join("room:" + room));
+    socket.join(socket.user.id);
     posts.forEach((post) => socket.join("post:" + post._id));
   } catch (error) {
     console.error(error);

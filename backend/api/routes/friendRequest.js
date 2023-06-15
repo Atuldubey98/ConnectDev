@@ -26,4 +26,5 @@ friendRequestRouter.delete(
   isAuthenticated,
   cancelFriendRequestByCurrentUser
 );
+
 module.exports = friendRequestRouter;

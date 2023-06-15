@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { logoutUserAction } from "../login/loginSlice"
 import { setIdle } from "../posts/postSlice"
 import "./ProfileSection.css"
+import { FaUserFriends } from "react-icons/fa"
 
 export default function ProfileSection({ name }: { name: string }) {
   const navigate = useNavigate()
@@ -43,6 +44,10 @@ export default function ProfileSection({ name }: { name: string }) {
           <TbCircleDotFilled color={connected ? "green" : "red"} />
         </div>
         <ul className="profile__dropdownItems">
+          <li onClick={() => navigate("/friends")} className="d-flex-center">
+            <FaUserFriends />
+            <span>Friends</span>
+          </li>
           <li onClick={() => navigate("/profile")} className="d-flex-center">
             <CgProfile />
             <span>Profile</span>

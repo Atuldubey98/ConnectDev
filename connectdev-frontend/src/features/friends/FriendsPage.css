@@ -1,0 +1,15 @@
+.friends__wrapper {
+  width: min(100%, 925px);
+  margin-inline: auto;
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.8rem;
+}
+
+.friends__search {
+  margin-block: 0.8rem;
+}
+.friends {
+  display: grid;
+  gap: 0.8rem;
+}

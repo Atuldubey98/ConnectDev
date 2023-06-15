@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import socket from "../../socket"
 import AcceptFriendRequest from "./AcceptFriendRequest"
 import AlreadyFriends from "./AlreadyFriends"
 import CancelRequest from "./CancelRequest"
@@ -24,13 +25,24 @@ export default function FriendRequestWrapper(props: FriendRequestWrapperProps) {
 
   const appDispatch = useAppDispatch()
   const sendFriendRequest = () => {
-    appDispatch(sendFriendRequestAction(props.friendUserId))
+    appDispatch(
+      sendFriendRequestAction(
+        props.friendUserId,
+        sendNotificationForFriendRequestSent,
+      ),
+    )
+  }
+  function sendNotificationForFriendRequestSent(friendRequestId: string) {
+    socket.emit("friendRequest:send", friendRequestId)
   }
   const cancelFriendRequest = () => {
-    appDispatch(cancelFriendRequestAction(friendRequest?._id || ""))
+    appDispatch(cancelFriendRequestAction(friendRequest?._id || "",cancelFriendRequestSendNotificaition))
   }
   const acceptFriendRequest = () => {
     appDispatch(acceptFriendRequestAction(friendRequest?._id || ""))
+  }
+  function cancelFriendRequestSendNotificaition() {
+    socket.emit("friendRequest:cancel", friendRequest)
   }
   return friendRequest ? (
     <div className="d-flex-center">

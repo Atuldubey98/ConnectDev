@@ -37,7 +37,7 @@ export default function ProfilePage() {
               userId={userId || user?._id || ""}
             />
           </ProfileLeft>
-          {isCurrentUserSameForProfile ? null : (
+          {!profile || isCurrentUserSameForProfile ? null : (
             <FriendRequestWrapper
               friendUserId={userId || ""}
               friendRequest={friendRequest}

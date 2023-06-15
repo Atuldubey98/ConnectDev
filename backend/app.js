@@ -8,6 +8,10 @@ const chatRouter = require("./api/routes/chat");
 const loadMiddlewares = require("./api/middlewares/loadMiddleware");
 const notificationRouter = require("./api/routes/notification");
 const friendRequestRouter = require("./api/routes/friendRequest");
+const { isAuthenticated } = require("./utils/auth");
+const {
+  getCurrentUserAllFriends,
+} = require("./api/controller/friendRequestController");
 const app = express();
 loadMiddlewares(app);
 app.get("/api/health", (req, res) => {
@@ -19,6 +23,7 @@ app.use("/api/profile", profile);
 app.use("/api/chat", chatRouter);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/friend-request", friendRequestRouter);
+app.use("/api/friends", isAuthenticated, getCurrentUserAllFriends);
 app.use(errorMiddleware);
 
 app.all("*", (req, res, next) => {

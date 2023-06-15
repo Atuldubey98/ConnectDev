@@ -119,3 +119,25 @@ exports.getFriendRequestCurrentStatus = catchAsyncErrors(
     return res.status(200).json(request);
   }
 );
+
+exports.getCurrentUserAllFriends = catchAsyncErrors(async (req, res, next) => {
+  const userId = req.user._id;
+  const friendRequests = await FriendRequest.find({
+    $or: [{ requestor: userId }, { recipient: userId }],
+    status: "accepted",
+  })
+    .populate({
+      path: "requestor",
+      select: "name email avatar _id",
+    })
+    .populate({
+      path: "recipient",
+      select: "name email avatar _id",
+    });
+  const friends = friendRequests.map((friendRequest) =>
+    friendRequest.requestor._id.toString() === userId.toString()
+      ? friendRequest.recipient
+      : friendRequest.requestor
+  );
+  return res.status(200).json(friends);
+});

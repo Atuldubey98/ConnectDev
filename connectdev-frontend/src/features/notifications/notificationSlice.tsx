@@ -32,6 +32,14 @@ const notificationSlice = createSlice({
     ) => {
       state.friendRequests = action.payload
     },
+    setAddFriendRequest: (
+      state,
+      action: PayloadAction<FriendRequestEntity>,
+    ) => {
+      state.friendRequests = state.friendRequests
+        ? [...state.friendRequests, action.payload]
+        : null
+    },
     setAcceptFriendRequest: (state, action: PayloadAction<string>) => {
       state.friendRequests = state.friendRequests
         ? state.friendRequests.filter(
@@ -39,7 +47,7 @@ const notificationSlice = createSlice({
           )
         : null
     },
-    setDeniedFriendRequest: (state, action: PayloadAction<string>) => {
+    setDeniedFriendRequest: (state, action: PayloadAction<string>) => {      
       state.friendRequests = state.friendRequests
         ? state.friendRequests.filter(
             (request) => request._id !== action.payload,
@@ -100,6 +108,7 @@ export const {
   setAddNotification,
   setNotificationsIdle,
   setFriendRequests,
+  setAddFriendRequest,
   setAcceptFriendRequest,
   setDeniedFriendRequest,
   setUpdateReadNotification,
@@ -118,11 +127,15 @@ export const loadNotificationsAction =
   }
 
 export const acceptFriendRequestNotificationAction =
-  (friendRequestId: string): AppThunk =>
+  (
+    friendRequestId: string,
+    sendFriendRequestAcceptedNotification: VoidFunction,
+  ): AppThunk =>
   async (dispatch) => {
     try {
       await acceptFriendRequest(friendRequestId)
       dispatch(setAcceptFriendRequest(friendRequestId))
+      sendFriendRequestAcceptedNotification();
     } catch (error) {}
   }
 export const cancelFriendRequestNotificationAction =

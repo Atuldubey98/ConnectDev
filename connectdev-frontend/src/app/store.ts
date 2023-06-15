@@ -7,6 +7,7 @@ import profileReducer from "../features/profile/profileSlice"
 import searchReducer from "../features/search/searchSlice"
 import notificationRedcuer from "../features/notifications/notificationSlice"
 import chatsReducer from "../features/chats/chatsSlice"
+import friendsReducer from "../features/friends/friendsSlice"
 export const store = configureStore({
   reducer: {
     register: registerReducer,
@@ -17,6 +18,7 @@ export const store = configureStore({
     search: searchReducer,
     chats: chatsReducer,
     notification: notificationRedcuer,
+    friends: friendsReducer,
   },
 })
 

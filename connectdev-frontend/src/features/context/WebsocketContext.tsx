@@ -8,7 +8,11 @@ import useUserToast from "../common/useUserToast"
 import { ErrorNotification } from "../posts/interfaces"
 import { setDislike, setLike } from "../posts/postSlice"
 import { NotificationsEntity } from "../notifications/interfaces"
-import { setAddNotification } from "../notifications/notificationSlice"
+import {
+  setAddFriendRequest,
+  setAddNotification,
+  setDeniedFriendRequest,
+} from "../notifications/notificationSlice"
 
 export type WebsocketContextProps = {
   tryConnectingToServer: VoidFunction
@@ -46,6 +50,16 @@ export default function WebsocketContextProvider({
     })
     socket.on("disconnect", () => {
       appDispatch(setConnectionState(socket.connected))
+    })
+    socket.on("friendRequest:recieved", (data) => {
+      showToast(`${data.requestor.name} sent a friend request`, false)
+      appDispatch(setAddFriendRequest(data))
+    })
+    socket.on("friendRequest:accepted", (data) => {
+      showToast(data, false)
+    })
+    socket.on("friendRequest:cancelled", (data) => {
+      appDispatch(setDeniedFriendRequest(data))
     })
     ;() => {
       socket.disconnect()
