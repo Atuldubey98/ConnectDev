@@ -61,12 +61,18 @@ export default function WebsocketContextProvider({
     socket.on("friendRequest:cancelled", (data) => {
       appDispatch(setDeniedFriendRequest(data))
     })
+    socket.on("private", (data) => {
+      console.log(data)
+    })
     ;() => {
       socket.disconnect()
       socket.off("notify:success", () => {})
       socket.off("notify:error", () => {})
       socket.off("like", () => {})
       socket.off("unlike", () => {})
+      socket.off("friendRequest:cancelled", () => {})
+      socket.off("friendRequest:accepted", () => {})
+      socket.off("friendRequest:recieved", () => {})
     }
   }, [])
 

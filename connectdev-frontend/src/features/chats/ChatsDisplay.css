@@ -1,4 +1,5 @@
 .chats__display {
   overflow: auto;
   max-height: 70svh;
+  background-color: aquamarine;
 }

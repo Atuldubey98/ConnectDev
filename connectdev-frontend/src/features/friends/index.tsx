@@ -1,9 +1,11 @@
 import { ChangeEventHandler, useEffect, useState } from "react"
+import { AiOutlineSend } from "react-icons/ai"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import Input from "../common/Input"
+import LinkButton from "../common/LinkButton"
+import UserFriendDetail from "../notifications/UserFriendDetail"
 import "./FriendsPage.css"
 import { loadFriendsAction } from "./friendsSlice"
-import Input from "../common/Input"
-import UserFriendDetail from "../notifications/UserFriendDetail"
 export default function FriendsPage() {
   const { status, friends: friendsList } = useAppSelector(
     (state) => state.friends,
@@ -17,6 +19,7 @@ export default function FriendsPage() {
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFilter(e.currentTarget.value)
   }
+
   const friends = friendsList || []
   return (
     <main className="friends__page">
@@ -37,13 +40,20 @@ export default function FriendsPage() {
           {friends
             .filter(
               (friend) =>
-                friend.name.toLocaleLowerCase().indexOf(filter) !== -1 ||
-                friend.email.toLocaleLowerCase().indexOf(filter) !== -1 ||
+                friend.name
+                  .toLocaleLowerCase()
+                  .indexOf(filter.toLocaleLowerCase()) !== -1 ||
+                friend.email
+                  .toLocaleLowerCase()
+                  .indexOf(filter.toLocaleLowerCase()) !== -1 ||
                 filter === "",
             )
             .map((friend) => (
               <li key={friend._id} className="friend__request">
                 <UserFriendDetail key={friend._id} user={friend} />
+                <LinkButton to={`/chats/${friend._id}`} label="Message">
+                  <AiOutlineSend />
+                </LinkButton>
               </li>
             ))}
         </ul>

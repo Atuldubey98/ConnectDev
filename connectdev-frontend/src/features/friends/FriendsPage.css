@@ -13,3 +13,7 @@
   display: grid;
   gap: 0.8rem;
 }
+.friend__request {
+  display: grid;
+  grid-template-columns: 1fr auto;
+}

@@ -94,6 +94,14 @@ export default function App() {
           }
         />
         <Route
+          path="/chats/:chatId"
+          element={
+            <PrivateRoute>
+              <ChatsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <PrivateRoute>

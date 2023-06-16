@@ -8,7 +8,7 @@ export type UserFriendDetailProps = {
 export default function UserFriendDetail(props: UserFriendDetailProps) {
   const { user: requestor } = props
   return (
-    <>
+    <div className="d-flex-center">
       <UserAvatarSmall
         name={requestor.name}
         avatar={requestor.avatar}
@@ -20,6 +20,6 @@ export default function UserFriendDetail(props: UserFriendDetailProps) {
         </Link>
         <p>{requestor.email}</p>
       </div>
-    </>
+    </div>
   )
 }

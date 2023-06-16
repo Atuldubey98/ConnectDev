@@ -1,0 +1,6 @@
+.side__nav {
+  position: absolute;
+  background-color: var(--secondary-color);
+  height: 100%;
+  width: min(100%, 240px);
+}

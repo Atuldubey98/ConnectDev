@@ -1,6 +1,10 @@
 .chats__screenHeader {
   background-color: var(--accent-color);
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: flex-start;
 }
 .chats__screenHeader > h3 {
   text-align: center;
