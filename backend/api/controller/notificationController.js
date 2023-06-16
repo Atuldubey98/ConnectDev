@@ -13,10 +13,6 @@ exports.getAllNotificationsByUserId = catchAsyncErrors(
       typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
         ? Number(req.query.limit)
         : 10;
-    if (!userId) {
-      next(new ErrorHandler("User not found", 400));
-      return;
-    }
     const query = { user: userId };
     const options = {
       page,

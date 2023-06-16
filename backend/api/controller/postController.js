@@ -229,7 +229,6 @@ exports.getCountofPostsByUser = catchAsyncErrors(async (req, res, next) => {
   const { userId: userParams } = req.params;
   const userId = userParams || "";
   const user = await User.findById(userId);
-  console.log(user);
   const count = await Post.count({ user: user ? userId : req.user._id });
   return res.status(200).json(count);
 });

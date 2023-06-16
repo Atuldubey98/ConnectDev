@@ -1,6 +1,10 @@
 const FriendRequest = require("../../models/FriendRequest");
 const User = require("../../models/User");
-
+const {
+  createFriendRequest,
+  getFriendRequests,
+  getFriendRequestByUserAndFriendUserId,
+} = require("../repository/friendRequestRepository")();
 const ErrorHandler = require("../../utils/errorhandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 exports.createFriendRequest = catchAsyncErrors(async (req, res, next) => {
@@ -14,41 +18,28 @@ exports.createFriendRequest = catchAsyncErrors(async (req, res, next) => {
     throw new ErrorHandler(400, "FRIEND_USERID_NOT_FOUND");
   }
   const userId = req.user._id;
-  const requestExists = await FriendRequest.findOne({
-    $or: [
-      {
-        $and: [{ requestor: friendUserId }, { recipient: userId }],
-      },
-      {
-        $and: [{ requestor: userId }, { recipient: friendUserId }],
-      },
-    ],
-  });
+  const requestExists = await getFriendRequestByUserAndFriendUserId(
+    userId,
+    friendUserId
+  );
   if (requestExists) {
     return res.status(201).send(requestExists);
   }
 
   if (friendUserId === userId) throw new ErrorHandler(400, "PAYLOAD_ERROR");
 
-  const friendRequest = new FriendRequest({
+  const friendRequest = await createFriendRequest({
     requestor: userId,
     recipient: friendUserId,
     status: "requested",
   });
-  await friendRequest.save();
   return res.status(201).send(friendRequest);
 });
 
 exports.getAllFriendRequestsForCurrentUser = catchAsyncErrors(
   async (req, res, next) => {
     const userId = req.user._id;
-    const friendRequests = await FriendRequest.find({
-      recipient: userId,
-      status: "requested",
-    }).populate({
-      path: "requestor",
-      select: "name email avatar _id",
-    });
+    const friendRequests = await getFriendRequests(userId);
     return res.status(200).send(friendRequests);
   }
 );
@@ -105,16 +96,10 @@ exports.getFriendRequestCurrentStatus = catchAsyncErrors(
     if (!friendUserId) {
       throw new ErrorHandler("PAYLOAD_ERROR", 400);
     }
-    const request = await FriendRequest.findOne({
-      $or: [
-        {
-          $and: [{ requestor: friendUserId }, { recipient: userId }],
-        },
-        {
-          $and: [{ requestor: userId }, { recipient: friendUserId }],
-        },
-      ],
-    });
+    const request = await getFriendRequestByUserAndFriendUserId(
+      userId,
+      friendUserId
+    );
 
     return res.status(200).json(request);
   }
