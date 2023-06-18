@@ -1,8 +1,26 @@
-const Notification = require("../../models/Notification");
 const Post = require("../../models/Post");
 const logger = require("../../utils/logger");
+const notificationRepository = require("../repository/notificationRepostory");
 
 function likePostHandler(socket, io) {
+  const { createNotification } = notificationRepository();
+  function generateMessageAndLink(notification) {
+    const isValidNotification =
+      typeof notification === "object" ||
+      typeof notification.name === "string" ||
+      typeof notification.totalLikes === "number" ||
+      typeof notification.postId === "string";
+    if (!isValidNotification) {
+      return null;
+    }
+    const { totalLikes, name, postId } = notification;
+    const message =
+      totalLikes > 1
+        ? `${name} & ${totalLikes - 1} others liked your post`
+        : `${name} liked your post`;
+    const href = `/posts/${postId}`;
+    return { message, href };
+  }
   return async (data) => {
     const { _id, liked } = data;
     const post = await Post.findById(_id).select("likes user");
@@ -15,27 +33,28 @@ function likePostHandler(socket, io) {
         message: `Post was deleted`,
       });
     } else {
-      if (socket.user.id !== post.user.toString()) {
+      const isPostCreatorCurrentUserSame =
+        socket.user.id !== post.user.toString();
+      if (isPostCreatorCurrentUserSame) {
         logger.info({
           level: "info",
           message: `${socket.user.id} liked post with id---- >${_id} of ${post.user}`,
         });
 
         const { likes } = post;
-        const message =
-          likes.length > 1
-            ? `${socket.user.name} & ${likes.length - 1} others liked your post`
-            : `${socket.user.name} liked your post`;
-        const href = `/posts/${_id}`;
+        const { message, href } = generateMessageAndLink({
+          name: socket.user.name,
+          postId: _id,
+          totalLikes: likes.length,
+        });
         const response = { user: socket.user, post: _id };
         if (liked) {
           io.to("post:" + _id).emit("like", response);
-          const notification = new Notification({
-            user: post.user.toString(),
+          const notification = await createNotification(
+            post.user.toString(),
             href,
-            message,
-          });
-          await notification.save();
+            message
+          );
           io.to("post:" + _id).emit("notify:success", notification);
         } else {
           io.to("post:" + _id).emit("unlike", response);

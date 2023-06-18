@@ -4,33 +4,20 @@ const Comments = require("../../models/Comments");
 const ErrorHandler = require("../../utils/errorhandler");
 const Likes = require("../../models/Likes");
 const User = require("../../models/User");
-const { sanitizeFilterUtil } = require("../../utils/sanitize");
+const {
+  sanitizeFilterUtil,
+  getPaginationFilter,
+} = require("../../utils/sanitize");
+const { deleteCompletePost, createNewPost, getPostById } =
+  require("../repository/postRepository")();
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
-  const post = new Post({ ...req.body, user: req.user._id });
-  await (await post.save()).populate("user", "name avatar email");
-
+  const post = await createNewPost(req.body, req.user._id);
   return res.status(201).json({ status: true, post });
 });
 
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
-  const post = await Post.findById(req.query.postId)
-    .populate({
-      path: "likes",
-      populate: {
-        path: "user",
-        select: "name email _id",
-      },
-    })
-    .populate({
-      path: "comments",
-      populate: {
-        path: "user",
-        select: "name email _id avatar",
-      },
-    })
-    .populate("user", "_id name avatar email");
-
+  const post = await getPostById(req.query.postId);
   return res.status(200).json(post);
 });
 
@@ -52,19 +39,7 @@ exports.deletePostsById = catchAsyncErrors(async (req, res, next) => {
 
 exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
   const { postId } = req.query;
-  const post = await Post.findById(postId);
-
-  if (!post) {
-    next(new ErrorHandler("Post not found", 400));
-    return;
-  }
-  if (post.likes.length > 0) {
-    await Likes.deleteMany({ _id: { $in: post.likes } });
-  }
-  if (post.comments.length > 0) {
-    await Comments.deleteMany({ _id: { $in: post.comments } });
-  }
-  await Post.deleteOne({ _id: postId });
+  await deleteCompletePost(postId);
   return res.status(204).json({
     status: true,
     message: "Deleted",
@@ -72,15 +47,9 @@ exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
 });
 
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
-  const page =
-    typeof req.query.page === "string" && !isNaN(Number(req.query.page))
-      ? Number(req.query.page)
-      : 1;
-  const limit =
-    typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
-      ? Number(req.query.limit)
-      : 10;
+  const { page, limit } = getPaginationFilter(req.query);
   const search = typeof req.params.search === "string" ? req.params.search : "";
+
   const filter = sanitizeFilterUtil(req.query.filter);
   const query =
     search.length === 0
@@ -92,7 +61,6 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
             { title: { $regex: search, $options: "i" } },
           ],
         };
-
   const postRes = await Post.paginate(query, {
     page,
     limit,

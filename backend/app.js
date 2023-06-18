@@ -1,4 +1,3 @@
-require("./config/mongoconnection");
 const express = require("express");
 const errorMiddleware = require("./api/middlewares/error");
 const user = require("./api/routes/user");
@@ -11,7 +10,11 @@ const { isAuthenticated } = require("./utils/auth");
 const {
   getCurrentUserAllFriends,
 } = require("./api/controller/friendRequestController");
+const mongoose = require("mongoose");
+const { MONGO_URI } = require("./config/keys");
 const app = express();
+mongoose.connect(MONGO_URI);
+
 loadMiddlewares(app);
 app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");

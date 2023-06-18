@@ -2,6 +2,7 @@ const User = require("../../models/User");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const bcryptjs = require("bcryptjs");
 const sendToken = require("../../utils/sendToken");
+const { getPaginationFilter } = require("../../utils/sanitize");
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const { password, ...others } = req.body;
   const user = new User({
@@ -45,67 +46,9 @@ exports.getCurrentUserProfile = catchAsyncErrors(async (req, res, next) => {
   return res.status(200).json(user);
 });
 
-exports.getChatUser = catchAsyncErrors(async (req, res, next) => {
-  const page = req.query.page ? parseInt(req.query.page) : 0;
-  const offset = page * 5;
-  const search = req.query.search;
-  if (!search) {
-    return res.status(200).json({
-      status: true,
-      message: "Enter text in search box !",
-    });
-  }
-  const totalCount = await User.find({ name: { $regex: search } }).count();
-  const totalPages = totalCount > 0 ? Math.ceil(totalCount / 5) : 0;
-  const users = await User.find(
-    { email: { $regex: search }, _id: { $ne: req.user._id } },
-    "name email avatar _id",
-    { skip: offset, limit: 5 }
-  );
-
-  const chatIds = users.map(({ _id }) => {
-    const chatId =
-      _id < req.user._id ? _id + "_" + req.user._id : req.user._id + "_" + _id;
-    return chatId;
-  });
-  const fetchedContacts = await Contact.find({
-    chatId: { $in: chatIds },
-    user: { $ne: req.user._id },
-  });
-  const contactsMap = {};
-  const contacts = fetchedContacts
-    .map((contact) => contact.user)
-    .forEach((id) => {
-      contactsMap[id] = true;
-    });
-
-  return res.status(200).json({
-    status: true,
-    users: users.map((user) => {
-      return {
-        ...user._doc,
-        isContact: user._id in contactsMap,
-      };
-    }),
-    contacts,
-    meta: {
-      totalCount,
-      totalPages,
-      currentPage: page + 1,
-      currentTotal: users.length,
-    },
-  });
-});
 
 exports.searchUser = catchAsyncErrors(async (req, res, next) => {
-  const page =
-    typeof req.query.page === "string" && !isNaN(Number(req.query.page))
-      ? Number(req.query.page)
-      : 1;
-  const limit =
-    typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
-      ? Number(req.query.limit)
-      : 10;
+  const { limit, page } = getPaginationFilter(req.query);
   const search = typeof req.params.search === "string" ? req.params.search : "";
   const query = {
     $text: {

@@ -1,9 +1,35 @@
-const Notification = require("../../models/Notification");
 const Post = require("../../models/Post");
 const User = require("../../models/User");
 const logger = require("../../utils/logger");
+const notificationRepository = require("../repository/notificationRepostory");
 
 function commentHandler(socket, io) {
+  const { createNotification } = notificationRepository();
+
+  function generateMessageAndLink({ totalComments, name, commentId, postId }) {
+    const taggedCommentId = `comment-${commentId}`;
+    const message =
+      totalComments > 1
+        ? `${name} and ${totalComments} others commented on your post`
+        : `${name} commented on your post`;
+    const href = `/posts/${postId}#${taggedCommentId}`;
+    return { href, message };
+  }
+  async function createCommentNotification({ post, commentId }) {
+    const { name } = await User.findById(socket.user.id).select("name");
+    const { href, message } = generateMessageAndLink({
+      totalComments: post.comments.length,
+      name,
+      commentId,
+      postId: post._id,
+    });
+    const notification = await createNotification(
+      post.user.toString(),
+      href,
+      message
+    );
+    return notification;
+  }
   return async (data) => {
     const { _id, commentId } = data;
     logger.log({
@@ -18,21 +44,13 @@ function commentHandler(socket, io) {
         isError: true,
       });
     } else {
-      const comments = post.comments;
-      if (socket.user.id != post.user.toString()) {
-        const { name } = await User.findById(socket.user.id).select("name");
-        const taggedCommentId = `comment-${commentId}`;
-        const message =
-          comments.length > 1
-            ? `${name} and ${comments.length} others commented on your post`
-            : `${name} commented on your post`;
-        const href = `/posts/${_id}#${taggedCommentId}`;
-        const notification = new Notification({
-          user: post.user.toString(),
-          href,
-          message,
+      const isPostCreatorAndCurrentUserDifferent =
+        socket.user.id != post.user.toString();
+      if (isPostCreatorAndCurrentUserDifferent) {
+        const notification = await createCommentNotification({
+          commentId,
+          post,
         });
-        await notification.save();
         io.to("post:" + _id).emit("notify:success", notification);
       }
     }

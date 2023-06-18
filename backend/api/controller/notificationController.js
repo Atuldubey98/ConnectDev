@@ -1,19 +1,16 @@
 const Notification = require("../../models/Notification");
 const ErrorHandler = require("../../utils/errorhandler");
+const {
+  getPaginationFilter,
+  getNotificationId,
+  getNotificationIds,
+} = require("../../utils/sanitize");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 
 exports.getAllNotificationsByUserId = catchAsyncErrors(
   async (req, res, next) => {
+    const { limit, page } = getPaginationFilter(req.query);
     const userId = req.user._id;
-    const page =
-      typeof req.query.page === "string" && !isNaN(Number(req.query.page))
-        ? Number(req.query.page)
-        : 1;
-    const limit =
-      typeof req.query.limit === "string" && !isNaN(Number(req.query.limit))
-        ? Number(req.query.limit)
-        : 10;
-    const query = { user: userId };
     const options = {
       page,
       limit,
@@ -27,19 +24,15 @@ exports.getAllNotificationsByUserId = catchAsyncErrors(
         prevPage: "prevPage",
       },
     };
-    const notifications = await Notification.paginate(query, options);
+    const notifications = await Notification.paginate(
+      { user: userId },
+      options
+    );
     return res.status(200).send(notifications);
   }
 );
 exports.getCountNotificationRead = catchAsyncErrors(async (req, res, next) => {
-  const notificationId =
-    typeof req.params.notificationId === "string"
-      ? req.params.notificationId
-      : "";
-  if (!notificationId) {
-    next(new ErrorHandler("Please specify the notification id", 400));
-    return;
-  }
+  
   const unreadCount = await Notification.count({
     read: false,
     user: req.user._id,
@@ -48,14 +41,7 @@ exports.getCountNotificationRead = catchAsyncErrors(async (req, res, next) => {
 });
 exports.updateReadNotificationByUser = catchAsyncErrors(
   async (req, res, next) => {
-    const notificationId =
-      typeof req.params.notificationId === "string"
-        ? req.params.notificationId
-        : "";
-    if (!notificationId) {
-      next(new ErrorHandler("Please specify the notification id", 400));
-      return;
-    }
+    const notificationId = getNotificationId(req.params);
     await Notification.findByIdAndUpdate(
       notificationId,
       {
@@ -72,16 +58,7 @@ exports.updateReadNotificationByUser = catchAsyncErrors(
 );
 
 exports.deleteNotificationsByIds = catchAsyncErrors(async (req, res, next) => {
-  const notificationIds = Array.isArray(req.body.notificationIds)
-    ? req.body.notificationIds
-    : [];
-  const isNotificationIdsString = notificationIds.some(
-    (n) => typeof n !== "string"
-  );
-  if (isNotificationIdsString) {
-    next(new ErrorHandler("Please specify the notification id", 400));
-    return;
-  }
+  const notificationIds = getNotificationIds(req.body);
   await Notification.deleteMany({
     _id: { $in: notificationIds },
     user: req.user._id,
