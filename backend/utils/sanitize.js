@@ -29,6 +29,13 @@ function getPaginationFilter(query) {
       : 10;
   return { limit, page };
 }
+function getProfileInformationOnlyArray(body) {
+  const skills = Array.isArray(body.skills) ? body.skills : [];
+  const experience = Array.isArray(body.experience) ? body.experience : [];
+  const handle = Array.isArray(body.handle) ? body.handle : [];
+  const education = Array.isArray(body.education) ? body.education : [];
+  return { skills, experience, handle, education };
+}
 function getNotificationId(params) {
   const notificationId =
     typeof params.notificationId === "string" ? params.notificationId : "";
@@ -54,4 +61,5 @@ module.exports = {
   getPaginationFilter,
   getNotificationId,
   getNotificationIds,
+  getProfileInformationOnlyArray,
 };

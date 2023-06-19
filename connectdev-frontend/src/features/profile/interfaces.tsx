@@ -20,7 +20,7 @@ export interface FriendRequestEntity extends FriendRequestModel {
 export interface IProfile {
   _id: string
   skills?: SkillsEntity[] | null
-  user: IUser
+  user: IUserDetails
   handle?: HandleEntity[] | null
   status: string
   experience?: ExperienceEntity[] | null

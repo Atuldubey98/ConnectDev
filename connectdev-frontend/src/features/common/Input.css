@@ -6,7 +6,6 @@
 .input__control > input {
   width: 100%;
   font-size: 1.1rem;
-  border-radius: 0.3rem;
 }
 @media screen and (max-width: 540px) {
   .input__control {

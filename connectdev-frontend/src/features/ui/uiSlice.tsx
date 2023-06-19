@@ -10,6 +10,7 @@ type State = {
     justAdded: boolean
     postId: string
   }
+  updateProfilePictureModal: boolean
 }
 const initialState: State = {
   commentsModal: {
@@ -20,11 +21,18 @@ const initialState: State = {
     justAdded: false,
     postId: "",
   },
+  updateProfilePictureModal: false,
 }
 const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
+    setUpdateProfilePictureModalOpen: (state) => {
+      state.updateProfilePictureModal = true
+    },
+    setUpdateProfilePictureModalClose: (state) => {
+      state.updateProfilePictureModal = false
+    },
     setCommentsModalPost: (state, action: PayloadAction<string>) => {
       state.commentsModal.postId = action.payload
     },
@@ -44,6 +52,8 @@ export const {
   setCommentsModalPost,
   setCommentsModal,
   setPostWasJustAdded,
+  setUpdateProfilePictureModalClose,
+  setUpdateProfilePictureModalOpen,
   setJustAddedPostId,
 } = uiSlice.actions
 export const toggleCommentsModalPost =

@@ -32,3 +32,17 @@ export const acceptFriendRequest = async (friendRequestId: string) => {
     friendRequestId,
   })
 }
+export const uploadProfileAvatar = async (profilePicture: any) => {
+  const profileInformation = new FormData()
+  profileInformation.append("avatar", profilePicture)
+  return instance.post("/api/profile/avatar", profileInformation, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+}
+export const updateProfileAvatar = async (profilePicture: any) => {
+  const profileInformation = new FormData()
+  profileInformation.append("avatar", profilePicture)
+  return instance.patch("/api/profile/avatar", profileInformation, {
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+}

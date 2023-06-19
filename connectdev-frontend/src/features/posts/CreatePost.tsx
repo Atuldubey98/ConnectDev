@@ -34,6 +34,7 @@ export function UserAvatarSmall({
   name: string
   size?: number
 }) {
+  
   return avatar ? (
     <img src={avatar} alt={name} width={size || 48} loading="lazy" />
   ) : (

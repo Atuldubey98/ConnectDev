@@ -12,6 +12,7 @@ export default function useProfile(userId: string | undefined) {
   const { user: userLoggedIn } = useAppSelector((state) => state.login)
   const appDispatch = useAppDispatch()
   const user = userId || userLoggedIn?._id || ""
+
   const loading: boolean = profileStatus === "loading"
   useEffect(() => {
     appDispatch(loadProfileAction(userId))

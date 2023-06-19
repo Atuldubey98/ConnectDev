@@ -12,11 +12,10 @@
 .profile__dropbtn > p {
   white-space: nowrap;
 }
-.profile__dropbtn:hover {
-  background-color: var(--hover-color);
-}
 .profile__dropdownItems {
   position: absolute;
+  top: 100%;
+  z-index: 1;
   list-style: none;
   display: none;
   width: 100%;
@@ -41,6 +40,6 @@
   justify-content: flex-start;
   gap: 0.8rem;
 }
-.profile__dropdownItems li:hover {
+.profile__dropdownItems > li:hover{
   background-color: var(--hover-color);
 }

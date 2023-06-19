@@ -9,6 +9,8 @@ import {
   loadProfile,
   sendFriendRequest,
   updateProfile,
+  updateProfileAvatar,
+  uploadProfileAvatar,
 } from "./profileAPI"
 import { UpdateProfileBody } from "../profileEdit/interfaces"
 import { isAxiosError } from "axios"
@@ -20,9 +22,11 @@ type State = {
   updateError: string
   friendRequest: FriendRequest | null
   totalPostByUser: number
+  profileAvatarStatus: "idle" | "success" | "failure" | "loading"
 }
 const initialState: State = {
   profileStatus: "idle",
+  profileAvatarStatus: "idle",
   profile: null,
   updateStatus: "idle",
   updateError: "",
@@ -33,6 +37,21 @@ const profileSlice = createSlice({
   initialState,
   name: "profile",
   reducers: {
+    setProfileAvatarError: (state) => {
+      state.profileAvatarStatus = "failure"
+    },
+    setProfileAvatarLoading: (state) => {
+      state.profileAvatarStatus = "loading"
+    },
+    setProfileAvatar: (state, action: PayloadAction<string>) => {
+      state.profileAvatarStatus = "success"
+      state.profile = state.profile
+        ? {
+            ...state.profile,
+            user: { ...state.profile.user, avatar: action.payload },
+          }
+        : null
+    },
     setUpdateLoading: (state) => {
       state.updateStatus = "loading"
       state.updateError = ""
@@ -67,9 +86,12 @@ const profileSlice = createSlice({
 export const {
   setProfileError,
   setProfileLoading,
+  setProfileAvatarLoading,
   setProfileSuccess,
   setUpdateError,
   setTotalPostByUser,
+  setProfileAvatar,
+  setProfileAvatarError,
   setFriendRequest,
   setFriendRequestIdle,
   setUpdateLoading,
@@ -147,6 +169,9 @@ export const getCountOfPostsByUserIdAction =
   (userId: string): AppThunk =>
   async (dispatch) => {
     try {
+      if (!userId) {
+        return
+      }
       const { data: count } = await countTotalPostByUserId(userId)
       dispatch(setTotalPostByUser(count))
     } catch (error) {
@@ -174,4 +199,27 @@ export const updateProfileAction =
       )
     }
   }
+export const uploadProfileAvatarAction =
+  (profileAvatar: File): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setProfileAvatarLoading())
+      const { data } = await uploadProfileAvatar(profileAvatar)
+      dispatch(setProfileAvatar(data))
+    } catch (error) {
+      dispatch(setProfileAvatarError())
+    }
+  }
+export const updateProfileAvatarAction =
+  (profileAvatar: File): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(setProfileAvatarLoading())
+      const { data } = await updateProfileAvatar(profileAvatar)
+      dispatch(setProfileAvatar(data))
+    } catch (error) {
+      dispatch(setProfileAvatarError())
+    }
+  }
+
 export default profileSlice.reducer

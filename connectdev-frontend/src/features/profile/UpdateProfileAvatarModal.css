@@ -1,0 +1,27 @@
+.avatar__btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-block: 0.3rem;
+  list-style-type: none;
+}
+
+.avatar__file {
+  color: green;
+  font-weight: bold;
+  position: relative;
+  cursor: pointer;
+}
+.avatar__btns > li {
+  padding: 0.5rem;
+  width: 100%;
+  cursor: pointer;
+  text-align: center;
+  border-top: 1px solid var(--shadow-color);
+}
+.avatar__btns > li > input {
+  position: absolute;
+  left: 1rem;
+  opacity: 0;
+}
