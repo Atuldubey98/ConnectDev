@@ -8,18 +8,19 @@
 .cursor__pointer {
   cursor: pointer;
 }
-body {
-  font-family: "Poppins", sans-serif;
-}
+
 :root {
   --accent-color: #4242e7c7;
   --hover-color: #3131ebc7;
   --secondary-color: rgb(240, 240, 240);
   --white-color: white;
   --red-color: red;
-  --black-color: black;
   --shadow-color: #888888;
   --success-color: rgb(46, 133, 46);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
 }
 .d-flex-center {
   display: flex;

@@ -19,7 +19,7 @@ import SearchPage from "./features/search"
 import UserSearchPage from "./features/search/UserSearchPage"
 import NotificationsPage from "./features/notifications"
 import FriendsPage from "./features/friends"
-
+import './App.css'
 export default function App() {
   return (
     <>
