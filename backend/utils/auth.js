@@ -11,7 +11,7 @@ exports.isAuthenticated = catchAsyncErrors(async (req, res, next) => {
   const decodeData = jwt.verify(token, JWT_SECRET);
   const user = await User.findOne(
     { email: decodeData.email },
-    "name email avatar"
+    "name email avatar _id"
   );
   req.user = user;
   next();
