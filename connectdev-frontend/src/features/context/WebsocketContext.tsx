@@ -13,9 +13,12 @@ import {
   setAddNotification,
   setDeniedFriendRequest,
 } from "../notifications/notificationSlice"
+import { FriendActiveStatus } from "../friends/interface"
+import { setUpdateFriendActiveStatus } from "../friends/friendsSlice"
 
 export type WebsocketContextProps = {
   tryConnectingToServer: VoidFunction
+  disconnectFromServer: VoidFunction
 }
 export const WebsocketContext = createContext<WebsocketContextProps | null>(
   null,
@@ -64,8 +67,10 @@ export default function WebsocketContextProvider({
     socket.on("private", (data) => {
       console.log(data)
     })
+    socket.on("friendActive:status", (data: FriendActiveStatus) => {
+      appDispatch(setUpdateFriendActiveStatus(data))
+    })
     ;() => {
-      socket.disconnect()
       socket.off("notify:success", () => {})
       socket.off("notify:error", () => {})
       socket.off("like", () => {})
@@ -73,14 +78,20 @@ export default function WebsocketContextProvider({
       socket.off("friendRequest:cancelled", () => {})
       socket.off("friendRequest:accepted", () => {})
       socket.off("friendRequest:recieved", () => {})
+      socket.disconnect()
     }
   }, [])
 
   function tryConnectingToServer() {
     socket.connect()
   }
+  function disconnectFromServer() {
+    socket.disconnect()
+  }
   return (
-    <WebsocketContext.Provider value={{ tryConnectingToServer }}>
+    <WebsocketContext.Provider
+      value={{ tryConnectingToServer, disconnectFromServer }}
+    >
       {children}
     </WebsocketContext.Provider>
   )

@@ -1,23 +1,32 @@
 import { AiFillEdit, AiOutlineLogout } from "react-icons/ai"
-import { TbCircleDotFilled } from "react-icons/tb"
 import { CgProfile } from "react-icons/cg"
 
+import { FaUserFriends } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { logoutUserAction } from "../login/loginSlice"
 import { setIdle } from "../posts/postSlice"
+import ActiveStatus from "./ActiveStatus"
 import "./ProfileSection.css"
-import { FaUserFriends } from "react-icons/fa"
+import { useContext } from "react"
+import { WebsocketContext } from "../context/WebsocketContext"
 
 export default function ProfileSection({ name }: { name: string }) {
   const navigate = useNavigate()
   const { connected } = useAppSelector((state) => state.chats)
+  const socketContext = useContext(WebsocketContext)
+  const disconnectFromServer: VoidFunction | null = socketContext
+    ? socketContext.disconnectFromServer
+    : null
   const appDispatch = useAppDispatch()
   function onLogout() {
     if (confirm("Do you want to logout ?")) {
       appDispatch(logoutUserAction(showToast, navigateToHome))
       appDispatch(setIdle())
+      if (disconnectFromServer) {
+        disconnectFromServer()
+      }
     }
   }
   function navigateToHome() {
@@ -41,7 +50,7 @@ export default function ProfileSection({ name }: { name: string }) {
       <div className="profile__dropwrapper">
         <div className="profile__dropbtn d-flex-center">
           <p>{name}</p>
-          <TbCircleDotFilled color={connected ? "green" : "red"} />
+          <ActiveStatus isActiveNow={connected} />
         </div>
         <ul className="profile__dropdownItems">
           <li onClick={() => navigate("/friends")} className="d-flex-center">

@@ -73,3 +73,8 @@ export interface ILikePost {
   postId: string
   user: IUserDetails
 }
+
+export interface UserWithActiveStatus extends IUserDetails {
+  isActiveNow: boolean
+  lastActive: Date
+}

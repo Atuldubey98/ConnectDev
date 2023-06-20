@@ -19,6 +19,7 @@ export default function UserFriendDetail(props: UserFriendDetailProps) {
           <p>{requestor.name}</p>
         </Link>
         <p>{requestor.email}</p>
+        
       </div>
     </div>
   )

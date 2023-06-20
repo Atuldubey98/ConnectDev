@@ -6,6 +6,7 @@ import LinkButton from "../common/LinkButton"
 import UserFriendDetail from "../notifications/UserFriendDetail"
 import "./FriendsPage.css"
 import { loadFriendsAction } from "./friendsSlice"
+import ActiveStatus from "../common/ActiveStatus"
 export default function FriendsPage() {
   const { status, friends: friendsList } = useAppSelector(
     (state) => state.friends,
@@ -50,7 +51,10 @@ export default function FriendsPage() {
             )
             .map((friend) => (
               <li key={friend._id} className="friend__request">
-                <UserFriendDetail key={friend._id} user={friend} />
+                <div className=" friend__active">
+                  <ActiveStatus isActiveNow={friend.isActiveNow} />
+                  <UserFriendDetail key={friend._id} user={friend} />
+                </div>
                 <LinkButton to={`/chats/${friend._id}`} label="Message">
                   <AiOutlineSend />
                 </LinkButton>

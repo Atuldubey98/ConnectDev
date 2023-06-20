@@ -33,6 +33,10 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  isActiveNow: {
+    type: Boolean,
+    default: false,
+  },
 });
 UserSchema.index({ email: "text", name: "text" });
 UserSchema.methods.getJWTToken = (email, name, id) => {

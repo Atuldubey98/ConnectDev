@@ -153,12 +153,8 @@ exports.getCurrentUserAllFriends = catchAsyncErrors(async (req, res, next) => {
         name: "$user.name",
         email: "$user.email",
         lastActive: "$user.lastActive",
+        isActiveNow: "$user.isActiveNow",
         avatar: "$user.avatar",
-      },
-    },
-    {
-      $addFields: {
-        isActiveNow: false,
       },
     },
   ]);

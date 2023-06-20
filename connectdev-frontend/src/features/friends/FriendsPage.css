@@ -17,3 +17,9 @@
   display: grid;
   grid-template-columns: 1fr auto;
 }
+
+.friend__active{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
