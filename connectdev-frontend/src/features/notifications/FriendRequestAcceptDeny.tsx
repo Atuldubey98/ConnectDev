@@ -30,8 +30,10 @@ export default function FriendRequestAcceptDeny(
   const onCancelFriendRequest = () => {
     appDispatch(cancelFriendRequestNotificationAction(request._id))
   }
-  function sendFriendRequestAcceptedNotification() {
-    socket.emit("friendRequest:accept", request)
+  function sendFriendRequestAcceptedNotification(
+    acceptedRequest: FriendRequestEntity,
+  ) {
+    socket.emit("friendRequest:accept", acceptedRequest)
   }
   return (
     <li className="friend__request">

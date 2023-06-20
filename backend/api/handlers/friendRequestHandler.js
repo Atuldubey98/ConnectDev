@@ -21,9 +21,9 @@ function friendRequestHandler(socket, io) {
     });
   }
   async function friendRequestAccept(friendRequest) {
-    io.to(friendRequest.requestor._id.toString()).emit(
+    io.to(friendRequest.requestor.toString()).emit(
       "friendRequest:accepted",
-      `${friendRequest.requestor.name} accepted your friend request`
+      friendRequest
     );
     logger.info({
       level: "info",

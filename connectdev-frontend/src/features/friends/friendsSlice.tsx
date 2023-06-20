@@ -46,7 +46,7 @@ export const {
   setFriendsError,
   setFriendsLoaded,
   setFriendsLoading,
-  setUpdateFriendActiveStatus,
+  setUpdateFriendActiveStatus
 } = friendsSlice.actions
 
 export const loadFriendsAction = (): AppThunk => async (dispatch) => {

@@ -1,5 +1,10 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import { FriendRequest, IProfile } from "./interfaces"
+import {
+  FriendRequest,
+  FriendRequestWithRecipient,
+  FriendshipStatus,
+  IProfile,
+} from "./interfaces"
 import { AppThunk } from "../../app/store"
 import {
   acceptFriendRequest,
@@ -39,6 +44,19 @@ const profileSlice = createSlice({
   reducers: {
     setProfileAvatarError: (state) => {
       state.profileAvatarStatus = "failure"
+    },
+    setProfileFriendShipStatus: (
+      state,
+      action: PayloadAction<FriendRequestWithRecipient>,
+    ) => {
+      if (state.profile?.user._id === action.payload.recipient._id) {
+        state.friendRequest = state.friendRequest
+          ? {
+              ...state.friendRequest,
+              status: action.payload.status,
+            }
+          : null
+      }
     },
     setProfileAvatarLoading: (state) => {
       state.profileAvatarStatus = "loading"
@@ -95,6 +113,7 @@ export const {
   setFriendRequest,
   setFriendRequestIdle,
   setUpdateLoading,
+  setProfileFriendShipStatus,
 } = profileSlice.actions
 
 export const loadFriendshipStatusAction =

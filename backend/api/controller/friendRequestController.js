@@ -63,7 +63,10 @@ exports.acceptFriendRequest = catchAsyncErrors(async (req, res, next) => {
     {
       new: true,
     }
-  );
+  ).populate({
+    path: "recipient",
+    select: "name _id",
+  });
   return res.status(200).send(friendRequestUpdated);
 });
 

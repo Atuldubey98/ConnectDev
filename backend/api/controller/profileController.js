@@ -15,7 +15,7 @@ exports.getProfile = catchAsyncErrors(async (req, res, next) => {
     .populate("experience")
     .populate("education")
     .populate("handle")
-    .populate("user", "name avatar email date");
+    .populate("user", "name avatar email date _id");
   return res.status(200).json(profile);
 });
 exports.updateUploadedProfilePicture = catchAsyncErrors(

@@ -5,16 +5,17 @@ import { useAppDispatch } from "../../app/hooks"
 import socket from "../../socket"
 import { setConnectionState } from "../chats/chatsSlice"
 import useUserToast from "../common/useUserToast"
-import { ErrorNotification } from "../posts/interfaces"
-import { setDislike, setLike } from "../posts/postSlice"
+import { setUpdateFriendActiveStatus } from "../friends/friendsSlice"
+import { FriendActiveStatus } from "../friends/interface"
 import { NotificationsEntity } from "../notifications/interfaces"
 import {
   setAddFriendRequest,
   setAddNotification,
   setDeniedFriendRequest,
 } from "../notifications/notificationSlice"
-import { FriendActiveStatus } from "../friends/interface"
-import { setUpdateFriendActiveStatus } from "../friends/friendsSlice"
+import { ErrorNotification } from "../posts/interfaces"
+import { setDislike, setLike } from "../posts/postSlice"
+import { setProfileFriendShipStatus } from "../profile/profileSlice"
 
 export type WebsocketContextProps = {
   tryConnectingToServer: VoidFunction
@@ -31,6 +32,7 @@ export default function WebsocketContextProvider({
 }: WebsocketContextProviderProps) {
   const appDispatch = useAppDispatch()
   const { showToast } = useUserToast()
+
   useEffect(() => {
     socket.connect()
     socket.on("connect", () => {
@@ -59,7 +61,8 @@ export default function WebsocketContextProvider({
       appDispatch(setAddFriendRequest(data))
     })
     socket.on("friendRequest:accepted", (data) => {
-      showToast(data, false)
+      showToast(`${data.recipient.name} accepted your friend request`, false)
+      appDispatch(setProfileFriendShipStatus(data))
     })
     socket.on("friendRequest:cancelled", (data) => {
       appDispatch(setDeniedFriendRequest(data))
