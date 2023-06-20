@@ -4,6 +4,8 @@ const {
   createFriendRequest,
   getFriendRequests,
   getFriendRequestByUserAndFriendUserId,
+  getCurrentUserAllFriendsRepo,
+  findFriendRequestByIdOrError,
 } = require("../repository/friendRequestRepository")();
 const ErrorHandler = require("../../utils/errorhandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
@@ -79,8 +81,8 @@ exports.cancelFriendRequestByCurrentUser = catchAsyncErrors(
     if (!friendRequestId) {
       throw new ErrorHandler("PAYLOAD_ERROR", 400);
     }
-    const friendRequest = await FriendRequest.findById(friendRequestId);
-    if (!friendRequest || friendRequest.status !== "requested") {
+    const friendRequest = await findFriendRequestByIdOrError(friendRequestId);
+    if (friendRequest.status !== "requested") {
       throw new ErrorHandler("PAYLOAD_ERROR", 400);
     }
     await FriendRequest.findByIdAndDelete(friendRequestId, {
@@ -110,57 +112,6 @@ exports.getFriendRequestCurrentStatus = catchAsyncErrors(
 
 exports.getCurrentUserAllFriends = catchAsyncErrors(async (req, res, next) => {
   const userId = req.user._id;
-  const results = await FriendRequest.aggregate([
-    {
-      $match: {
-        $or: [{ requestor: userId }, { recipient: userId }],
-        status: "accepted",
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "requestor",
-        foreignField: "_id",
-        as: "requestor",
-      },
-    },
-    {
-      $lookup: {
-        from: "users",
-        localField: "recipient",
-        foreignField: "_id",
-        as: "recipient",
-      },
-    },
-    {
-      $unwind: "$requestor",
-    },
-    {
-      $unwind: "$recipient",
-    },
-    {
-      $project: {
-        user: {
-          $cond: {
-            if: { $eq: [userId, "$requestor._id"] },
-            then: "$recipient",
-            else: "$requestor",
-          },
-        },
-      },
-    },
-    {
-      $project: {
-        _id: "$user._id",
-        name: "$user.name",
-        email: "$user.email",
-        lastActive: "$user.lastActive",
-        isActiveNow: "$user.isActiveNow",
-        avatar: "$user.avatar",
-      },
-    },
-  ]);
-
-  return res.status(200).json(results);
+  const friends = await getCurrentUserAllFriendsRepo(userId);
+  return res.status(200).json(friends);
 });

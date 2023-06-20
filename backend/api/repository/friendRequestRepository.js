@@ -1,6 +1,73 @@
 const FriendRequest = require("../../models/FriendRequest");
 
 function friendRequestRepository() {
+  async function findFriendRequestByIdOrError(friendRequestId) {
+    if (typeof userId === "string") {
+      return null;
+    }
+    const friendRequest = await FriendRequest.findById(friendRequestId);
+    if (!friendRequest) {
+      throw new ErrorHandler("PAYLOAD_ERROR", 400);
+    }
+    return friendRequest;
+  }
+  async function getCurrentUserAllFriendsRepo(userId) {
+    if (typeof userId === "string") {
+      return null;
+    }
+    const results = await FriendRequest.aggregate([
+      {
+        $match: {
+          $or: [{ requestor: userId }, { recipient: userId }],
+          status: "accepted",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "requestor",
+          foreignField: "_id",
+          as: "requestor",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "recipient",
+          foreignField: "_id",
+          as: "recipient",
+        },
+      },
+      {
+        $unwind: "$requestor",
+      },
+      {
+        $unwind: "$recipient",
+      },
+      {
+        $project: {
+          user: {
+            $cond: {
+              if: { $eq: [userId, "$requestor._id"] },
+              then: "$recipient",
+              else: "$requestor",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: "$user._id",
+          name: "$user.name",
+          email: "$user.email",
+          lastActive: "$user.lastActive",
+          isActiveNow: "$user.isActiveNow",
+          avatar: "$user.avatar",
+        },
+      },
+    ]);
+    return results;
+  }
   async function createFriendRequest(friendRequestBody) {
     const friendRequest = new FriendRequest(friendRequestBody);
     await friendRequest.save();
@@ -33,6 +100,8 @@ function friendRequestRepository() {
     createFriendRequest,
     getFriendRequests,
     getFriendRequestByUserAndFriendUserId,
+    getCurrentUserAllFriendsRepo,
+    findFriendRequestByIdOrError,
   });
 }
 
