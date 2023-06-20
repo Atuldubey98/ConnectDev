@@ -1,11 +1,12 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { isAxiosError } from "axios"
+import { AppThunk } from "../../app/store"
+import { UpdateProfileBody } from "../profileEdit/interfaces"
 import {
   FriendRequest,
   FriendRequestWithRecipient,
-  FriendshipStatus,
-  IProfile,
+  IProfile
 } from "./interfaces"
-import { AppThunk } from "../../app/store"
 import {
   acceptFriendRequest,
   cancelFriendRequest,
@@ -17,8 +18,6 @@ import {
   updateProfileAvatar,
   uploadProfileAvatar,
 } from "./profileAPI"
-import { UpdateProfileBody } from "../profileEdit/interfaces"
-import { isAxiosError } from "axios"
 
 type State = {
   profileStatus: "loading" | "success" | "failure" | "idle"
