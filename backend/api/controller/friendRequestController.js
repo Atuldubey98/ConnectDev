@@ -107,22 +107,61 @@ exports.getFriendRequestCurrentStatus = catchAsyncErrors(
 
 exports.getCurrentUserAllFriends = catchAsyncErrors(async (req, res, next) => {
   const userId = req.user._id;
-  const friendRequests = await FriendRequest.find({
-    $or: [{ requestor: userId }, { recipient: userId }],
-    status: "accepted",
-  })
-    .populate({
-      path: "requestor",
-      select: "name email avatar _id",
-    })
-    .populate({
-      path: "recipient",
-      select: "name email avatar _id",
-    });
-  const friends = friendRequests.map((friendRequest) =>
-    friendRequest.requestor._id.toString() === userId.toString()
-      ? friendRequest.recipient
-      : friendRequest.requestor
-  );
-  return res.status(200).json(friends);
+  const results = await FriendRequest.aggregate([
+    {
+      $match: {
+        $or: [{ requestor: userId }, { recipient: userId }],
+        status: "accepted",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "requestor",
+        foreignField: "_id",
+        as: "requestor",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "recipient",
+        foreignField: "_id",
+        as: "recipient",
+      },
+    },
+    {
+      $unwind: "$requestor",
+    },
+    {
+      $unwind: "$recipient",
+    },
+    {
+      $project: {
+        user: {
+          $cond: {
+            if: { $eq: [userId, "$requestor._id"] },
+            then: "$recipient",
+            else: "$requestor",
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        _id: "$user._id",
+        name: "$user.name",
+        email: "$user.email",
+        lastActive: "$user.lastActive",
+        avatar: "$user.avatar",
+      },
+    },
+    {
+      $addFields: {
+        isActiveNow: false,
+      },
+    },
+  ]);
+
+  return res.status(200).json(results);
 });
