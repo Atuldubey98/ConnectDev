@@ -1,12 +1,14 @@
 import { ChangeEventHandler, useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import ActiveStatus from "../common/ActiveStatus"
+import ButtonWithIcon from "../common/ButtonWithIcon"
 import Input from "../common/Input"
-import LinkButton from "../common/LinkButton"
 import UserFriendDetail from "../notifications/UserFriendDetail"
 import "./FriendsPage.css"
-import { loadFriendsAction } from "./friendsSlice"
-import ActiveStatus from "../common/ActiveStatus"
+import { Friend, createContactAction, loadFriendsAction } from "./friendsSlice"
+import FriendRequest from "./FriendRequest"
+import { useNavigate } from "react-router"
 export default function FriendsPage() {
   const { status, friends: friendsList } = useAppSelector(
     (state) => state.friends,
@@ -20,8 +22,20 @@ export default function FriendsPage() {
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFilter(e.currentTarget.value)
   }
-
   const friends = friendsList || []
+  const filterFriends = (friend: Friend): boolean =>
+    friend.name.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) !==
+      -1 ||
+    friend.email.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) !==
+      -1 ||
+    filter === ""
+  const onMessageClick = (friend: Friend) => {
+    appDispatch(createContactAction(friend._id, navigateToChatForContact))
+  }
+  const navigate = useNavigate()
+  const navigateToChatForContact = (contactId: string) => {
+    navigate(`/chats/${contactId}`)
+  }
   return (
     <main className="friends__page">
       <div className="friends__wrapper">
@@ -38,28 +52,13 @@ export default function FriendsPage() {
           </form>
         </section>
         <ul className="friends">
-          {friends
-            .filter(
-              (friend) =>
-                friend.name
-                  .toLocaleLowerCase()
-                  .indexOf(filter.toLocaleLowerCase()) !== -1 ||
-                friend.email
-                  .toLocaleLowerCase()
-                  .indexOf(filter.toLocaleLowerCase()) !== -1 ||
-                filter === "",
-            )
-            .map((friend) => (
-              <li key={friend._id} className="friend__request">
-                <div className=" friend__active">
-                  <ActiveStatus isActiveNow={friend.isActiveNow} />
-                  <UserFriendDetail key={friend._id} user={friend} />
-                </div>
-                <LinkButton to={`/chats/${friend._id}`} label="Message">
-                  <AiOutlineSend />
-                </LinkButton>
-              </li>
-            ))}
+          {friends.filter(filterFriends).map((friend) => (
+            <FriendRequest
+              onMessageClick={onMessageClick}
+              key={friend._id}
+              friend={friend}
+            />
+          ))}
         </ul>
       </div>
     </main>

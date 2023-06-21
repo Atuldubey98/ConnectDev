@@ -1,9 +1,13 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
 import { UserWithActiveStatus } from "../posts/interfaces"
-import { loadFriends } from "./friendsAPI"
+import { createContact, loadFriends } from "./friendsAPI"
 import { FriendActiveStatus } from "./interface"
-type Friend = UserWithActiveStatus
+type Status = "loading" | "failure" | "success" | "idle"
+
+export interface Friend extends UserWithActiveStatus {
+  contactCreationStatus: Status
+}
 type Type = {
   status: "idle" | "loading" | "success" | "failure"
   friends: Friend[] | null
@@ -27,6 +31,24 @@ const friendsSlice = createSlice({
     setFriendsError: (state) => {
       state.status = "failure"
     },
+    setUpdateContactCreationStatus: (
+      state,
+      action: PayloadAction<{
+        contactCreationStatus: Status
+        friendId: string
+      }>,
+    ) => {
+      state.friends = state.friends
+        ? state.friends.map((friend) =>
+            friend._id === action.payload.friendId
+              ? {
+                  ...friend,
+                  contactCreationStatus: action.payload.contactCreationStatus,
+                }
+              : friend,
+          )
+        : null
+    },
     setUpdateFriendActiveStatus: (
       state,
       action: PayloadAction<FriendActiveStatus>,
@@ -46,7 +68,8 @@ export const {
   setFriendsError,
   setFriendsLoaded,
   setFriendsLoading,
-  setUpdateFriendActiveStatus
+  setUpdateFriendActiveStatus,
+  setUpdateContactCreationStatus,
 } = friendsSlice.actions
 
 export const loadFriendsAction = (): AppThunk => async (dispatch) => {
@@ -58,3 +81,34 @@ export const loadFriendsAction = (): AppThunk => async (dispatch) => {
     dispatch(setFriendsError())
   }
 }
+
+export const createContactAction =
+  (
+    recipientUserId: string,
+    navigateToChatForContact: (contactId: string) => void,
+  ): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(
+        setUpdateContactCreationStatus({
+          contactCreationStatus: "loading",
+          friendId: recipientUserId,
+        }),
+      )
+      const { data } = await createContact(recipientUserId)
+      dispatch(
+        setUpdateContactCreationStatus({
+          contactCreationStatus: "success",
+          friendId: recipientUserId,
+        }),
+      )
+      navigateToChatForContact(data._id)
+    } catch (error) {
+      dispatch(
+        setUpdateContactCreationStatus({
+          contactCreationStatus: "failure",
+          friendId: recipientUserId,
+        }),
+      )
+    }
+  }

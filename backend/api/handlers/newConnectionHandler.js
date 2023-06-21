@@ -8,6 +8,7 @@ const friendRequestHandler = require("./friendRequestHandler");
 const likePostHandler = require("./likePostHandler");
 const FriendRequest = require("../../models/FriendRequest");
 const User = require("../../models/User");
+const messageHandler = require("./messageHandler");
 
 function newConnectionHandler(io) {
   async function getCurrentUserFriends(userId) {
@@ -21,7 +22,9 @@ function newConnectionHandler(io) {
     socket.on("join", roomJoinHandler(socket));
     const { friendRequestSend, friendRequestAccept, friendRequestCancel } =
       friendRequestHandler(socket, io);
+    const { sendMessageHandler } = messageHandler(socket, io);
     socket.on("like", likePostHandler(socket, io));
+    socket.on("message:send", sendMessageHandler);
     socket.on("friendRequest:send", friendRequestSend);
     socket.on("friendRequest:accept", friendRequestAccept);
     socket.on("friendRequest:cancel", friendRequestCancel);
