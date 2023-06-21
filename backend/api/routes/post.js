@@ -16,18 +16,18 @@ const router = Router();
 
 router
   .post("/", isAuthenticated, savePost)
-  .get("/", isAuthenticated, getPost)
-  .delete("/", isAuthenticated, deleteSinglePostById);
+  .get("/:postId", isAuthenticated, getPost)
+  .delete("/:postId", isAuthenticated, deleteSinglePostById);
 router
-  .get("/all", isAuthenticated, getAllPosts)
-  .delete("/all", isAuthenticated, deletePostsById);
+  .get("/", isAuthenticated, getAllPosts)
+  .delete("/", isAuthenticated, deletePostsById);
 
 router.get("/search/:search", isAuthenticated, getAllPosts);
-router.post("/like", isAuthenticated, likeOrDislikePost);
+router.post("/:postId/like", isAuthenticated, likeOrDislikePost);
 
 router
-  .post("/comment", isAuthenticated, postComment)
-  .delete("/comment", isAuthenticated, deleteComment);
+  .post("/:postId/comment", isAuthenticated, postComment)
+  .delete("/:postId/comment/:commentId", isAuthenticated, deleteComment);
 
 router.get("/count/:userId", isAuthenticated, getCountofPostsByUser);
 module.exports = router;

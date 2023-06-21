@@ -25,7 +25,7 @@ exports.savePost = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
-  const post = await getPostById(req.query.postId);
+  const post = await getPostById(req.params.postId);
   return res.status(200).json(post);
 });
 
@@ -46,7 +46,7 @@ exports.deletePostsById = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
-  const { postId } = req.query;
+  const { postId } = req.params;
   await deleteCompletePost(postId);
   return res.status(204).json({
     status: true,
@@ -74,7 +74,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
-  const { postId } = req.body;
+  const { postId } = req.params;
   await findPostByIdOrError(postId);
   const like = await Likes.findOne({ post: postId, user: req.user._id });
   if (!like) {
@@ -90,12 +90,12 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.postComment = catchAsyncErrors(async (req, res, next) => {
-  const { postId, ...data } = req.body;
+  const postId = req.params.postId;
   await findPostByIdOrError(postId);
   const comment = await createNewCommentByPostId({
     user: req.user._id,
     post: postId,
-    ...data,
+    ...req.body,
   });
   await Post.updateOne(
     { _id: postId },
@@ -114,8 +114,8 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
-  const commentId = req.query.commentId || "";
-  const postId = req.query.postId || "";
+  const commentId = req.params.commentId || "";
+  const postId = req.params.postId || "";
   await findPostByIdOrError(postId);
   const comment = await Comments.findByIdAndRemove(commentId);
   if (!comment) {

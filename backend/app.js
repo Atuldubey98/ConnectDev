@@ -20,7 +20,7 @@ app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");
 });
 app.use("/api/users", user);
-app.use("/api/post", post);
+app.use("/api/posts", post);
 app.use("/api/profile", profile);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/friend-request", friendRequestRouter);
