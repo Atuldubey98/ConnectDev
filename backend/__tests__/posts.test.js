@@ -66,7 +66,7 @@ describe("posts", () => {
         expect(post).toHaveProperty("text", postPayload.text);
         expect(post).toHaveProperty("likes");
         expect(post).toHaveProperty("comments");
-        expect(post).toHaveProperty("user._id", "6470b79ef2e160172645515a");
+        expect(post).toHaveProperty("user._id", "6491fd4b99121efa0cbafca8");
         expect(post).toHaveProperty("user.name", "Atul Dubey");
         expect(post).toHaveProperty("user.email", "test@test.com");
         expect(post).toHaveProperty("color");
@@ -110,7 +110,7 @@ describe("posts", () => {
           .set("Cookie", cookies);
         const userIds = body.likes.map((like) => like.user._id);
         expect(userIds).toEqual(
-          expect.arrayContaining(["6470b79ef2e160172645515a"])
+          expect.arrayContaining(["6491fd4b99121efa0cbafca8"])
         );
         expect(statusCode).toBe(200);
       });
@@ -126,7 +126,7 @@ describe("posts", () => {
           .set("Cookie", cookies);
         const userIds = body.likes.map((like) => like.user._id);
         expect(userIds).toEqual(
-          expect.not.arrayContaining(["6470b79ef2e160172645515a"])
+          expect.not.arrayContaining(["6491fd4b99121efa0cbafca8"])
         );
         expect(statusCode).toBe(200);
       });

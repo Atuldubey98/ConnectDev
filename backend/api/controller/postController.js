@@ -8,8 +8,16 @@ const {
   sanitizeFilterUtil,
   getPaginationFilter,
 } = require("../../utils/sanitize");
-const { deleteCompletePost, createNewPost, getPostById } =
-  require("../repository/postRepository")();
+const {
+  deleteCompletePost,
+  createNewPost,
+  getPostById,
+  paginatePostsByQuery,
+  dislikeThePostById,
+  findPostByIdOrError,
+  likePostById,
+  createNewCommentByPostId,
+} = require("../repository/postRepository")();
 
 exports.savePost = catchAsyncErrors(async (req, res, next) => {
   const post = await createNewPost(req.body, req.user._id);
@@ -61,84 +69,21 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
             { title: { $regex: search, $options: "i" } },
           ],
         };
-  const postRes = await Post.paginate(query, {
-    page,
-    limit,
-    collation: {
-      locale: "en",
-    },
-    sort: {
-      createdAt: -1,
-    },
-    populate: [
-      {
-        path: "likes",
-        populate: {
-          path: "user",
-          select: "name email avatar",
-        },
-      },
-      {
-        path: "comments",
-        populate: {
-          path: "user",
-          select: "name email avatar",
-        },
-        sort: { createdAt: -1 },
-      },
-      {
-        path: "user",
-        select: "name email avatar",
-      },
-    ],
-    customLabels: {
-      totalDocs: "totalCount",
-      docs: "posts",
-      nextPage: "next",
-      prevPage: "prev",
-    },
-  });
-  return res.status(200).send(postRes);
+  const paginatedPosts = await paginatePostsByQuery(query, page, limit);
+  return res.status(200).send(paginatedPosts);
 });
 
 exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
   const { postId } = req.body;
-  if (!postId) {
-    next(new ErrorHandler("Post not found !", 400));
-    return;
-  }
-  const postById = await Post.findById(postId);
-  if (!postById) {
-    next(new ErrorHandler("Post not found !", 400));
-    return;
-  }
-
-  const likes = await Likes.findOne({ post: postId, user: req.user._id });
-  if (!likes) {
-    const like = new Likes({ user: req.user._id, post: postId });
-    await like.save();
-    await Post.updateOne(
-      { _id: postId },
-      {
-        $push: {
-          likes: like._id,
-        },
-      }
-    );
+  await findPostByIdOrError(postId);
+  const like = await Likes.findOne({ post: postId, user: req.user._id });
+  if (!like) {
+    await likePostById(postId, req.user._id);
     return res
       .status(200)
       .json({ status: true, message: "Post Liked", user: req.user });
   }
-
-  await Likes.deleteOne({ user: req.user._id, post: postId });
-  await Post.updateOne(
-    { _id: postId },
-    {
-      $pull: {
-        likes: likes._id,
-      },
-    }
-  );
+  await dislikeThePostById(postId, req.user._id, like._id);
   return res
     .status(200)
     .json({ status: false, message: "Post Disliked", user: req.user });
@@ -146,16 +91,12 @@ exports.likeOrDislikePost = catchAsyncErrors(async (req, res, next) => {
 
 exports.postComment = catchAsyncErrors(async (req, res, next) => {
   const { postId, ...data } = req.body;
-  if (!postId) {
-    return res.status(400).json({ status: false });
-  }
-  const postById = await Post.findById(postId);
-  if (!postById) {
-    return res.status(400).json({ status: false });
-  }
-  const comment = new Comments({ user: req.user._id, post: postId, ...data });
-  await comment.save();
-
+  await findPostByIdOrError(postId);
+  const comment = await createNewCommentByPostId({
+    user: req.user._id,
+    post: postId,
+    ...data,
+  });
   await Post.updateOne(
     { _id: postId },
     {
@@ -168,16 +109,14 @@ exports.postComment = catchAsyncErrors(async (req, res, next) => {
   return res.status(201).json({
     status: true,
     message: "Commented",
-    comment: { ...comment._doc, user: req.user },
+    comment,
   });
 });
 
 exports.deleteComment = catchAsyncErrors(async (req, res, next) => {
   const commentId = req.query.commentId || "";
   const postId = req.query.postId || "";
-  if (!commentId || !postId) {
-    return res.status(400).json({ status: false });
-  }
+  await findPostByIdOrError(postId);
   const comment = await Comments.findByIdAndRemove(commentId);
   if (!comment) {
     return res.status(400).json({ status: false });

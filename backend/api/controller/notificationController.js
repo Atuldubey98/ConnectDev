@@ -1,5 +1,4 @@
 const Notification = require("../../models/Notification");
-const ErrorHandler = require("../../utils/errorhandler");
 const {
   getPaginationFilter,
   getNotificationId,

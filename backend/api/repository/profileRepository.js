@@ -9,6 +9,21 @@ const cloudinary = require("../../config/cloudinary");
 const CloudinaryPhotosMeta = require("../../models/CloudinaryPhotosMeta");
 const User = require("../../models/User");
 function profileRepository() {
+  async function getFullProfileOrError(userId) {
+    if (!userId) {
+      return null;
+    }
+    const profile = await Profile.findOne({ user: userId })
+      .populate("skills")
+      .populate("experience")
+      .populate("education")
+      .populate("handle")
+      .populate("user", "name avatar email activeNow _id");
+    if (!profile) {
+      throw new ErrorHandler("PROFILE_NOT_FOUND", 400);
+    }
+    return profile;
+  }
   async function uploadProfilePhoto(file, userId) {
     const cloudinaryMeta = new CloudinaryPhotosMeta({
       contextId: userId,
@@ -103,6 +118,7 @@ function profileRepository() {
     createNewProfile,
     updateUploadedProfilePicture,
     uploadProfilePhoto,
+    getFullProfileOrError,
   });
 }
 

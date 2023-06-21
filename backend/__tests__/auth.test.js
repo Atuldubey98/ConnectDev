@@ -33,8 +33,8 @@ describe("auth", () => {
         cookies.push(...cookie);
         expect(statusCode).toBe(200);
         expect(body).toMatchObject({
-          _id: "6470b79ef2e160172645515a",
-          name: "Atul Dubey",
+          _id: "6491fd4b99121efa0cbafca8",
+          name: "AtulDubey",
           email: "test@test.com",
         });
       });
