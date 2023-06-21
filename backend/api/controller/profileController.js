@@ -1,4 +1,3 @@
-const Profile = require("../../models/Profile");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 const {
   createNewProfile,
