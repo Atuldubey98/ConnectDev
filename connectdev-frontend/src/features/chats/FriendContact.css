@@ -1,0 +1,7 @@
+.friend__contact {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+.friend__contactDescription > p {
+  font-size: 0.7rem;
+}

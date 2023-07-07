@@ -1,6 +1,13 @@
 .side__nav {
   position: absolute;
-  background-color: var(--secondary-color);
-  height: 100%;
-  width: min(100%, 240px);
+  z-index: 2;
+  height: 65svh;
+  background-color: var(--white-color);
+  border-right: 1px solid lightgray;
+  border-bottom: 1px solid lightgrey;
+  width: min(100%, 300px);
+  overflow-y: scroll;
+}
+.side__navContacts {
+  list-style: none;
 }

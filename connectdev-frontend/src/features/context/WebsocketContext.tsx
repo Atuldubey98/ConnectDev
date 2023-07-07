@@ -1,9 +1,12 @@
-import { createContext, useEffect } from "react"
+import { RefObject, createContext, useEffect, useRef } from "react"
 
 import React from "react"
 import { useAppDispatch } from "../../app/hooks"
 import socket from "../../socket"
-import { setConnectionState } from "../chats/chatsSlice"
+import {
+  setAddMessageToContactById,
+  setConnectionState,
+} from "../chats/chatsSlice"
 import useUserToast from "../common/useUserToast"
 import { setUpdateFriendActiveStatus } from "../friends/friendsSlice"
 import { FriendActiveStatus } from "../friends/interface"
@@ -67,8 +70,8 @@ export default function WebsocketContextProvider({
     socket.on("friendRequest:cancelled", (data) => {
       appDispatch(setDeniedFriendRequest(data))
     })
-    socket.on("private", (data) => {
-      console.log(data)
+    socket.on("message:received", (data) => {
+      appDispatch(setAddMessageToContactById(data))
     })
     socket.on("friendActive:status", (data: FriendActiveStatus) => {
       appDispatch(setUpdateFriendActiveStatus(data))
@@ -93,7 +96,10 @@ export default function WebsocketContextProvider({
   }
   return (
     <WebsocketContext.Provider
-      value={{ tryConnectingToServer, disconnectFromServer }}
+      value={{
+        tryConnectingToServer,
+        disconnectFromServer,
+      }}
     >
       {children}
     </WebsocketContext.Provider>

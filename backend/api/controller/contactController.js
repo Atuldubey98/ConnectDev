@@ -1,4 +1,4 @@
-const { getContactByRecipientId, createContact } =
+const { getContactByRecipientId, createContact, getContactsOfCurrentUser } =
   require("../repository/contactRepository")();
 exports.getExistingOrCreateContact = async (req, res, next) => {
   const recipientUserId = req.body.recipientUserId || "";
@@ -11,4 +11,9 @@ exports.getExistingOrCreateContact = async (req, res, next) => {
     });
   }
   return res.status(201).json(contact);
+};
+
+exports.getContactsOfCurrentUser = async (req, res, next) => {
+  const contacts = await getContactsOfCurrentUser(req.user._id);
+  return res.status(201).json(contacts);
 };

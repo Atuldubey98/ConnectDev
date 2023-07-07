@@ -8,6 +8,7 @@ export default function ChatTextFieldSendBtn(props: ChatTextFieldSendBtnProps) {
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     props.sendMessage(content)
+    setContent("")
   }
   const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setContent(e.currentTarget.value)
@@ -17,6 +18,7 @@ export default function ChatTextFieldSendBtn(props: ChatTextFieldSendBtnProps) {
       <textarea
         name="content"
         id="content"
+        minLength={1}
         value={content}
         onChange={onChange}
       />

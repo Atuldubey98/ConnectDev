@@ -1,5 +1,11 @@
 .chats__display {
   overflow: auto;
-  max-height: 70svh;
-  background-color: aquamarine;
+  height: 65svh;
+  border-inline: 2px solid lightgray;
+  border-bottom: 2px solid lightgrey;
+}
+.chats {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.5rem;
 }

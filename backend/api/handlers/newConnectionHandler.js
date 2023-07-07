@@ -9,7 +9,8 @@ const likePostHandler = require("./likePostHandler");
 const FriendRequest = require("../../models/FriendRequest");
 const User = require("../../models/User");
 const messageHandler = require("./messageHandler");
-
+const { getContactIdsOfCurrentUserToSubscribe } =
+  require("../repository/contactRepository")();
 function newConnectionHandler(io) {
   async function getCurrentUserFriends(userId) {
     const friends = await FriendRequest.find({
@@ -50,6 +51,11 @@ function newConnectionHandler(io) {
           isActiveNow: true,
         });
       });
+      let contactIds = await getContactIdsOfCurrentUserToSubscribe(
+        socket.user.id
+      );
+      contactIds = contactIds.map((contactId) => contactId._id);
+      contactIds.forEach((contactId) => socket.join(`contact:${contactId}`));
     } catch (error) {
       console.error(error);
     }

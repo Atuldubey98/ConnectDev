@@ -13,6 +13,7 @@ const {
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("./config/keys");
 const contactRouter = require("./api/routes/contact");
+const chatRouter = require("./api/routes/chat");
 const app = express();
 mongoose.connect(MONGO_URI);
 
@@ -26,6 +27,7 @@ app.use("/api/profile", profile);
 app.use("/api/notifications", notificationRouter);
 app.use("/api/friend-request", friendRequestRouter);
 app.use("/api/contacts", contactRouter);
+app.use("/api/chats", chatRouter);
 app.use("/api/friends", isAuthenticated, getCurrentUserAllFriends);
 app.use(errorMiddleware);
 

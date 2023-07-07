@@ -1,0 +1,25 @@
+.message {
+  display: flex;
+  align-items: center;
+}
+.message__me {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+.message__content {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--secondary-color);
+  color: var(--black-color);
+  max-width: 85%;
+}
+.message__me > .message__content {
+  color: var(--white-color);
+  background-color: var(--accent-color);
+}
+
+@media screen and (max-width: 560px) {
+  .message__content {
+    max-width: 95%;
+  }
+}

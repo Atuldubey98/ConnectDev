@@ -1,10 +1,9 @@
 import moment from "moment"
-import { LegacyRef, forwardRef, useEffect, useRef } from "react"
+import { LegacyRef, forwardRef } from "react"
 import { useAppSelector } from "../../app/hooks"
 import "./CommentsList.css"
 import { UserAvatarSmall } from "./CreatePost"
 import { IComment } from "./interfaces"
-import { useLocation } from "react-router-dom"
 type CommentsListProps = {
   comments: IComment[]
   maxHeight?: string
