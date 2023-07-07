@@ -19,7 +19,7 @@
   list-style: none;
   display: none;
   width: 100%;
-  background-color: var(--accent-color);
+  background-color: var(--secondary-color);
   border-bottom-left-radius: 0.3rem;
   border-bottom-right-radius: 0.3rem;
 }
@@ -33,7 +33,7 @@
 
 .profile__dropdownItems li {
   padding: 0.3rem;
-  color: var(--white-color);
+  color: var(--dominant-color);
   transition: all 300ms ease-in;
   font-weight: bold;
   cursor: pointer;

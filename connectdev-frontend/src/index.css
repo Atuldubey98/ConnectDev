@@ -10,16 +10,17 @@
 }
 
 :root {
-  --accent-color: #4242e7c7;
+  --black-color: black;
   --hover-color: #3131ebc7;
-  --secondary-color: rgb(240, 240, 240);
-  --white-color: white;
-  --red-color: red;
-  --shadow-color: #888888;
+  --danger-color: red;
+  --dominant-color: white;
+  --primary-color: #d4d0d0;
+  --secondary-color: #4242e7c7;
   --success-color: rgb(46, 133, 46);
 }
 
 body {
+  background-color: var(--dominant-color);
   font-family: "Poppins", sans-serif;
 }
 .d-flex-center {

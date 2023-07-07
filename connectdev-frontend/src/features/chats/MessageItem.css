@@ -9,13 +9,13 @@
 .message__content {
   border-radius: 0.5rem;
   padding: 0.5rem;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   color: var(--black-color);
   max-width: 85%;
 }
 .message__me > .message__content {
-  color: var(--white-color);
-  background-color: var(--accent-color);
+  color: var(--dominant-color);
+  background-color: var(--secondary-color);
 }
 
 @media screen and (max-width: 560px) {

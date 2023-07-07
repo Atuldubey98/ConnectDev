@@ -11,6 +11,7 @@ import {
   loadUserContactsAction,
 } from "./chatsSlice"
 import socket from "../../socket"
+import { Contact } from "./interface"
 export default function ChatsPage() {
   const [openNavChats, setOpenNavChats] = useState<boolean>(false)
   function toggleNavChats() {
@@ -38,12 +39,32 @@ export default function ChatsPage() {
     }
     socket.emit("message:send", { content, contactId: currentChattingContact })
   }
+  const currentContact: Contact | undefined = (contacts || []).find(
+    (contact) => contact._id === currentChattingContact,
+  )
   return (
     <main className="chat__screen">
       <FilterComp />
       <div className="chats__screen">
-        <ChatsScreenHeader heading="Chats" toggleNavChats={toggleNavChats} />
+        {currentContact ? (
+          <ChatsScreenHeader
+            heading={
+              currentContact.isGroup
+                ? currentContact.name || ""
+                : currentContact.members?.find(
+                    (member) => member._id !== user?._id,
+                  )?.name || ""
+            }
+            toggleNavChats={toggleNavChats}
+          />
+        ) : (
+          <ChatsScreenHeader
+            heading={"Chats"}
+            toggleNavChats={toggleNavChats}
+          />
+        )}
         <ChatsDisplay
+          currentContact={currentContact}
           openNavChats={openNavChats}
           contacts={contacts || []}
           user={user}

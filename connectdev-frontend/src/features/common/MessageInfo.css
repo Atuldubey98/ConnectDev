@@ -2,7 +2,7 @@
   font-weight: bold;
   border-radius: 0.3rem;
   padding: 0.5rem;
-  color: var(--white-color);
+  color: var(--dominant-color);
   text-align: center;
   background-color: var(--success-color);
 }

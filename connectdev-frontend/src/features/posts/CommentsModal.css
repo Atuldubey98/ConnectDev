@@ -34,6 +34,6 @@
 }
 .comments_footer button {
   margin-top: 0.5rem;
-  color: var(--white-color);
-  background-color: var(--accent-color);
+  color: var(--dominant-color);
+  background-color: var(--secondary-color);
 }

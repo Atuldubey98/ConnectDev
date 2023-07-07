@@ -11,8 +11,7 @@
 
 .chat__textField {
   padding: 0.5rem;
-  background-color: var(--secondary-color);
-  border: 3px solid var(--shadow-color);
+  border: 3px solid var(--primary-color);
   border-radius: 0 0 0.5rem 0.5rem;
   width: 100%;
   max-width: 768px;

@@ -82,7 +82,7 @@ export default function CreatePostForm({
 
         {newPostLoading ? (
           <div className="d-flex-center">
-            <BarLoader color="var(--accent-color)" width={200} />
+            <BarLoader color="var(--secondary-color)" width={200} />
           </div>
         ) : (
           <div className="create__btn d-flex-center">

@@ -76,7 +76,7 @@ export default function UpdateProfileAvatarModal(
         <li
           onClick={closeProfileModal}
           style={{
-            color: "red",
+            color: "var(--danger-color)",
           }}
         >
           Close

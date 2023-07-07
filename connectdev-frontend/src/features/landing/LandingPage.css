@@ -23,8 +23,8 @@
 .landing__btns a {
   text-decoration: none;
   font-weight: bold;
-  color: var(--white-color);
-  background-color: var(--accent-color);
+  color: var(--dominant-color);
+  background-color: var(--secondary-color);
   border-radius: 0.3rem;
   padding: 0.5rem;
   transition: all 300ms ease-in;

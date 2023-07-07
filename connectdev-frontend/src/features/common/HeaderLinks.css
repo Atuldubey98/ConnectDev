@@ -1,6 +1,6 @@
 .header__links > li > a {
   text-decoration: none;
-  color: var(--white-color);
+  color: var(--dominant-color);
 }
 .header__links li {
   padding: 0.8rem;

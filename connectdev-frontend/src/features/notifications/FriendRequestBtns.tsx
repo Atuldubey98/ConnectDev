@@ -10,7 +10,7 @@ export default function FriendRequestBtns(props: FriendRequestBtnsProps) {
   return (
     <div className="friend__requestBtns">
       <ButtonWithIcon onClick={props.onAcceptFriendRequest}>
-        <TiTickOutline color="green" />
+        <TiTickOutline color="var(--success-color)" />
         <span>Accept</span>
       </ButtonWithIcon>
       <ButtonWithIcon onClick={props.onCancelFriendRequest}>

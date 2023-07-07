@@ -54,7 +54,7 @@ export default function AuthForm({
       <Link to={link.to}>{link.label}</Link>
       <div className="d-flex-center">
         {loading ? (
-          <ClockLoader color="var(--accent-color)" />
+          <ClockLoader color="var(--secondary-color)" />
         ) : (
           <Button disabled={loading} label={buttonLabel} />
         )}

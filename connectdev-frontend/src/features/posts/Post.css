@@ -31,7 +31,7 @@
   }
 }
 .post__body {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   padding: 0.8rem;
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
@@ -41,7 +41,8 @@
   text-align: right;
 }
 .post__about p {
-  color: var(--shadow-color);
+  color: var(--black-color);
+  font-size: small;
 }
 .post__btns {
   padding: 0.8rem;
@@ -50,7 +51,7 @@
   justify-content: space-between;
   border-bottom-left-radius: 0.8rem;
   border-bottom-right-radius: 0.8rem;
-  border-top: 1px solid var(--secondary-color);
+  border-top: 1px solid var(--primary-color);
 }
 .post__btn {
   cursor: pointer;
@@ -60,7 +61,7 @@
   border-radius: 0.3rem;
 }
 .post__btn:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
 }
 .post__tags {
   padding: 0.3rem;
@@ -71,7 +72,7 @@
 }
 .post__tagsList span {
   border-radius: 0.3rem;
-  border: 1px solid var(--secondary-color);
+  border: 1px solid var(--primary-color);
   padding: 0.3rem;
 }
 .post__date {

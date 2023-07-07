@@ -5,5 +5,7 @@ export default function ActiveStatus({
 }: {
   isActiveNow: boolean
 }) {
-  return <TbCircleDotFilled color={isActiveNow ? "green" : "red"} />
+  return (
+    <TbCircleDotFilled color={isActiveNow ? "var(--success-color)" : "var(--danger-color)"} />
+  )
 }

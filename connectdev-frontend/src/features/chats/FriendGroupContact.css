@@ -1,12 +1,13 @@
 .friend__groupWrapper {
-  border: 2px solid var(--white-color);
+  border: 2px solid var(--dominant-color);
   padding-top: 0.8rem;
   cursor: pointer;
+  transition: all ease-in 300ms;
 }
 
 .friend__groupWrapper:hover {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
 }
 .contact__selected {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
 }

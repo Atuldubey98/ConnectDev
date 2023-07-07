@@ -166,20 +166,20 @@ function Like({
   return (
     <ButtonWithIcon onClick={createLikeOrDislike}>
       {liked ? (
-        <AiFillLike size={20} color="var(--accent-color)" />
+        <AiFillLike size={20} color="var(--secondary-color)" />
       ) : (
         <AiOutlineLike size={20} />
       )}
       <span
         style={{
-          color: liked ? "var(--accent-color)" : undefined,
+          color: liked ? "var(--secondary-color)" : undefined,
         }}
       >
         Like
       </span>
       <span
         style={{
-          color: liked ? "var(--accent-color)" : undefined,
+          color: liked ? "var(--secondary-color)" : undefined,
         }}
       >
         {totalLikes}

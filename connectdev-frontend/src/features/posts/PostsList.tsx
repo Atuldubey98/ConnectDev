@@ -48,7 +48,7 @@ export default function PostsList(props: PostListProps) {
         </div>
       )}
       <div className="d-flex-center">
-        <ClockLoader loading={loading} color="var(--accent-color)" />
+        <ClockLoader loading={loading} color="var(--secondary-color)" />
       </div>
     </section>
   )

@@ -71,7 +71,7 @@ export default function NotificationsPage() {
             <IoNotificationsOffSharp size={100} color={"brown"} />
             <h3>No Notifications for now</h3>
             <div className="d-flex-center">
-              <ClockLoader loading={loading} color="var(--accent-color)" />
+              <ClockLoader loading={loading} color="var(--secondary-color)" />
             </div>
           </div>
         ) : (

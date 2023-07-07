@@ -1,7 +1,7 @@
 .not__found {
   text-align: center;
   flex-direction: column;
-  min-height: 30rem;
+  min-height: 25rem;
 }
 .not__found > h1 {
   font-size: 3rem;

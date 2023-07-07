@@ -11,7 +11,7 @@ export default function ChatsScreenHeader(props: ChatsScreenHeaderProps) {
       <AiOutlineMenu
         onClick={props.toggleNavChats}
         className="cursor-pointer"
-        color="white"
+        color="var(--dominant-color)"
       />
       <h3>{heading} </h3>
     </section>

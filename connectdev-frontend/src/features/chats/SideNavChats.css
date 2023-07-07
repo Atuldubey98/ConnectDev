@@ -2,7 +2,7 @@
   position: absolute;
   z-index: 2;
   height: 65svh;
-  background-color: var(--white-color);
+  background-color: var(--dominant-color);
   border-right: 1px solid lightgray;
   border-bottom: 1px solid lightgrey;
   width: min(100%, 300px);

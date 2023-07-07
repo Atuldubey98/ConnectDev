@@ -8,7 +8,7 @@
 }
 
 .avatar__file {
-  color: green;
+  color: var(--success-color);
   font-weight: bold;
   position: relative;
   cursor: pointer;
@@ -18,7 +18,7 @@
   width: 100%;
   cursor: pointer;
   text-align: center;
-  border-top: 1px solid var(--shadow-color);
+  border-top: 1px solid var(--primary-color);
 }
 .avatar__btns > li > input {
   position: absolute;

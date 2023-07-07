@@ -9,7 +9,7 @@
 }
 .profile__email {
   font-size: 0.9rem;
-  color: var(--shadow-color);
+  color: var(--primary-color);
 }
 .common__profileList {
   list-style: none;

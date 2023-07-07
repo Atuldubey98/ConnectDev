@@ -1,5 +1,5 @@
 .chats__screenHeader {
-  background-color: var(--accent-color);
+  background-color: var(--secondary-color);
   padding: 0.5rem;
   display: flex;
   align-items: center;
@@ -8,5 +8,5 @@
 }
 .chats__screenHeader > h3 {
   text-align: center;
-  color: white;
+  color: var(--dominant-color);
 }

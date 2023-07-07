@@ -11,7 +11,7 @@
 .create__same > input {
   border: none;
   outline: none;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   border-radius: 0.3rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -37,13 +37,13 @@
   border: 0;
   padding: 0.3rem;
   font-size: 1rem;
-  background-color: var(--accent-color);
-  color: var(--white-color);
+  background-color: var(--secondary-color);
+  color: var(--dominant-color);
   border-radius: 0.5rem;
   outline: none;
 }
 .create__errTxt {
-  color: var(--red-color);
+  color: var(--danger-color);
 }
 .create__btn {
   gap: 0.8rem;
@@ -56,13 +56,13 @@
   gap: 0.8rem;
 }
 .tags__list span {
-  background-color: var(--white-color);
+  background-color: var(--dominant-color);
   border-radius: 0.3rem;
   padding: 0.5rem;
 }
 .create__btn > .submit {
-  background-color: var(--accent-color);
-  color: var(--white-color);
+  background-color: var(--secondary-color);
+  color: var(--dominant-color);
   transition: all 300ms ease-in;
 }
 .create__btn > .submit:hover {
@@ -70,5 +70,5 @@
 }
 .create__btn > .cancel {
   background-color: var(--black-color);
-  color: var(--white-color);
+  color: var(--dominant-color);
 }

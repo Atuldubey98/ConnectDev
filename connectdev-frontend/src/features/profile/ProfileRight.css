@@ -6,9 +6,9 @@
 .profile__right > div {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px double lightgray;
+  border: 1px double var(--secondary-color);
 }
 .profle__null > h3 {
-  color: lightgrey;
+  color: var(--secondary-color);
   text-align: center;
 }

@@ -6,8 +6,8 @@
   cursor: pointer;
 }
 .notification__read {
-  border: 1px solid var(--shadow-color);
-  background-color: white;
+  border: 1px solid var(--primary-color);
+  background-color: var(--dominant-color);
 }
 .notification > p:nth-child(1) {
   font-weight: 600;

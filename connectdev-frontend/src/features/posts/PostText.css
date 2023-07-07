@@ -1,5 +1,5 @@
 .post__text {
   text-decoration: none;
-  color: black;
+  color: var(--black-color);
   text-align: justify;
 }

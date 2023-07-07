@@ -1,4 +1,5 @@
 import { ChangeEventHandler, useState } from "react"
+import { AiOutlineSend } from "react-icons/ai"
 import "./ChatTextFieldSendBtn.css"
 type ChatTextFieldSendBtnProps = {
   sendMessage: (content: string) => void
@@ -22,7 +23,9 @@ export default function ChatTextFieldSendBtn(props: ChatTextFieldSendBtnProps) {
         value={content}
         onChange={onChange}
       />
-      <button className="btn">Send</button>
+      <button className="btn d-flex-center">
+        <span>Send</span> <AiOutlineSend size={22}/>
+      </button>
     </form>
   )
 }

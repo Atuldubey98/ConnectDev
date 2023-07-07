@@ -9,7 +9,7 @@ export default function FullLoading() {
       }}
       className="d-flex-center"
     >
-      <ClockLoader color="var(--accent-color)" />
+      <ClockLoader color="var(--secondary-color)" />
     </main>
   )
 }

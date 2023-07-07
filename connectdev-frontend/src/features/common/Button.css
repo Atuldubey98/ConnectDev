@@ -5,8 +5,8 @@
   font-size: 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  background-color: var(--accent-color);
-  color: var(--white-color);
+  background-color: var(--secondary-color);
+  color: var(--dominant-color);
   transition: all 300ms ease-in;
 }
 .primary__btn:hover {
