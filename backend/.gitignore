@@ -6,3 +6,5 @@
 /logs/error.log
 /logs/combined.log
 /data
+.env.development
+.env.test

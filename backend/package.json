@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "build": "npm i",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "NODE_ENV=production server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "test": "NODE_ENV=test mocha --exit"
   },
   "author": "",
   "license": "ISC",
@@ -33,7 +34,10 @@
   },
   "devDependencies": {
     "axios": "^1.4.0",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
     "lorem-ipsum": "^2.0.8",
+    "mocha": "^10.2.0",
     "nodemon": "^1.14.9"
   }
 }

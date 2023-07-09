@@ -1,5 +1,14 @@
 const dotenv = require("dotenv");
-dotenv.config();
+const path =
+  process.env.NODE_ENV == "development"
+    ? ".env.development"
+    : process.env.NODE_ENV == "test"
+    ? ".env.test"
+    : ".env";
+console.log(path);
+dotenv.config({
+  path,
+});
 module.exports = {
   MONGO_URI: process.env.MONGO_URI,
   SECRET_KEY: process.env.SECRET_KEY,
