@@ -1,3 +1,4 @@
+const { MONGO_URI } = require("./config/keys");
 const express = require("express");
 const errorMiddleware = require("./api/middlewares/error");
 const user = require("./api/routes/user");
@@ -11,7 +12,6 @@ const {
   getCurrentUserAllFriends,
 } = require("./api/controller/friendRequestController");
 const mongoose = require("mongoose");
-const { MONGO_URI } = require("./config/keys");
 const contactRouter = require("./api/routes/contact");
 const chatRouter = require("./api/routes/chat");
 const app = express();

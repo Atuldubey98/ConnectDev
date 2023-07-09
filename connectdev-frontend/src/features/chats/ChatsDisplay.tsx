@@ -1,12 +1,11 @@
-import { useContext, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
+import { MdEnhancedEncryption } from "react-icons/md"
+import Notfound from "../common/Notfound"
 import IUser from "../login/interfaces"
 import "./ChatsDisplay.css"
 import MessageItem from "./MessageItem"
 import SideNavChats from "./SideNavChats"
 import { Contact } from "./interface"
-import { WebsocketContext } from "../context/WebsocketContext"
-import Notfound from "../common/Notfound"
-import { MdEnhancedEncryption } from "react-icons/md"
 type ChatsDisplayProps = {
   openNavChats: boolean
   contacts: Contact[]
