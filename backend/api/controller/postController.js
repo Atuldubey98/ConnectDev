@@ -55,6 +55,7 @@ exports.deleteSinglePostById = catchAsyncErrors(async (req, res) => {
 });
 
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
+  const initial = performance.now();
   const { page, limit } = getPaginationFilter(req.query);
   const search = typeof req.params.search === "string" ? req.params.search : "";
 
@@ -70,6 +71,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
           ],
         };
   const paginatedPosts = await paginatePostsByQuery(query, page, limit);
+  console.log(performance.now() - initial);
   return res.status(200).send(paginatedPosts);
 });
 

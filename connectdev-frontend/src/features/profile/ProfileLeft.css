@@ -3,7 +3,7 @@
 }
 .profile__left {
   text-align: center;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
 }

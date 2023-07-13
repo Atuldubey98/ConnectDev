@@ -15,11 +15,21 @@ const mongoose = require("mongoose");
 const contactRouter = require("./api/routes/contact");
 const chatRouter = require("./api/routes/chat");
 const app = express();
+const path = require("path");
 mongoose.connect(MONGO_URI);
 
 loadMiddlewares(app);
+
 app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");
+});
+app.use(express.static(path.join(__dirname, "../connectdev-frontend/build")));
+app.use((req, res, next) => {
+  if (req.originalUrl.startsWith("/api")) {
+    next();
+  } else {
+    return res.sendFile(path.join(__dirname, "../connectdev-frontend/build/index.html"));
+  }
 });
 app.use("/api/users", user);
 app.use("/api/posts", post);

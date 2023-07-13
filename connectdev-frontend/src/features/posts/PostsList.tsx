@@ -1,55 +1,41 @@
-import { useEffect } from "react"
-import { BsFillFilePostFill } from "react-icons/bs"
-import { ClockLoader } from "react-spinners"
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import Notfound from "../common/Notfound"
-import useInfiniteScroll from "../common/useInfiniteScroll"
+import { Dispatch, SetStateAction, memo } from "react"
 import Post from "./Post"
 import "./PostsLists.css"
-import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
+import { IPost } from "./interfaces"
 export type PostListProps = {
-  search: string
-  user: string
+  posts: IPost[]
+  setElement: Dispatch<SetStateAction<HTMLDivElement | HTMLLIElement | null>>
+  justAddedPost: {
+    justAdded: boolean
+    postId: string
+  }
 }
-export default function PostsList(props: PostListProps) {
-  const { search, user } = props
-  const { status, postResponse, hasNextPost } = useAppSelector(
-    (state) => state.post,
-  )
-  const { page, setElement } = useInfiniteScroll(hasNextPost)
-  const appDispatch = useAppDispatch()
-  const loading = status === "loading"
-  useEffect(() => {
-    appDispatch(
-      search
-        ? searchPostByNameAction(page, search, user)
-        : getAllPosts(page, user),
-    )
-  }, [page, user])
-  useEffect(() => {
-    return () => {
-      appDispatch(setIdle())
-    }
-  }, [user])
+
+const PostsList = memo((props: PostListProps) => {
+  const { posts, setElement, justAddedPost } = props
+  const { justAdded, postId } = justAddedPost
   return (
     <section className="posts__list">
-      {postResponse && postResponse.posts && postResponse.posts.length === 0 ? (
-        <Notfound icon={BsFillFilePostFill} message="Posts Not found" />
-      ) : (
-        <div className="posts">
-          {postResponse?.posts &&
-            postResponse.posts.map((post, index) =>
-              index === postResponse.posts!.length - 2 ? (
-                <Post key={post._id} post={post} ref={setElement} />
-              ) : (
-                <Post key={post._id} post={post} />
-              ),
-            )}
-        </div>
-      )}
-      <div className="d-flex-center">
-        <ClockLoader loading={loading} color="var(--secondary-color)" />
+      <div className="posts">
+        {posts.map((post, index) =>
+          index === posts.length - 2 ? (
+            <Post
+              key={post._id}
+              post={post}
+              ref={setElement}
+              justAddedPostId={justAdded && post._id === postId}
+            />
+          ) : (
+            <Post
+              key={post._id}
+              post={post}
+              justAddedPostId={justAdded && post._id === postId}
+            />
+          ),
+        )}
       </div>
     </section>
   )
-}
+})
+
+export default PostsList

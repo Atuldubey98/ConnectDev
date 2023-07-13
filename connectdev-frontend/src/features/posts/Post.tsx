@@ -1,25 +1,23 @@
-import { LegacyRef, forwardRef, useCallback, useState } from "react"
-import { IPost } from "./interfaces"
+import classNames from "classnames"
+import moment from "moment"
+import { LegacyRef, forwardRef, memo, useCallback, useState } from "react"
 import "./Post.css"
 import PostBody from "./PostBody"
 import PostBtns from "./PostBtns"
 import PostTags from "./PostTags"
-import moment from "moment"
-import classNames from "classnames"
-import { useAppSelector } from "../../app/hooks"
+import { IPost } from "./interfaces"
 type PostProps = {
   post: IPost
+  justAddedPostId: boolean
 }
 
 const Post = forwardRef(
-  ({ post }: PostProps, ref: LegacyRef<HTMLDivElement>) => {
+  ({ post, justAddedPostId }: PostProps, ref: LegacyRef<HTMLDivElement>) => {
     const [beingDeleted, setBeingDelete] = useState<boolean>(false)
-    const { justAddedPost } = useAppSelector((state) => state.ui)
-    const { justAdded, postId } = justAddedPost
+
     function onSetBeingDeleted() {
       setBeingDelete(!beingDeleted)
     }
-    const justAddedPostId = justAdded && post._id === postId
     const callbackOnDelete = useCallback(onSetBeingDeleted, [])
 
     return (
@@ -46,4 +44,4 @@ const Post = forwardRef(
     )
   },
 )
-export default Post
+export default memo(Post)

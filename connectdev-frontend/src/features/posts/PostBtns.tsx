@@ -8,6 +8,8 @@ import { toggleCommentsModal, toggleCommentsModalPost } from "../ui/uiSlice"
 import { IPost, LikeNotificationPayload } from "./interfaces"
 import { deletePostAction, dolikeorDislikePost } from "./postSlice"
 import useUserToast from "../common/useUserToast"
+import { memo } from "react"
+import { IconType } from "react-icons"
 
 type PostBtnsProps = {
   post: IPost
@@ -39,7 +41,9 @@ export default function PostBtns({ post, onDelete }: PostBtnsProps) {
     <div className="post__btns">
       <div
         onClick={() =>
-          appDispatch(dolikeorDislikePost(postId, sendLikeNotification, showToast))
+          appDispatch(
+            dolikeorDislikePost(postId, sendLikeNotification, showToast),
+          )
         }
         className="post__btn d-flex-center"
       >
@@ -51,15 +55,28 @@ export default function PostBtns({ post, onDelete }: PostBtnsProps) {
         )}
       </div>
       {user?._id === postUser._id ? (
-        <div onClick={onDeleteClick} className="post__btn d-flex-center">
-          <MdDelete />
-          <span>Delete</span>
-        </div>
+        <PostBtn onClick={onDeleteClick} Icon={MdDelete} text={"Delete"} />
       ) : null}
-      <div onClick={onCommentsIconClick} className="post__btn d-flex-center">
-        <span>{comments?.length}</span>
-        <FaRegCommentAlt size={20} />
-      </div>
+      <PostBtn
+        onClick={onCommentsIconClick}
+        text={comments?.length.toString() || "0"}
+        Icon={FaRegCommentAlt}
+      />
     </div>
   )
 }
+
+type PostBtnProps = {
+  text: string
+  Icon: IconType
+  onClick: VoidFunction
+}
+const PostBtn = memo((props: PostBtnProps) => {
+  const { Icon } = props
+  return (
+    <div onClick={props.onClick} className="post__btn d-flex-center">
+      <Icon size={20} />
+      <span>{props.text}</span>
+    </div>
+  )
+})

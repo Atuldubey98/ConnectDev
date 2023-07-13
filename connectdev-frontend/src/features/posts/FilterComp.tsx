@@ -2,7 +2,8 @@ import { GoSearch } from "react-icons/go"
 import "./FilterComp.css"
 import useSearchForm from "./useSearchForm"
 import { useParams } from "react-router-dom"
-export default function FilterComp() {
+import { memo } from "react"
+function FilterComponent() {
   const { searchRef, large, onSubmit } = useSearchForm()
   const { search } = useParams()
   return (
@@ -26,3 +27,5 @@ export default function FilterComp() {
     </section>
   )
 }
+const FilterComp = memo(FilterComponent)
+export default FilterComp

@@ -46,6 +46,25 @@ export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
+    setSuccess: (state, action: PayloadAction<IPostResponse>) => {
+      state.status = "success"
+      state.postResponse = state.postResponse
+        ? {
+            ...action.payload,
+            posts: [
+              ...(state.postResponse.posts || []),
+              ...(action.payload.posts || []),
+            ],
+          }
+        : action.payload
+      state.hasNextPost = action.payload.hasNextPage
+    },
+    setLoading: (state) => {
+      state.status = "loading"
+    },
+    setFailed: (state) => {
+      state.status = "failed"
+    },
     setSiglePostLoading: (state) => {
       state.singlePostStatus = "loading"
     },
@@ -121,24 +140,6 @@ export const postSlice = createSlice({
       }
     },
 
-    setLoading: (state) => {
-      state.status = "loading"
-    },
-    setFailed: (state) => {
-      state.status = "failed"
-    },
-    setSuccess: (state, action: PayloadAction<IPostResponse>) => {
-      state.status = "success"
-      if (state.postResponse?.posts && action.payload.posts) {
-        state.postResponse = {
-          ...action.payload,
-          posts: [...state.postResponse.posts, ...action.payload.posts],
-        }
-      } else {
-        state.postResponse = action.payload
-      }
-      state.hasNextPost = action.payload.hasNextPage
-    },
     setLike: (state, action: PayloadAction<ILikes>) => {
       if (state.postResponse && state.postResponse.posts) {
         state.postResponse.posts = state.postResponse!.posts?.map((post) =>

@@ -3,14 +3,24 @@ const { APP_URL } = require("../../config/keys");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
-
+const compression = require("compression");
 function loadMiddlewares(app) {
+  app.use(compression({ filter: shouldCompress }));
+
+  function shouldCompress(req, res) {
+    if (req.headers["x-no-compression"]) {
+      return false;
+    }
+    return compression.filter(req, res);
+  }
   app.use(morgan("combined"));
   const corsOptions = {
     origin: function (origin, callback) {
       if (
         !origin ||
-        [APP_URL, "http://192.168.1.15:5173"].indexOf(origin) !== -1
+        [APP_URL, "http://192.168.1.15:5173", "http://localhost:9000"].indexOf(
+          origin
+        ) !== -1
       ) {
         callback(null, true);
       } else {
