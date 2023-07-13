@@ -23,12 +23,18 @@ loadMiddlewares(app);
 app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");
 });
-app.use(express.static(path.join(__dirname, "../connectdev-frontend/build")));
+app.use(
+  express.static(path.join(__dirname, "../connectdev-frontend/build"), {
+    maxAge: "1d",
+  })
+);
 app.use((req, res, next) => {
   if (req.originalUrl.startsWith("/api")) {
     next();
   } else {
-    return res.sendFile(path.join(__dirname, "../connectdev-frontend/build/index.html"));
+    return res.sendFile(
+      path.join(__dirname, "../connectdev-frontend/build/index.html")
+    );
   }
 });
 app.use("/api/users", user);

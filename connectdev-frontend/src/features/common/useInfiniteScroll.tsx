@@ -4,7 +4,7 @@ export default function useInfiniteScroll(hasNext: boolean) {
   const [element, setElement] = useState<HTMLDivElement | null | HTMLLIElement>(
     null,
   )
-  
+
   const [page, setPage] = useState<number>(1)
   const hasNextRef = useRef(hasNext)
 
@@ -13,8 +13,7 @@ export default function useInfiniteScroll(hasNext: boolean) {
       (entries: IntersectionObserverEntry[]) => {
         const first = entries[0]
         if (first.isIntersecting && hasNextRef.current) {
-          setPage((p) => p + 1);
-          console.log(hasNextRef.current);
+          setPage((p) => p + 1)
         }
       },
       {

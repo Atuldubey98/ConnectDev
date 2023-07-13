@@ -64,11 +64,10 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
     search.length === 0
       ? { ...filter }
       : {
-          ...filter,
-          $or: [
-            { text: { $regex: search, $options: "i" } },
-            { title: { $regex: search, $options: "i" } },
-          ],
+          $text: {
+            $search: search,
+            $caseSensitive: false,
+          },
         };
   const paginatedPosts = await paginatePostsByQuery(query, page, limit);
   console.log(performance.now() - initial);

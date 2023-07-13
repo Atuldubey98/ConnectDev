@@ -96,12 +96,20 @@ function friendRequestRepository() {
     });
     return request;
   }
+  async function getCurrentUserFriends(userId) {
+    const friends = await FriendRequest.find({
+      $or: [{ requestor: userId }, { recipient: userId }],
+      status: "accepted",
+    }).select("_id");
+    return friends;
+  }
   return Object.freeze({
     createFriendRequest,
     getFriendRequests,
     getFriendRequestByUserAndFriendUserId,
     getCurrentUserAllFriendsRepo,
     findFriendRequestByIdOrError,
+    getCurrentUserFriends,
   });
 }
 

@@ -1,4 +1,4 @@
-import { RefObject, createContext, useEffect, useRef } from "react"
+import { createContext, useEffect } from "react"
 
 import React from "react"
 import { useAppDispatch } from "../../app/hooks"

@@ -3,6 +3,8 @@
   margin: auto;
   justify-content: flex-start;
   gap: 1rem;
+  display: block;
+  min-height: 40svh;
   margin-block: 0.4rem;
   border-bottom: 1px dashed lightgrey;
   padding-block: 0.4rem;

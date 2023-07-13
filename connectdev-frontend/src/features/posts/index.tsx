@@ -48,7 +48,11 @@ export default function PostsPage() {
           <Notfound icon={BsFillFilePostFill} message="Posts Not found" />
         )
       ) : (
-        <PostsList posts={posts} setElement={setElement} justAddedPost={justAddedPost} />
+        <PostsList
+          posts={posts}
+          setElement={setElement}
+          justAddedPost={justAddedPost}
+        />
       )}
       <div className="d-flex-center">
         <ClockLoader loading={loading} color="var(--secondary-color)" />

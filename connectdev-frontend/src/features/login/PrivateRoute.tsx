@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../../app/hooks";
-import { loadUser } from "./loginSlice";
+import React, { useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { loadUser } from "./loginSlice"
+import FullLoading from "../common/FullLoading"
 
 interface PrivateRouteProps {
   children: React.ReactNode
@@ -8,12 +9,13 @@ interface PrivateRouteProps {
 export default function PrivateRoute({
   children,
 }: PrivateRouteProps): JSX.Element {
-  const [loading, setLoading] = useState<boolean>(true);
-  
+  const [loading, setLoading] = useState<boolean>(true)
+  const { user } = useAppSelector((state) => state.login)
   const appDispatch = useAppDispatch()
   useEffect(() => {
-      appDispatch(loadUser())
-      setLoading(false);
+    appDispatch(loadUser())
+    setLoading(false)
   }, [])
-  return loading ? <></> : <>{children}</>
+
+  return loading || !user ? <FullLoading /> : <>{children}</>
 }

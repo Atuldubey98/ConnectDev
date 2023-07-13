@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom"
 import App from "./App"
 import { store } from "./app/store"
 import WebsocketContextProvider from "./features/context/WebsocketContext"
-import "./webvitals"
 import "./index.css"
 Modal.setAppElement("#root")
 

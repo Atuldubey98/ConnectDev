@@ -6,19 +6,13 @@ const roomJoinHandler = require("./roomJoinHandler");
 const disconnectHandler = require("./disconnectHandler");
 const friendRequestHandler = require("./friendRequestHandler");
 const likePostHandler = require("./likePostHandler");
-const FriendRequest = require("../../models/FriendRequest");
 const User = require("../../models/User");
 const messageHandler = require("./messageHandler");
 const { getContactIdsOfCurrentUserToSubscribe } =
   require("../repository/contactRepository")();
+const { getCurrentUserFriends } =
+  require("../repository/friendRequestRepository")();
 function newConnectionHandler(io) {
-  async function getCurrentUserFriends(userId) {
-    const friends = await FriendRequest.find({
-      $or: [{ requestor: userId }, { recipient: userId }],
-      status: "accepted",
-    }).select("_id");
-    return friends;
-  }
   return async (socket) => {
     socket.on("join", roomJoinHandler(socket));
     const { friendRequestSend, friendRequestAccept, friendRequestCancel } =

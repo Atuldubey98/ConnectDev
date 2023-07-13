@@ -8,13 +8,9 @@ import { IoCloseOutline } from "react-icons/io5"
 import { SlTag } from "react-icons/sl"
 type CreatePostFormProps = {
   user: IUser | null
-  toggleOpen: () => void
 }
 
-export default function CreatePostForm({
-  user,
-  toggleOpen,
-}: CreatePostFormProps) {
+export default function CreatePostForm({ user }: CreatePostFormProps) {
   const {
     onChangeInput,
     state,
@@ -30,7 +26,7 @@ export default function CreatePostForm({
       <form onSubmit={onSubmit} className="create__postForm">
         <div className="create__postUser d-flex-center">
           <UserAvatarSmall avatar={user?.avatar} name={user ? user.name : ""} />
-          <p>{user?.name}</p>
+          <p>Create a new post</p>
         </div>
         <input
           className="create__same"
@@ -88,9 +84,6 @@ export default function CreatePostForm({
           <div className="create__btn d-flex-center">
             <button type="submit" className="submit btn">
               Post
-            </button>
-            <button type="button" onClick={toggleOpen} className="cancel btn">
-              Cancel
             </button>
           </div>
         )}

@@ -1,14 +1,10 @@
 import { ChangeEventHandler, useEffect, useState } from "react"
-import { AiOutlineSend } from "react-icons/ai"
+import { useNavigate } from "react-router"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import ActiveStatus from "../common/ActiveStatus"
-import ButtonWithIcon from "../common/ButtonWithIcon"
 import Input from "../common/Input"
-import UserFriendDetail from "../notifications/UserFriendDetail"
+import FriendRequest from "./FriendRequest"
 import "./FriendsPage.css"
 import { Friend, createContactAction, loadFriendsAction } from "./friendsSlice"
-import FriendRequest from "./FriendRequest"
-import { useNavigate } from "react-router"
 export default function FriendsPage() {
   const { status, friends: friendsList } = useAppSelector(
     (state) => state.friends,

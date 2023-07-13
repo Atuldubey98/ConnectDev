@@ -1,8 +1,7 @@
 .create__postForm {
   display: grid;
   width: 100%;
-  gap: 0.2rem;
-  animation: slideIn 100ms ease-in forwards;
+  gap: 0.5rem;
 }
 .create__form {
   width: 100%;
