@@ -6,12 +6,9 @@ const expect = chai.expect;
 const agent = chai.request.agent(app);
 const User = require("../models/User");
 before(async () => {
-  console.log("Logged");
   await User.deleteMany({});
 });
-after(async () => {
-  await User.deleteMany({});
-});
+
 describe("Authentication & Authorization", () => {
   describe("Register the user in the database", () => {
     describe("If name or email address is not provided", () => {
@@ -71,6 +68,40 @@ describe("Authentication & Authorization", () => {
         });
         expect(response.status).to.be.equal(200);
         expect(response).to.have.cookie("token");
+      });
+    });
+  });
+  describe("Authenticated requests", () => {
+    describe("if user has not logged in", () => {
+      it("should return 401", async () => {
+        const response = await agent.get("/api/users");
+        expect(response.status).to.be.equal(401);
+      });
+    });
+    describe("if user is logged in", () => {
+      let token;
+      before(async () => {
+        const response = await agent.post("/api/users/login").send({
+          email: "atuldubey017@gmail.com",
+          password: "123456789",
+        });
+        token = response.headers["set-cookie"];
+      });
+      describe("get the the current user", () => {
+        it("should return 200 and the user logged in", async () => {
+          const response = await agent.get("/api/users").set("Cookie", token);
+          expect(response.status).to.be.equal(200);
+          expect(response.body.email).to.be.equal("atuldubey017@gmail.com");
+          expect(response.body).to.have.property("_id").that.is.a("string");
+        });
+      });
+      describe("get the the current user", () => {
+        it("should return 200 and the user logged in", async () => {
+          const response = await agent
+            .get("/api/users/search/Atul")
+            .set("Cookie", token);
+          expect(response.body.users).that.is.a("array");
+        });
       });
     });
   });

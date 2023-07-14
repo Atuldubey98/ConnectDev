@@ -7,7 +7,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   const { password, ...others } = req.body;
   const user = new User({
     ...others,
-    password: await bcryptjs.hash(password, 12),
+    password: await bcryptjs.hash(password, await bcryptjs.genSalt(8)),
   });
   await user.save();
   return res.status(201).json({ status: true, message: "User created" });
@@ -45,7 +45,6 @@ exports.getCurrentUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = req.user;
   return res.status(200).json(user);
 });
-
 
 exports.searchUser = catchAsyncErrors(async (req, res, next) => {
   const { limit, page } = getPaginationFilter(req.query);
