@@ -1,0 +1,16 @@
+{
+  "name": "connectdev",
+  "version": "1.0.0",
+  "description": "Basic social media application with one to one chat functionality.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd connectdev-frontend && npm i && npm run build",
+    "build": "npm run build:backend && npm run build:frontend",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

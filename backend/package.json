@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "npm i",
-    "start": "NODE_ENV=production server.js",
+    "start": "NODE_ENV=production node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
     "test": "NODE_ENV=test mocha --exit"
   },
