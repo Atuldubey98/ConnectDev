@@ -1,11 +1,10 @@
 const dotenv = require("dotenv");
 const path =
   process.env.NODE_ENV == "development"
-    ? ".env.development"
+    ? "../.env.development"
     : process.env.NODE_ENV == "test"
-    ? ".env.test"
-    : ".env";
-console.log(path);
+    ? "../.env.test"
+    : "../.env";
 dotenv.config({
   path,
 });
