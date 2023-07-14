@@ -1,8 +1,8 @@
-import instance, { baseURL } from "../../axios"
+import instance from "../../axios"
 
 export async function login(email: string, password: string) {
   try {
-    return instance.post(baseURL + "/api/users/login", {
+    return instance.post("/api/users/login", {
       email,
       password,
     })
