@@ -1,5 +1,5 @@
 const cors = require("cors");
-const { APP_URL } = require("../../config/keys");
+const { VITE_APP_URL } = require("../../config/keys");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -18,7 +18,7 @@ function loadMiddlewares(app) {
     origin: function (origin, callback) {
       if (
         !origin ||
-        [APP_URL, "http://192.168.1.15:5173", "http://localhost:9000"].indexOf(
+        [VITE_APP_URL, "http://192.168.1.15:5173", "http://localhost:9000"].indexOf(
           origin
         ) !== -1
       ) {
