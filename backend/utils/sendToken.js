@@ -5,7 +5,7 @@ const sendToken = async (user, statusCode, res) => {
   const options = {
     httpOnly: true,
     sameSite: "strict",
-    maxAge : 3600000,
+    maxAge: 604_800_000,
     secure: NODE_ENV !== "development",
   };
   const { email, _id, name } = user;

@@ -6,7 +6,7 @@
 .profile__right > div {
   padding: 0.5rem;
   border-radius: 0.5rem;
-  border: 1px double var(--secondary-color);
+  border: 1px double var(--primary-color);
 }
 .profle__null > h3 {
   color: var(--secondary-color);

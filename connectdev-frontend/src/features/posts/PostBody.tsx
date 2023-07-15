@@ -1,10 +1,7 @@
-import { Link } from "react-router-dom"
-import TextTruncate from "react-text-truncate"
-import { IUserDetails } from "./interfaces"
-import PostTitle from "./PostTitle"
 import PostAuthor from "./PostAuthor"
-import moment from "moment"
 import PostText from "./PostText"
+import PostTitle from "./PostTitle"
+import { IUserDetails } from "./interfaces"
 
 type PostBodyProps = {
   text: string

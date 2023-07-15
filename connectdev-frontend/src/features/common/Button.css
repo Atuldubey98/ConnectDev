@@ -8,8 +8,8 @@
   background-color: var(--secondary-color);
   color: var(--dominant-color);
   transition: all 300ms ease-in;
+  font-weight: bold;
 }
 .primary__btn:hover {
-  opacity: 0.9;
-  outline: 1px solid grey;
+  opacity: 0.85;
 }

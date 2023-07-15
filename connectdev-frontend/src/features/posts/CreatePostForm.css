@@ -6,6 +6,9 @@
 .create__form {
   width: 100%;
 }
+.create__postUser > p {
+  font-weight: 600;
+}
 .create__postForm > .create__same,
 .create__same > input {
   border: none;
@@ -44,9 +47,7 @@
 .create__errTxt {
   color: var(--danger-color);
 }
-.create__btn {
-  gap: 0.8rem;
-}
+
 .tags__list {
   display: flex;
   align-items: center;

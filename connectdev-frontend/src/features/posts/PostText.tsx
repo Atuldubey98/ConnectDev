@@ -1,26 +1,19 @@
-import { memo } from "react"
-import "./PostText.css"
 import { Link } from "react-router-dom"
-import TextTruncate from "react-text-truncate"
+import "./PostText.css"
 type PostTextProps = {
   postId: string
   text: string
   numberOfLines?: number
 }
 
-const PostText = memo((props: PostTextProps) => {
+const PostText = (props: PostTextProps) => {
   const { postId, text, numberOfLines } = props
   const to: string = `/posts/${postId}`
   return (
     <Link className="post__text" to={to}>
-      <TextTruncate
-        text={text}
-        element={"p"}
-        truncateText="..."
-        line={numberOfLines || 5}
-      />
+      <p className="text-truncate-6">{text}</p>
     </Link>
   )
-})
+}
 
 export default PostText

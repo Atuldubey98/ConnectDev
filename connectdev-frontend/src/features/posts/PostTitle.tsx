@@ -1,15 +1,10 @@
-import { memo } from "react"
-import TextTruncate from "react-text-truncate"
-
 type PostTitleProps = {
   title: string
 }
 
-const PostTitle = memo((props: PostTitleProps) => {
+const PostTitle = (props: PostTitleProps) => {
   const { title } = props
-  return (
-    <TextTruncate text={title} element={"h3"} truncateText="..." line={2} />
-  )
-})
+  return <h3 className="text-truncate-2">{title}</h3>
+}
 
 export default PostTitle

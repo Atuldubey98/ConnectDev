@@ -25,7 +25,7 @@ app.get("/api/health", (req, res) => {
 });
 app.use(
   express.static(path.join(__dirname, "../connectdev-frontend/build"), {
-    maxAge: "1d",
+    maxAge: "1y",
   })
 );
 app.use((req, res, next) => {

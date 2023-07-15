@@ -1,11 +1,12 @@
+import { IoCloseOutline } from "react-icons/io5"
+import { SlTag } from "react-icons/sl"
 import { BarLoader } from "react-spinners"
 import { useAppSelector } from "../../app/hooks"
+import Button from "../common/Button"
 import IUser from "../login/interfaces"
 import { UserAvatarSmall } from "./CreatePost"
 import "./CreatePostForm.css"
 import useNewPost from "./useNewPost"
-import { IoCloseOutline } from "react-icons/io5"
-import { SlTag } from "react-icons/sl"
 type CreatePostFormProps = {
   user: IUser | null
 }
@@ -66,6 +67,7 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
             placeholder="Tag"
             name="tag"
           />
+
           <button
             type="button"
             onClick={onAddTag}
@@ -82,9 +84,7 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
           </div>
         ) : (
           <div className="create__btn d-flex-center">
-            <button type="submit" className="submit btn">
-              Post
-            </button>
+            <Button label="Post" />
           </div>
         )}
       </form>

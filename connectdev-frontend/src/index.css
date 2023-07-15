@@ -13,10 +13,21 @@
   --danger-color: red;
   --dominant-color: white;
   --primary-color: #d4d0d0;
-  --secondary-color: #4242e7c7;
+  --secondary-color: rgb(58, 50, 113);
   --success-color: rgb(46, 133, 46);
 }
-
+.text-truncate-6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 6; /* Number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Number of lines to show */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 body {
   background-color: var(--dominant-color);
   font-family: "Poppins", sans-serif;
