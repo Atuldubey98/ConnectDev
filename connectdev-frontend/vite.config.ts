@@ -1,8 +1,7 @@
 import { defineConfig } from "vitest/config"
 import react from "@vitejs/plugin-react"
-import { splitVendorChunkPlugin } from "vite"
 export default defineConfig({
-  plugins: [react(), splitVendorChunkPlugin()],
+  plugins: [react()],
   envDir: "../.env",
   server: {
     open: true,
@@ -10,6 +9,7 @@ export default defineConfig({
   },
   build: {
     outDir: "build",
+    manifest: true,
     sourcemap: true,
     cssMinify: true,
   },

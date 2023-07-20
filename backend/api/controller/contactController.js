@@ -15,5 +15,5 @@ exports.getExistingOrCreateContact = async (req, res, next) => {
 
 exports.getContactsOfCurrentUser = async (req, res, next) => {
   const contacts = await getContactsOfCurrentUser(req.user._id);
-  return res.status(201).json(contacts);
+  return res.status(200).json(contacts);
 };

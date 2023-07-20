@@ -29,7 +29,9 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
       .status(401)
       .json({ status: false, message: "User not authenticated" });
   }
+  
   sendToken(user, 200, res);
+  
 });
 
 exports.logoutUser = catchAsyncErrors(async (req, res, next) => {

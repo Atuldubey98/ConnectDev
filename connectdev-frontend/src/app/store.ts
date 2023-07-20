@@ -1,13 +1,13 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit"
-import registerReducer from "../features/register/registerSlice"
-import loginReducer from "../features/login/loginSlice"
-import postReducer from "../features/posts/postSlice"
-import uiReducer from "../features/ui/uiSlice"
-import profileReducer from "../features/profile/profileSlice"
-import searchReducer from "../features/search/searchSlice"
-import notificationRedcuer from "../features/notifications/notificationSlice"
+import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit"
 import chatsReducer from "../features/chats/chatsSlice"
 import friendsReducer from "../features/friends/friendsSlice"
+import loginReducer from "../features/login/loginSlice"
+import notificationRedcuer from "../features/notifications/notificationSlice"
+import postReducer from "../features/posts/postSlice"
+import profileReducer from "../features/profile/profileSlice"
+import registerReducer from "../features/register/registerSlice"
+import searchReducer from "../features/search/searchSlice"
+import uiReducer from "../features/ui/uiSlice"
 export const store = configureStore({
   reducer: {
     register: registerReducer,

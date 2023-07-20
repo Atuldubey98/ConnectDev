@@ -19,7 +19,9 @@ import {
 import { ErrorNotification } from "../posts/interfaces"
 import { setDislike, setLike } from "../posts/postSlice"
 import { setProfileFriendShipStatus } from "../profile/profileSlice"
+import { injectStyle } from "react-toastify/dist/inject-style"
 
+// CALL IT ONCE IN YOUR APP
 export type WebsocketContextProps = {
   tryConnectingToServer: VoidFunction
   disconnectFromServer: VoidFunction
@@ -40,6 +42,7 @@ export default function WebsocketContextProvider({
     socket.connect()
     socket.on("connect", () => {
       appDispatch(setConnectionState(socket.connected))
+      injectStyle()
     })
     socket.on("notify:success", (data) => {
       const notification: NotificationsEntity = data

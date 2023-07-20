@@ -7,7 +7,8 @@
     "build": "npm i",
     "start": "NODE_ENV=production node server.js",
     "dev": "NODE_ENV=development nodemon server.js",
-    "test": "NODE_ENV=test mocha --exit"
+    "test": "NODE_ENV=test mocha --exit",
+    "profile": "NODE_ENV=development node --inspect server.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +21,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "jose": "^4.14.4",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
     "mongoose-paginate-v2": "^1.7.1",
@@ -40,5 +42,9 @@
     "lorem-ipsum": "^2.0.8",
     "mocha": "^10.2.0",
     "nodemon": "^1.14.9"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.7",
+    "utf-8-validate": "^5.0.10"
   }
 }

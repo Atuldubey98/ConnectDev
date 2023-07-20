@@ -1,6 +1,7 @@
+const catchAsyncErrors = require("../api/middlewares/catchAsyncErrors");
 const { NODE_ENV } = require("../config/keys");
 
-const sendToken = async (user, statusCode, res) => {
+const sendToken = catchAsyncErrors(async (user, statusCode, res) => {
   const token = await user.getJWTToken(user.email, user.name, user._id);
   const options = {
     httpOnly: true,
@@ -13,5 +14,5 @@ const sendToken = async (user, statusCode, res) => {
     .status(statusCode)
     .cookie("token", token, options)
     .json({ email, _id, name });
-};
+});
 module.exports = sendToken;

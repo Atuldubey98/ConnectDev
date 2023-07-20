@@ -3,15 +3,17 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import CommentsModal from "./CommentsModal"
 import CreatePost from "./CreatePost"
 
+import { useEffect } from "react"
+import { BsFillFilePostFill } from "react-icons/bs"
+import { ClockLoader } from "react-spinners"
+import Notfound from "../common/Notfound"
+import useInfiniteScroll from "../common/useInfiniteScroll"
 import FilterComp from "./FilterComp"
 import PostsList from "./PostsList"
 import "./PostsPage.css"
-import useInfiniteScroll from "../common/useInfiniteScroll"
-import { useEffect } from "react"
 import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
-import { ClockLoader } from "react-spinners"
-import Notfound from "../common/Notfound"
-import { BsFillFilePostFill } from "react-icons/bs"
+import Header from "../common/Header"
+import Container from "../common/Container"
 export default function PostsPage() {
   const { commentsModal, justAddedPost } = useAppSelector((state) => state.ui)
 
@@ -40,24 +42,26 @@ export default function PostsPage() {
   }, [user])
   const posts = postResponse?.posts || []
   return (
-    <main className="posts__page">
-      <FilterComp />
-      <CreatePost />
-      {posts.length === 0 ? (
-        loading ? null : (
-          <Notfound icon={BsFillFilePostFill} message="Posts Not found" />
-        )
-      ) : (
-        <PostsList
-          posts={posts}
-          setElement={setElement}
-          justAddedPost={justAddedPost}
-        />
-      )}
-      <div className="d-flex-center">
-        <ClockLoader loading={loading} color="var(--secondary-color)" />
-      </div>
-      {isCommentsModalOpen ? <CommentsModal /> : null}
-    </main>
+    <Container>
+      <main className="posts__page">
+        <FilterComp />
+        <CreatePost />
+        {posts.length === 0 ? (
+          loading ? null : (
+            <Notfound icon={BsFillFilePostFill} message="Posts Not found" />
+          )
+        ) : (
+          <PostsList
+            posts={posts}
+            setElement={setElement}
+            justAddedPost={justAddedPost}
+          />
+        )}
+        <div className="d-flex-center">
+          <ClockLoader loading={loading} color="var(--secondary-color)" />
+        </div>
+        {isCommentsModalOpen ? <CommentsModal /> : null}
+      </main>
+    </Container>
   )
 }

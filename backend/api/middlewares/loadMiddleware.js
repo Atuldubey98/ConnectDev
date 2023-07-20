@@ -13,14 +13,16 @@ function loadMiddlewares(app) {
     }
     return compression.filter(req, res);
   }
-  app.use(morgan("combined"));
+  app.use(morgan("dev"));
   const corsOptions = {
     origin: function (origin, callback) {
       if (
         !origin ||
-        [VITE_APP_URL, "http://192.168.1.15:5173", "http://localhost:9000"].indexOf(
-          origin
-        ) !== -1
+        [
+          VITE_APP_URL,
+          "http://192.168.1.15:5173",
+          "http://localhost:9000",
+        ].indexOf(origin) !== -1
       ) {
         callback(null, true);
       } else {

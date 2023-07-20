@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET, JWT_EXPIRE } = require("../config/keys");
 const Schema = mongoose.Schema;
+const { getTokenAndEncryptionThePayload } =
+  require("../api/repository/encryptionRepository")();
 const mongoosePaginate = require("mongoose-paginate-v2");
-
 const validateEmail = (email) => {
   const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   return re.test(email);
@@ -39,18 +39,13 @@ const UserSchema = new Schema({
   },
 });
 UserSchema.index({ email: "text", name: "text" });
-UserSchema.methods.getJWTToken = (email, name, id) => {
-  return jwt.sign(
-    {
-      email,
-      name,
-      id,
-    },
-    JWT_SECRET,
-    {
-      expiresIn: JWT_EXPIRE,
-    }
-  );
+UserSchema.methods.getJWTToken = async (email, name, id) => {
+  const jwt = await getTokenAndEncryptionThePayload({
+    email,
+    name,
+    id,
+  });
+  return jwt;
 };
 UserSchema.plugin(mongoosePaginate);
 

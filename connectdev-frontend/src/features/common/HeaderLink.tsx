@@ -1,7 +1,6 @@
-import React from "react"
-import { HeaderLinkType } from "./HeaderLinks"
 import classNames from "classnames"
 import { Link } from "react-router-dom"
+import { HeaderLinkType } from "./HeaderLinks"
 
 export default function HeaderLink({
   headerLink,

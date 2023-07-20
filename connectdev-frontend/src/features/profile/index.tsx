@@ -14,6 +14,7 @@ import ProfileRight from "./ProfileRight"
 import TotalPosts from "./TotalPosts"
 import UpdateProfileAvatarModal from "./UpdateProfileAvatarModal"
 import useProfile from "./useProfile"
+import Container from "../common/Container"
 export default function ProfilePage() {
   const { userId } = useParams()
   const { user } = useAppSelector((state) => state.login)
@@ -32,43 +33,45 @@ export default function ProfilePage() {
     appDispatch(setUpdateProfilePictureModalOpen())
   }
   return (
-    <main className="profile__page">
-      {loading ? (
-        <FullLoading />
-      ) : (
-        <div className="profile__wrapper">
-          <ProfileLeft
-            onAvatarClick={onAvatarClick}
-            isCurrentUserSameForProfile={isCurrentUserSameForProfile}
-            user={profile?.user || null}
-            status={profile?.status || "Here is using your website"}
-          >
-            {(userId && userId === user?._id) || !userId ? (
-              <div className="d-flex-center">
-                <LinkButton to="/profile/edit" label="Edit Profile">
-                  <AiFillEdit size={20} />
-                </LinkButton>
-              </div>
-            ) : null}
-            <TotalPosts
-              total={totalPostByUser}
-              userId={userId || user?._id || ""}
-            />
-          </ProfileLeft>
-          {!profile || isCurrentUserSameForProfile ? null : (
-            <FriendRequestWrapper
-              friendUserId={userId || ""}
-              friendRequest={friendRequest}
-            />
-          )}
-          <ProfileRight profile={profile} />
-        </div>
-      )}
-      <UpdateProfileAvatarModal
-        user={profile?.user || null}
-        modalIsOpen={updateProfilePictureModal}
-        closeProfileModal={closeProfileModal}
-      />
-    </main>
+    <Container>
+      <main className="profile__page">
+        {loading ? (
+          <FullLoading />
+        ) : (
+          <div className="profile__wrapper">
+            <ProfileLeft
+              onAvatarClick={onAvatarClick}
+              isCurrentUserSameForProfile={isCurrentUserSameForProfile}
+              user={profile?.user || null}
+              status={profile?.status || "Here is using your website"}
+            >
+              {(userId && userId === user?._id) || !userId ? (
+                <div className="d-flex-center">
+                  <LinkButton to="/profile/edit" label="Edit Profile">
+                    <AiFillEdit size={20} />
+                  </LinkButton>
+                </div>
+              ) : null}
+              <TotalPosts
+                total={totalPostByUser}
+                userId={userId || user?._id || ""}
+              />
+            </ProfileLeft>
+            {!profile || isCurrentUserSameForProfile ? null : (
+              <FriendRequestWrapper
+                friendUserId={userId || ""}
+                friendRequest={friendRequest}
+              />
+            )}
+            <ProfileRight profile={profile} />
+          </div>
+        )}
+        <UpdateProfileAvatarModal
+          user={profile?.user || null}
+          modalIsOpen={updateProfilePictureModal}
+          closeProfileModal={closeProfileModal}
+        />
+      </main>
+    </Container>
   )
 }

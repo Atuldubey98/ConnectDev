@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
-import { Contact, Message, MessagesResponse } from "./interface"
 import { loadChatsByContactId, loadUserContacts } from "./chatsAPI"
+import { Contact, Message, MessagesResponse } from "./interface"
 export type ChatsStateType = {
   connected: boolean
   contactsStatus: "loading" | "idle" | "failure" | "success"

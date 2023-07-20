@@ -1,9 +1,9 @@
 import moment from "moment"
+import ActiveStatus from "../common/ActiveStatus"
 import IUser from "../login/interfaces"
 import { UserAvatarSmall } from "../posts/CreatePost"
 import "./FriendContact.css"
 import { Member } from "./interface"
-import ActiveStatus from "../common/ActiveStatus"
 export type FriendContactProps = {
   members: Member[]
   messages: []

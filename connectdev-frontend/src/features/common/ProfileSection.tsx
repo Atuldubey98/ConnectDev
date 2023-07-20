@@ -1,16 +1,16 @@
 import { AiFillEdit, AiOutlineLogout } from "react-icons/ai"
 import { CgProfile } from "react-icons/cg"
 
+import { useContext } from "react"
 import { FaUserFriends } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { WebsocketContext } from "../context/WebsocketContext"
 import { logoutUserAction } from "../login/loginSlice"
 import { setIdle } from "../posts/postSlice"
 import ActiveStatus from "./ActiveStatus"
 import "./ProfileSection.css"
-import { useContext } from "react"
-import { WebsocketContext } from "../context/WebsocketContext"
 
 export default function ProfileSection({ name }: { name: string }) {
   const navigate = useNavigate()

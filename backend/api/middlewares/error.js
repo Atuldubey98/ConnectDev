@@ -14,17 +14,16 @@ module.exports = (err, req, res, next) => {
     const message = `Duplicate ${Object.keys(err.keyValue)} Entered`;
     err = new ErrorHandler(message, 400);
   }
-
   // Wrong JWT error
-  if (err.name === "JsonWebTokenError") {
+  if (err.name === "JWEInvalid") {
     const message = `Json Web Token is invalid, Try again `;
-    err = new ErrorHandler(message, 400);
+    err = new ErrorHandler(message, 401);
   }
 
   // JWT EXPIRE error
   if (err.name === "TokenExpiredError") {
     const message = `Json Web Token is Expired, Try again `;
-    err = new ErrorHandler(message, 400);
+    err = new ErrorHandler(message, 401);
   }
   if (err.name === "ValidationError") {
     err = new ErrorHandler("PAYLOAD ERROR", 400);

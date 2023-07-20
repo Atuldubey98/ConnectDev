@@ -30,8 +30,8 @@ export default function App() {
 
   return (
     <>
-      <Header />
       <Suspense fallback={<FullLoading />}>
+        
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />

@@ -61,6 +61,7 @@ describe("Posts Controller requests", () => {
           .post("/api/posts")
           .set("Cookie", token)
           .send({ text: "text", title: "title" });
+          console.log(token)
         newPostId = response.body.post._id;
         expect(response).to.have.status(201);
         expect(response.body.post).to.have.property("_id").that.is.a("string");
