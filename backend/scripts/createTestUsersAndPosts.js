@@ -3,7 +3,7 @@ const LoremIpsum = require("lorem-ipsum").LoremIpsum;
 const BASE_URL = "http://127.0.0.1:9000";
 const REGISTER_URL = "/api/users/register";
 const LOGIN_URL = "/api/users/login";
-const POST_URL = "/api/post";
+const POST_URL = "/api/posts";
 const PROFILE_URL = "/api/profile";
 const COMMENT_URL = "/api/post/comment";
 const TEST_PASSWORD = "12345678";
@@ -91,8 +91,9 @@ async function userAPICalls() {
       );
       const responsesCookies = await Promise.allSettled(cookiesRequests);
       const cookies = responsesCookies.map((response) =>
-        response.status === "fulfilled" ? response.value : null
+        response.status === "fulfilled" ? response.value[0] : null
       );
+
       return cookies;
     } catch (error) {
       console.log(error.response.data);
@@ -120,8 +121,8 @@ async function postsAPICalls(cookies) {
   }
   async function createPosts() {
     const factoryPosts = await factory.posts.then((res) => res.posts);
-
     const requests = [];
+
     cookies.forEach((Cookie) => {
       let i = getRandomInt(factoryPosts.length),
         j = getRandomInt(factoryPosts.length);
@@ -129,7 +130,7 @@ async function postsAPICalls(cookies) {
       requests.push(createPostApiInstance(Cookie, getPost(factoryPosts[j])));
     });
     const responses = await Promise.allSettled(requests);
-    console.log("posts created ", responses.length);
+
     postIds = responses.map((res) => res.value.data.post._id);
   }
   async function createCommentApiInstance(postId, Cookie, text) {
