@@ -19,8 +19,8 @@ export default function ChatsPage() {
     setOpenNavChats(!openNavChats)
   }
   const { user } = useAppSelector((state) => state.login)
-  const { chatId: chatIdParams } = useParams()
   const { contacts } = useAppSelector((state) => state.chats)
+  const { chatId: chatIdParams } = useParams()
   const currentChattingContact =
     typeof chatIdParams === "string" ? chatIdParams : ""
 

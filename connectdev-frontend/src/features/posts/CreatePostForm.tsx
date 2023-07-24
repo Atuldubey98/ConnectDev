@@ -7,6 +7,8 @@ import IUser from "../login/interfaces"
 import { UserAvatarSmall } from "./CreatePost"
 import "./CreatePostForm.css"
 import useNewPost from "./useNewPost"
+import useAutosizeTextArea from "../common/useAutosizeTextArea"
+import { useRef } from "react"
 type CreatePostFormProps = {
   user: IUser | null
 }
@@ -21,6 +23,8 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
     onRemoveTag,
   } = useNewPost()
   const { newPostStatus } = useAppSelector((state) => state.post)
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  useAutosizeTextArea(textAreaRef.current, state.text);
   const newPostLoading = newPostStatus === "loading"
   return (
     <>
@@ -42,6 +46,7 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
         <textarea
           onChange={onChangeText}
           name="text"
+          ref={textAreaRef}
           disabled={newPostLoading}
           value={state.text}
           className="create__same"

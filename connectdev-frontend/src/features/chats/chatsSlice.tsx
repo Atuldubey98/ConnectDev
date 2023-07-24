@@ -2,10 +2,15 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 import { AppThunk } from "../../app/store"
 import { loadChatsByContactId, loadUserContacts } from "./chatsAPI"
 import { Contact, Message, MessagesResponse } from "./interface"
+import { FriendActiveStatus } from "../friends/interface"
 export type ChatsStateType = {
   connected: boolean
   contactsStatus: "loading" | "idle" | "failure" | "success"
   contacts: Contact[] | null
+}
+export type ContactFriendActiveStatus = {
+  isActiveNow: FriendActiveStatus,
+  friendId: string;
 }
 const initialState: ChatsStateType = {
   connected: false,
@@ -26,24 +31,25 @@ const chatsSlice = createSlice({
       state.contacts = action.payload
       state.contactsStatus = "success"
     },
+    
     setAddMessageToContactById: (state, action: PayloadAction<Message>) => {
       state.contacts = state.contacts
         ? state.contacts.map((contact) =>
-            contact._id === action.payload.contact
-              ? {
-                  ...contact,
-                  messagesResponse: contact.messagesResponse
-                    ? {
-                        ...contact.messagesResponse,
-                        messages: [
-                          ...(contact.messagesResponse.messages || []),
-                          action.payload,
-                        ],
-                      }
-                    : null,
+          contact._id === action.payload.contact
+            ? {
+              ...contact,
+              messagesResponse: contact.messagesResponse
+                ? {
+                  ...contact.messagesResponse,
+                  messages: [
+                    ...(contact.messagesResponse.messages || []),
+                    action.payload,
+                  ],
                 }
-              : contact,
-          )
+                : null,
+            }
+            : contact,
+        )
         : null
     },
     setContactMessagesResponse: (
@@ -52,21 +58,21 @@ const chatsSlice = createSlice({
     ) => {
       state.contacts = state.contacts
         ? state.contacts.map((contact) =>
-            contact._id === action.payload.contactId
-              ? {
-                  ...contact,
-                  messagesResponse: contact.messagesResponse
-                    ? {
-                        messages: [
-                          ...(contact.messagesResponse.messages || []),
-                          ...(action.payload.messages || []),
-                        ],
-                        ...action.payload,
-                      }
-                    : action.payload,
+          contact._id === action.payload.contactId
+            ? {
+              ...contact,
+              messagesResponse: contact.messagesResponse
+                ? {
+                  messages: [
+                    ...(contact.messagesResponse.messages || []),
+                    ...(action.payload.messages || []),
+                  ],
+                  ...action.payload,
                 }
-              : contact,
-          )
+                : action.payload,
+            }
+            : contact,
+        )
         : null
     },
   },
@@ -85,13 +91,13 @@ export const loadUserContactsAction = (): AppThunk => async (dispatch) => {
     dispatch(setContactLoading())
     const { data } = await loadUserContacts()
     dispatch(setContactsSuccess(data))
-  } catch (error) {}
+  } catch (error) { }
 }
 export const loadChatsByContactIdAction =
   (contactId: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      const { data } = await loadChatsByContactId(contactId)
-      dispatch(setContactMessagesResponse(data))
-    } catch (error) {}
-  }
+    async (dispatch) => {
+      try {
+        const { data } = await loadChatsByContactId(contactId)
+        dispatch(setContactMessagesResponse(data))
+      } catch (error) { }
+    }

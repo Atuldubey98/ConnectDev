@@ -9,7 +9,7 @@ export default function Notfound(props: NotfoundProps) {
   return (
     <div className="d-flex-center not__found">
       <Icon size={60} color="var(--secondary-color)" />
-      <h1>{message}</h1>
+      <h2>{message}</h2>
     </div>
   )
 }

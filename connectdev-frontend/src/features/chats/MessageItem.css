@@ -1,6 +1,7 @@
 .message {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 .message__me {
   flex-direction: row-reverse;

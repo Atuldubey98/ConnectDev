@@ -1,3 +1,5 @@
+import { BsChatSquareDots } from "react-icons/bs"
+import Notfound from "../common/Notfound"
 import IUser from "../login/interfaces"
 import FriendContact from "./FriendContact"
 import FriendGroupContact from "./FriendGroupContact"
@@ -11,10 +13,10 @@ export type SideNavChatsProps = {
 }
 export default function SideNavChats(props: SideNavChatsProps) {
   const { contacts, currentChattingContact, user: currentUser } = props
-  
+
   return (
     <nav className="side__nav">
-      <ul className="side__navContacts">
+      {contacts.length === 0 ? <Notfound icon={BsChatSquareDots} message="No chats" /> : <ul className="side__navContacts">
         {contacts.map((contact) => (
           <FriendGroupContact
             isSelected={currentChattingContact === contact._id}
@@ -32,7 +34,7 @@ export default function SideNavChats(props: SideNavChatsProps) {
             )}
           </FriendGroupContact>
         ))}
-      </ul>
+      </ul>}
     </nav>
   )
 }

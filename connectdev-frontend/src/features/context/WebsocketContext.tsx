@@ -37,7 +37,6 @@ export default function WebsocketContextProvider({
 }: WebsocketContextProviderProps) {
   const appDispatch = useAppDispatch()
   const { showToast } = useUserToast()
-
   useEffect(() => {
     socket.connect()
     socket.on("connect", () => {
