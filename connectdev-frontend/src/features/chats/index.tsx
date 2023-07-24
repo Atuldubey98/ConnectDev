@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import socket from "../../socket"
+import Container from "../common/Container"
 import FilterComp from "../posts/FilterComp"
 import ChatTextFieldSendBtn from "./ChatTextFieldSendBtn"
 import ChatsDisplay from "./ChatsDisplay"
@@ -12,7 +13,6 @@ import {
   loadUserContactsAction,
 } from "./chatsSlice"
 import { Contact } from "./interface"
-import Container from "../common/Container"
 export default function ChatsPage() {
   const [openNavChats, setOpenNavChats] = useState<boolean>(false)
   function toggleNavChats() {
@@ -23,26 +23,29 @@ export default function ChatsPage() {
   const { chatId: chatIdParams } = useParams()
   const currentChattingContact =
     typeof chatIdParams === "string" ? chatIdParams : ""
-
+  const currentContact: Contact | undefined = (contacts || []).find(
+    (contact) => contact._id === currentChattingContact,
+  )
+  const [page, setPage] = useState<number>(1);
   const appDispatch = useAppDispatch()
   useEffect(() => {
     appDispatch(loadUserContactsAction())
   }, [])
   useEffect(() => {
     if (currentChattingContact) {
-      appDispatch(loadChatsByContactIdAction(currentChattingContact))
+      appDispatch(loadChatsByContactIdAction(currentChattingContact, page))
       setOpenNavChats(false)
     }
-  }, [currentChattingContact])
+  }, [currentChattingContact, page])
   function sendMessage(content: string) {
     if (!currentChattingContact) {
       return
     }
     socket.emit("message:send", { content, contactId: currentChattingContact })
   }
-  const currentContact: Contact | undefined = (contacts || []).find(
-    (contact) => contact._id === currentChattingContact,
-  )
+  const onIncrementPage = () => {
+    setPage(p => p + 1);
+  }
   return (
     <Container>
       <main className="chat__screen">
@@ -54,8 +57,8 @@ export default function ChatsPage() {
                 currentContact.isGroup
                   ? currentContact.name || ""
                   : currentContact.members?.find(
-                      (member) => member._id !== user?._id,
-                    )?.name || ""
+                    (member) => member._id !== user?._id,
+                  )?.name || ""
               }
               toggleNavChats={toggleNavChats}
             />
@@ -66,6 +69,7 @@ export default function ChatsPage() {
             />
           )}
           <ChatsDisplay
+            onIncrementPage={onIncrementPage}
             currentContact={currentContact}
             openNavChats={openNavChats}
             contacts={contacts || []}

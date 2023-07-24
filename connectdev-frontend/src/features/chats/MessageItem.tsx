@@ -3,16 +3,17 @@ import { UserAvatarSmall } from "../posts/CreatePost"
 import "./MessageItem.css"
 import { Message } from "./interface"
 import { LegacyRef, forwardRef } from "react"
+import moment from 'moment';
 export type MessageItemProps = {
   message: Message
   currentUserId: string | undefined
 }
 
-const MessageItem = forwardRef((props : MessageItemProps, ref: LegacyRef<HTMLLIElement>)=>{
+const MessageItem = forwardRef((props: MessageItemProps, ref: LegacyRef<HTMLLIElement>) => {
   const { message } = props
   const isCurrentUserMessage = message.sender._id === props.currentUserId
   return (
-    <li className="message__item">
+    <li title={moment(message.createdAt).fromNow()} className="message__item">
       <div
         className={classNames("message", { message__me: isCurrentUserMessage })}
       >

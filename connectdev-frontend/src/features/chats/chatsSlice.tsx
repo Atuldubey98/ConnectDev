@@ -31,7 +31,7 @@ const chatsSlice = createSlice({
       state.contacts = action.payload
       state.contactsStatus = "success"
     },
-    
+
     setAddMessageToContactById: (state, action: PayloadAction<Message>) => {
       state.contacts = state.contacts
         ? state.contacts.map((contact) =>
@@ -63,11 +63,11 @@ const chatsSlice = createSlice({
               ...contact,
               messagesResponse: contact.messagesResponse
                 ? {
-                  messages: [
-                    ...(contact.messagesResponse.messages || []),
-                    ...(action.payload.messages || []),
-                  ],
                   ...action.payload,
+                  messages: [
+                    ...(action.payload.messages || []),
+                    ...(contact.messagesResponse.messages || []),
+                  ],
                 }
                 : action.payload,
             }
@@ -94,10 +94,10 @@ export const loadUserContactsAction = (): AppThunk => async (dispatch) => {
   } catch (error) { }
 }
 export const loadChatsByContactIdAction =
-  (contactId: string): AppThunk =>
+  (contactId: string, page = 1): AppThunk =>
     async (dispatch) => {
       try {
-        const { data } = await loadChatsByContactId(contactId)
+        const { data } = await loadChatsByContactId(contactId, page)
         dispatch(setContactMessagesResponse(data))
       } catch (error) { }
     }
