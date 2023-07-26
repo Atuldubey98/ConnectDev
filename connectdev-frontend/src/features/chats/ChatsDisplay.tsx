@@ -10,7 +10,6 @@ type ChatsDisplayProps = {
   openNavChats: boolean
   contacts: Contact[]
   user: IUser | null
-  onIncrementPage: VoidFunction;
   currentChattingContact: string
   currentContact: Contact | undefined
 }
@@ -28,7 +27,7 @@ export default function ChatsDisplay(props: ChatsDisplayProps) {
       ) : null}
       {messagesResponse ? (
         <div className="chats__wrapper">
-          <LoadMoreBtn onIncrementPage={props.onIncrementPage} hasNextPage={messagesResponse.hasNextPage} />
+
           <ChatMessagesList messages={messagesResponse.messages || []} currentUserId={props.user?._id || ""} />
         </div>
       ) : (
