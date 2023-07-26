@@ -26,26 +26,24 @@ export default function ChatsPage() {
   const currentContact: Contact | undefined = (contacts || []).find(
     (contact) => contact._id === currentChattingContact,
   )
-  const [page, setPage] = useState<number>(1);
+
   const appDispatch = useAppDispatch()
   useEffect(() => {
     appDispatch(loadUserContactsAction())
   }, [])
   useEffect(() => {
     if (currentChattingContact) {
-      appDispatch(loadChatsByContactIdAction(currentChattingContact, page))
+      appDispatch(loadChatsByContactIdAction(currentChattingContact))
       setOpenNavChats(false)
     }
-  }, [currentChattingContact, page])
+  }, [currentChattingContact])
   function sendMessage(content: string) {
     if (!currentChattingContact) {
       return
     }
     socket.emit("message:send", { content, contactId: currentChattingContact })
   }
-  const onIncrementPage = () => {
-    setPage(p => p + 1);
-  }
+
   return (
     <Container>
       <main className="chat__screen">
@@ -69,7 +67,7 @@ export default function ChatsPage() {
             />
           )}
           <ChatsDisplay
-            onIncrementPage={onIncrementPage}
+
             currentContact={currentContact}
             openNavChats={openNavChats}
             contacts={contacts || []}

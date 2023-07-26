@@ -6,6 +6,7 @@
 
 .single__post > p {
   text-align: justify;
+  word-wrap: break-word;
 }
 .single__avatarAbout {
   gap: 0.8rem;

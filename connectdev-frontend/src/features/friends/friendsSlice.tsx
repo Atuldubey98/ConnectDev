@@ -3,6 +3,7 @@ import { AppThunk } from "../../app/store"
 import { UserWithActiveStatus } from "../posts/interfaces"
 import { createContact, loadFriends } from "./friendsAPI"
 import { FriendActiveStatus } from "./interface"
+import socket from "../../socket"
 type Status = "loading" | "failure" | "success" | "idle"
 
 export interface Friend extends UserWithActiveStatus {
@@ -40,13 +41,13 @@ const friendsSlice = createSlice({
     ) => {
       state.friends = state.friends
         ? state.friends.map((friend) =>
-            friend._id === action.payload.friendId
-              ? {
-                  ...friend,
-                  contactCreationStatus: action.payload.contactCreationStatus,
-                }
-              : friend,
-          )
+          friend._id === action.payload.friendId
+            ? {
+              ...friend,
+              contactCreationStatus: action.payload.contactCreationStatus,
+            }
+            : friend,
+        )
         : null
     },
     setUpdateFriendActiveStatus: (
@@ -55,10 +56,10 @@ const friendsSlice = createSlice({
     ) => {
       state.friends = state.friends
         ? state.friends.map((friend) =>
-            friend._id === action.payload.friendUserId
-              ? { ...friend, isActiveNow: action.payload.isActiveNow }
-              : friend,
-          )
+          friend._id === action.payload.friendUserId
+            ? { ...friend, isActiveNow: action.payload.isActiveNow }
+            : friend,
+        )
         : null
     },
   },
@@ -87,28 +88,29 @@ export const createContactAction =
     recipientUserId: string,
     navigateToChatForContact: (contactId: string) => void,
   ): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(
-        setUpdateContactCreationStatus({
-          contactCreationStatus: "loading",
-          friendId: recipientUserId,
-        }),
-      )
-      const { data } = await createContact(recipientUserId)
-      dispatch(
-        setUpdateContactCreationStatus({
-          contactCreationStatus: "success",
-          friendId: recipientUserId,
-        }),
-      )
-      navigateToChatForContact(data._id)
-    } catch (error) {
-      dispatch(
-        setUpdateContactCreationStatus({
-          contactCreationStatus: "failure",
-          friendId: recipientUserId,
-        }),
-      )
+    async (dispatch) => {
+      try {
+        dispatch(
+          setUpdateContactCreationStatus({
+            contactCreationStatus: "loading",
+            friendId: recipientUserId,
+          }),
+        )
+        const { data } = await createContact(recipientUserId)
+        dispatch(
+          setUpdateContactCreationStatus({
+            contactCreationStatus: "success",
+            friendId: recipientUserId,
+          }),
+        )
+        navigateToChatForContact(data._id)
+        socket.emit("subscribe", data);
+      } catch (error) {
+        dispatch(
+          setUpdateContactCreationStatus({
+            contactCreationStatus: "failure",
+            friendId: recipientUserId,
+          }),
+        )
+      }
     }
-  }

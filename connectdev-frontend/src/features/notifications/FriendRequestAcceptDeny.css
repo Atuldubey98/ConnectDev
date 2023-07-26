@@ -1,6 +1,7 @@
 .friend__request {
   display: flex;
   gap: 0.8rem;
+  justify-content: space-between;
 }
 .friend__requestAbout {
   flex: 1;

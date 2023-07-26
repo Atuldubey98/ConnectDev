@@ -1,7 +1,7 @@
 const User = require("../../models/User");
 const logger = require("../../utils/logger");
 
-function disconnectHandler(socket, io) {
+function disconnectHandler(socket, io, socketUserIdsMap) {
   async function getCurrentUserFriends(userId) {
     const friends = await FriendRequest.find({
       $or: [{ requestor: userId }, { recipient: userId }],
@@ -17,6 +17,7 @@ function disconnectHandler(socket, io) {
         lastActive: new Date(Date.now()),
       }
     );
+    socketUserIdsMap.delete(socket.user.id);
     const friends = await getCurrentUserFriends(socket.user.id);
     const friendIds = friends.map((friend) => friend._id);
     friendIds.forEach((friendId) => {

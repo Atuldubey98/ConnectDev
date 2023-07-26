@@ -8,23 +8,27 @@ const friendRequestHandler = require("./friendRequestHandler");
 const likePostHandler = require("./likePostHandler");
 const User = require("../../models/User");
 const messageHandler = require("./messageHandler");
+const subscribeToContactHandler = require("./subscribeToContactHandler");
 const { getContactIdsOfCurrentUserToSubscribe } =
   require("../repository/contactRepository")();
 const { getCurrentUserFriends } =
   require("../repository/friendRequestRepository")();
+const socketUserIdsMap = new Map();
 function newConnectionHandler(io) {
   return async (socket) => {
+    socketUserIdsMap.set(socket.user.id, socket.id);
     socket.on("join", roomJoinHandler(socket));
     const { friendRequestSend, friendRequestAccept, friendRequestCancel } =
       friendRequestHandler(socket, io);
     const { sendMessageHandler } = messageHandler(socket, io);
+    socket.on("subscribe", subscribeToContactHandler(io, socketUserIdsMap));
     socket.on("like", likePostHandler(socket, io));
     socket.on("message:send", sendMessageHandler);
     socket.on("friendRequest:send", friendRequestSend);
     socket.on("friendRequest:accept", friendRequestAccept);
     socket.on("friendRequest:cancel", friendRequestCancel);
     socket.on("comment", commentHandler(socket, io));
-    socket.on("disconnect", disconnectHandler(socket, io));
+    socket.on("disconnect", disconnectHandler(socket, io, socketUserIdsMap));
     try {
       logger.info({
         level: "info",

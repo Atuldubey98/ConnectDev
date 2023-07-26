@@ -84,4 +84,5 @@
 }
 .post__body > a > p {
   text-align: justify;
+  word-wrap: break-word;
 }

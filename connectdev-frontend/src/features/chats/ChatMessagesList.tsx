@@ -13,8 +13,7 @@ export default function ChatMessagesList(props: ChatMessagesListProps) {
         if (dummyElementLiRef.current) {
             dummyElementLiRef.current.scrollIntoView()
         }
-        
-    }, [currentUserId])
+    }, [currentUserId,messages])
     return <ul className="chats">
         {messages!.map((message) => (
             <MessageItem
