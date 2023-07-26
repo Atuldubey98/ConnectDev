@@ -1,4 +1,4 @@
-import moment from "moment"
+import { formatDistanceToNow } from "date-fns"
 import { useEffect, useRef, useState } from "react"
 import { AiFillLike, AiOutlineLike } from "react-icons/ai"
 import { BsFillFilePostFill } from "react-icons/bs"
@@ -28,7 +28,7 @@ export default function SinglePostPage() {
   const { user } = useAppSelector((state) => state.login)
   const liked: boolean | undefined = post?.likes
     ? post.likes.map((like) => like.user._id).indexOf(user ? user._id : "") !==
-      -1
+    -1
     : false
   const lastCommentRef = useRef<HTMLDivElement>(null)
   async function onSubmitDispatch(postId: string, comment: string) {
@@ -67,11 +67,11 @@ export default function SinglePostPage() {
       setPost(
         post
           ? {
-              ...post,
-              comments: (post?.comments || []).filter(
-                (comment) => comment._id !== commentId,
-              ),
-            }
+            ...post,
+            comments: (post?.comments || []).filter(
+              (comment) => comment._id !== commentId,
+            ),
+          }
           : post,
       )
     } catch (error) {
@@ -84,7 +84,7 @@ export default function SinglePostPage() {
     }
   }
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       if (!postId) return
       try {
         const { data } = await fetchPost(postId)
@@ -118,7 +118,7 @@ export default function SinglePostPage() {
               <div className="single__avatarSection">
                 <p>{post?.user.name}</p>
                 <p className="post__date">
-                  {moment(post?.createdAt).fromNow()}
+                  {formatDistanceToNow(new Date(post.createdAt || ""), { addSuffix: true })}
                 </p>
               </div>
             </div>

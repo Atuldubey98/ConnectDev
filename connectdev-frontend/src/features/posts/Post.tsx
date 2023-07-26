@@ -1,5 +1,5 @@
 import classNames from "classnames"
-import moment from "moment"
+import { formatDistanceToNow } from "date-fns"
 import { LegacyRef, forwardRef, memo, useCallback, useState } from "react"
 import "./Post.css"
 import PostBody from "./PostBody"
@@ -34,7 +34,7 @@ const Post = forwardRef(
           text={post.text}
           title={post.title}
           user={post.user}
-          date={moment(post.createdAt).fromNow()}
+          date={formatDistanceToNow(new Date(post.createdAt || ""), { addSuffix: true })}
         />
         {post.tags && post.tags.length > 0 ? (
           <PostTags tags={post.tags} />

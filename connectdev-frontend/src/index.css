@@ -46,21 +46,3 @@ body {
   border-radius: 0.3rem;
   font-size: 1rem;
 }
-@keyframes slideIn {
-  0% {
-    transform: translateY(-10%);
-    scale: 0;
-  }
-  100% {
-    scale: 1;
-    transform: translateY(0%);
-  }
-}
-@keyframes opaque {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}

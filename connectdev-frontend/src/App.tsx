@@ -1,15 +1,11 @@
+import { TbError404Off } from "react-icons/tb"
 import { Route, Routes } from "react-router-dom"
 import "./App.css"
 
-import { TbError404Off } from "react-icons/tb"
-import Header from "./features/common/Header"
-
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import { useAppSelector } from "./app/hooks"
-import PostsPage from "./features/posts"
 import { Suspense, lazy } from "react"
+import { useAppSelector } from "./app/hooks"
 import FullLoading from "./features/common/FullLoading"
+const PostsPage = lazy(() => import("./features/posts"));
 
 const ChatsPage = lazy(() => import("./features/chats"))
 const NotFound = lazy(() => import("./features/common/Notfound"))
@@ -31,7 +27,7 @@ export default function App() {
   return (
     <>
       <Suspense fallback={<FullLoading />}>
-        
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -146,7 +142,6 @@ export default function App() {
           />
         </Routes>
       </Suspense>
-      {connected ? <ToastContainer /> : null}
     </>
   )
 }

@@ -1,7 +1,8 @@
+import { lazy } from "react";
 import ReactModal from "react-modal"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { toggleCommentsModal } from "../ui/uiSlice"
-import CommentSection from "./CommentSection"
+const CommentSection = lazy(() => import("./CommentSection"));
 import "./CommentsModal.css"
 
 export default function CommentsModal() {
@@ -34,7 +35,7 @@ export default function CommentsModal() {
       onRequestClose={() => appDispatch(toggleCommentsModal())}
       isOpen={isCommentsModalOpen}
     >
-      <CommentSection comments={comments} user={post?.user} postId={postId}/>
+      <CommentSection comments={comments} user={post?.user} postId={postId} />
     </ReactModal>
   )
 }

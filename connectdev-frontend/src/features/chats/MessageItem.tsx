@@ -1,9 +1,10 @@
 import classNames from "classnames"
+import { formatDistanceToNow } from "date-fns"
+import { LegacyRef, forwardRef } from "react"
 import { UserAvatarSmall } from "../posts/CreatePost"
 import "./MessageItem.css"
 import { Message } from "./interface"
-import { LegacyRef, forwardRef } from "react"
-import moment from 'moment';
+
 export type MessageItemProps = {
   message: Message
   currentUserId: string | undefined
@@ -13,7 +14,7 @@ const MessageItem = forwardRef((props: MessageItemProps, ref: LegacyRef<HTMLLIEl
   const { message } = props
   const isCurrentUserMessage = message.sender._id === props.currentUserId
   return (
-    <li title={moment(message.createdAt).fromNow()} className="message__item">
+    <li title={formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })} className="message__item">
       <div
         className={classNames("message", { message__me: isCurrentUserMessage })}
       >

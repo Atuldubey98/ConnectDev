@@ -1,19 +1,18 @@
+import { lazy, useEffect } from "react"
 import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import CommentsModal from "./CommentsModal"
+const CommentsModal = lazy(() => import("./CommentsModal"));
 import CreatePost from "./CreatePost"
 
-import { useEffect } from "react"
 import { BsFillFilePostFill } from "react-icons/bs"
-import { ClockLoader } from "react-spinners"
+import Container from "../common/Container"
+import LoadingSkeleton from "../common/LoadingSkeleton"
 import Notfound from "../common/Notfound"
 import useInfiniteScroll from "../common/useInfiniteScroll"
 import FilterComp from "./FilterComp"
 import PostsList from "./PostsList"
 import "./PostsPage.css"
 import { getAllPosts, searchPostByNameAction, setIdle } from "./postSlice"
-import Header from "../common/Header"
-import Container from "../common/Container"
 export default function PostsPage() {
   const { commentsModal, justAddedPost } = useAppSelector((state) => state.ui)
 
@@ -27,7 +26,7 @@ export default function PostsPage() {
 
   const { page, setElement } = useInfiniteScroll(hasNextPost)
   const appDispatch = useAppDispatch()
-  const loading = status === "loading"
+  const loading: boolean = status === "loading"
   useEffect(() => {
     appDispatch(
       search
@@ -57,9 +56,8 @@ export default function PostsPage() {
             justAddedPost={justAddedPost}
           />
         )}
-        <div className="d-flex-center">
-          <ClockLoader loading={loading} color="var(--secondary-color)" />
-        </div>
+        <LoadingSkeleton loading={loading} />
+
         {isCommentsModalOpen ? <CommentsModal /> : null}
       </main>
     </Container>

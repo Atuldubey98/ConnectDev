@@ -1,0 +1,29 @@
+.dummy__postBody {
+    height: 150px;
+    display: grid;
+    gap: 0.2rem;
+}
+
+.dummy__postTags {
+    height: 30px;
+}
+
+.dummy__postText {
+    height: 32px;
+    animation: fadeColors 2s ease-in infinite forwards;
+    background: rgb(212, 208, 208);
+}
+
+@keyframes fadeColors {
+    0% {
+        background: linear-gradient(90deg, rgb(230, 224, 224) 1%, rgba(163, 163, 185, 0) 100%);
+    }
+
+    50% {
+        background: linear-gradient(90deg, rgb(185, 184, 184) 25%, rgba(208, 208, 214, 0) 100%);
+    }
+
+    100% {
+        background: linear-gradient(90deg, rgb(196, 190, 190) 51%, rgba(38, 38, 41, 0) 100%);
+    }
+}

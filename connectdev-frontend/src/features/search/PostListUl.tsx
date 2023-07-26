@@ -1,4 +1,4 @@
-import moment from "moment"
+import { formatDistanceToNow } from "date-fns"
 import { IPost } from "../posts/interfaces"
 import Post from "./Post"
 export type PostListUl = {
@@ -13,7 +13,7 @@ export default function PostListUl(props: PostListUl) {
           key={postId}
           title={title}
           user={user}
-          date={moment(createdAt).fromNow()}
+          date={formatDistanceToNow(new Date(createdAt), { addSuffix: true })}
           text={text}
           postId={postId}
         />

@@ -1,4 +1,5 @@
-import moment from "moment"
+
+import { formatDistanceToNow } from "date-fns"
 import ActiveStatus from "../common/ActiveStatus"
 import IUser from "../login/interfaces"
 import { UserAvatarSmall } from "../posts/CreatePost"
@@ -28,7 +29,7 @@ export default function FriendContact(props: FriendContactProps) {
             Active now <ActiveStatus isActiveNow={friendContact.isActiveNow} />
           </p>
         ) : (
-          <p>{moment(friendContact?.lastActive).fromNow()}</p>
+          <p>{formatDistanceToNow(new Date(friendContact?.lastActive || ""), { addSuffix: true })}</p>
         )}
       </div>
     </div>

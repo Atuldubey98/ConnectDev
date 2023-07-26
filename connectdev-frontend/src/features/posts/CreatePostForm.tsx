@@ -9,6 +9,7 @@ import "./CreatePostForm.css"
 import useNewPost from "./useNewPost"
 import useAutosizeTextArea from "../common/useAutosizeTextArea"
 import { useRef } from "react"
+import './CreatePostForm.css';
 type CreatePostFormProps = {
   user: IUser | null
 }

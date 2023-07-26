@@ -1,13 +1,12 @@
 import { useRef } from "react"
 import { AiOutlineClose } from "react-icons/ai"
 import { useAppDispatch } from "../../app/hooks"
+import socket from "../../socket"
 import { toggleCommentsModal } from "../ui/uiSlice"
 import CommentsForm from "./CommentsForm"
 import CommentsList from "./CommentsList"
 import { IComment, IUserDetails } from "./interfaces"
 import { deleteCommentAction, postCommentAction } from "./postSlice"
-import useUserToast from "../common/useUserToast"
-import socket from "../../socket"
 
 type CommentSectionProps = {
   user: IUserDetails | undefined
@@ -23,7 +22,6 @@ export default function CommentSection({
 }: CommentSectionProps) {
   const lastCommentRef = useRef<HTMLDivElement>(null)
   const appDispatch = useAppDispatch()
-  const { showToast } = useUserToast()
   function onDeleteComment(postId: string, commentId: string) {
     appDispatch(deleteCommentAction({ postId, commentId }))
   }

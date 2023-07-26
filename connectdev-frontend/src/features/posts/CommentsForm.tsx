@@ -7,7 +7,7 @@ import {
 } from "react"
 import { useAppSelector } from "../../app/hooks"
 import { UserAvatarSmall } from "./CreatePost"
-
+import './CommentsModal.css';
 type CommentsFormProps = {
   postId: string
   onSubmitDispatch: (postId: string, comment: string) => void

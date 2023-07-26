@@ -1,8 +1,8 @@
+import classNames from "classnames"
+import { formatDistanceToNow } from "date-fns"
 import { LegacyRef, forwardRef } from "react"
 import "./NotificationComp.css"
 import { NotificationsEntity } from "./interfaces"
-import moment from "moment"
-import classNames from "classnames"
 export type NotificationCompProps = {
   notification: NotificationsEntity
   openCommentNotificationAndNavigate(href: string, notificationId: string): void
@@ -23,7 +23,7 @@ const NotificationComp = forwardRef(
         })}
       >
         <p>{notification.message}</p>
-        <p>{moment(new Date(notification.createdAt)).fromNow()}</p>
+        <p>{formatDistanceToNow(new Date(notification.createdAt || ""), { addSuffix: true })}</p>
       </li>
     )
   },

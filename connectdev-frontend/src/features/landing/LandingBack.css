@@ -1,0 +1,15 @@
+.landing__back {
+    text-align: center;
+}
+
+.landing__banner img {
+    width: 10vw;
+}
+
+.landing__banner h1 {
+    font-size: 10vw;
+}
+
+.landing__back p {
+    font-size: 3vw;
+}

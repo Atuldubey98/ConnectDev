@@ -1,4 +1,4 @@
-import moment from "moment"
+import { formatDistanceToNow } from "date-fns"
 import { LegacyRef, forwardRef } from "react"
 import { useAppSelector } from "../../app/hooks"
 import "./CommentsList.css"
@@ -85,7 +85,7 @@ function Comment({
               Delete --
             </span>
           ) : null}
-          <span>{moment(comment.createdAt).fromNow()}</span>
+          <span>{formatDistanceToNow((comment.createdAt), { addSuffix: true })}</span>
         </div>
       </div>
     </div>
