@@ -1,50 +1,26 @@
 const { MONGO_URI } = require("./config/keys");
 const express = require("express");
 const errorMiddleware = require("./api/middlewares/error");
-const user = require("./api/routes/user");
-const profile = require("./api/routes/profile");
-const post = require("./api/routes/post");
+
 const loadMiddlewares = require("./api/middlewares/loadMiddleware");
-const notificationRouter = require("./api/routes/notification");
-const friendRequestRouter = require("./api/routes/friendRequest");
-const { isAuthenticated } = require("./utils/auth");
-const {
-  getCurrentUserAllFriends,
-} = require("./api/controller/friendRequestController");
+const router = require("./api/routes/index");
 const mongoose = require("mongoose");
-const contactRouter = require("./api/routes/contact");
-const chatRouter = require("./api/routes/chat");
+const helmet = require("helmet");
+
 const app = express();
-const path = require("path");
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      imgSrc: ["'self'", "https://res.cloudinary.com", "https://robohash.org"],
+    },
+  })
+);
 mongoose.connect(MONGO_URI);
-
-loadMiddlewares(app);
-
 app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");
 });
-app.use(
-  express.static(path.join(__dirname, "../connectdev-frontend/build"), {
-    maxAge: "1y",
-  })
-);
-app.use((req, res, next) => {
-  if (req.originalUrl.startsWith("/api")) {
-    next();
-  } else {
-    return res.sendFile(
-      path.join(__dirname, "../connectdev-frontend/build/index.html")
-    );
-  }
-});
-app.use("/api/users", user);
-app.use("/api/posts", post);
-app.use("/api/profile", profile);
-app.use("/api/notifications", notificationRouter);
-app.use("/api/friend-request", friendRequestRouter);
-app.use("/api/contacts", contactRouter);
-app.use("/api/chats", chatRouter);
-app.use("/api/friends", isAuthenticated, getCurrentUserAllFriends);
+loadMiddlewares(app);
+router(app);
 app.use(errorMiddleware);
 
 app.all("*", (req, res, next) => {

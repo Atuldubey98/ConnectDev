@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const compression = require("compression");
+const express = require("express");
+const path = require("path");
+
 function loadMiddlewares(app) {
   app.use(compression({ filter: shouldCompress }));
 
@@ -41,5 +44,19 @@ function loadMiddlewares(app) {
       extended: false,
     })
   );
+  app.use(
+    express.static(path.join(__dirname, "../../../connectdev-frontend/build"), {
+      maxAge: "1y",
+    })
+  );
+  app.use((req, res, next) => {
+    if (req.originalUrl.startsWith("/api")) {
+      next();
+    } else {
+      return res.sendFile(
+        path.join(__dirname, "../../../connectdev-frontend/build/index.html")
+      );
+    }
+  });
 }
 module.exports = loadMiddlewares;
