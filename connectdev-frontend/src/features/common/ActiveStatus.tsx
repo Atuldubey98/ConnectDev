@@ -1,6 +1,6 @@
+import { memo } from "react"
 import { TbCircleDotFilled } from "react-icons/tb"
-
-export default function ActiveStatus({
+function ActiveStatus({
   isActiveNow,
 }: {
   isActiveNow: boolean
@@ -9,3 +9,5 @@ export default function ActiveStatus({
     <TbCircleDotFilled color={isActiveNow ? "var(--success-color)" : "var(--danger-color)"} />
   )
 }
+
+export default memo(ActiveStatus)

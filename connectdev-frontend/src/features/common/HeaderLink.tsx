@@ -1,8 +1,9 @@
 import classNames from "classnames"
 import { Link } from "react-router-dom"
 import { HeaderLinkType } from "./HeaderLinks"
+import { memo } from "react"
 
-export default function HeaderLink({
+function HeaderLink({
   headerLink,
   activeLink,
 }: {
@@ -15,3 +16,5 @@ export default function HeaderLink({
     </li>
   )
 }
+
+export default memo(HeaderLink);

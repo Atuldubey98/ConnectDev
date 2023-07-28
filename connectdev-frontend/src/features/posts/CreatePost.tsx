@@ -1,17 +1,16 @@
+import { memo } from "react"
 import { RxAvatar } from "react-icons/rx"
-import { useAppSelector } from "../../app/hooks"
 import "./CreatePost.css"
 import CreatePostForm from "./CreatePostForm"
-export default function CreatePost() {
-  const { user } = useAppSelector((state) => state.login)
+function CreatePost() {
 
   return (
     <section className="create__post">
-      <CreatePostForm user={user} />
+      <CreatePostForm />
     </section>
   )
 }
-
+export default memo(CreatePost);
 export function UserAvatarSmall({
   avatar,
   name,
@@ -22,7 +21,7 @@ export function UserAvatarSmall({
   size?: number
 }) {
   return avatar ? (
-    <img src={avatar} alt={name} height={48} width={size || 48} loading="lazy" />
+    <img src={avatar} alt={name} height={size || 48} width={size || 48} loading="lazy" />
   ) : (
     <RxAvatar size={size || 48} />
   )

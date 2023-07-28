@@ -1,20 +1,14 @@
-import { IoCloseOutline } from "react-icons/io5"
 import { SlTag } from "react-icons/sl"
 import { BarLoader } from "react-spinners"
 import { useAppSelector } from "../../app/hooks"
 import Button from "../common/Button"
-import IUser from "../login/interfaces"
-import { UserAvatarSmall } from "./CreatePost"
 import "./CreatePostForm.css"
+import CreatePostUser from "./CreatePostUser"
+import FormPostTagsList from "./FormPostTagsList"
+import NewPostTextArea from "./NewPostTextArea"
 import useNewPost from "./useNewPost"
-import useAutosizeTextArea from "../common/useAutosizeTextArea"
-import { useRef } from "react"
-import './CreatePostForm.css';
-type CreatePostFormProps = {
-  user: IUser | null
-}
 
-export default function CreatePostForm({ user }: CreatePostFormProps) {
+export default function CreatePostForm() {
   const {
     onChangeInput,
     state,
@@ -23,17 +17,13 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
     onSubmit,
     onRemoveTag,
   } = useNewPost()
-  const { newPostStatus } = useAppSelector((state) => state.post)
-  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  useAutosizeTextArea(textAreaRef.current, state.text);
+  const newPostStatus = useAppSelector((state) => state.post.newCommentStatus)
+ 
   const newPostLoading = newPostStatus === "loading"
   return (
     <>
       <form onSubmit={onSubmit} className="create__postForm">
-        <div className="create__postUser d-flex-center">
-          <UserAvatarSmall avatar={user?.avatar} name={user ? user.name : ""} />
-          <p>Create a new post</p>
-        </div>
+        <CreatePostUser />
         <input
           className="create__same"
           type="text"
@@ -44,27 +34,16 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
           onChange={onChangeInput}
         />
         <div className="create__errTxt">{state.titleErrTxt}</div>
-        <textarea
-          onChange={onChangeText}
+        <NewPostTextArea
           name="text"
-          ref={textAreaRef}
+          onChange={onChangeText}
+          textErrTxt={state.textErrTxt}
           disabled={newPostLoading}
           value={state.text}
           className="create__same"
-          placeholder="Text*"
-        />
-        <div className="create__errTxt">{state.textErrTxt}</div>
+          placeholder="Text*" />
         <div className="create__same create__postTag">
-          {state.tags.length > 0 ? (
-            <div className="tags__list ">
-              {state.tags.map((tag) => (
-                <span key={tag.id}>
-                  {tag.tag}{" "}
-                  <IoCloseOutline onClick={() => onRemoveTag(tag.id)} />
-                </span>
-              ))}
-            </div>
-          ) : null}
+          <FormPostTagsList tags={state.tags} onRemoveTag={onRemoveTag} />
           <input
             disabled={newPostLoading}
             onChange={onChangeInput}
@@ -90,7 +69,7 @@ export default function CreatePostForm({ user }: CreatePostFormProps) {
           </div>
         ) : (
           <div className="create__btn d-flex-center">
-            <Button label="Post" />
+            <Button disabled={newPostLoading} label="Post" />
           </div>
         )}
       </form>

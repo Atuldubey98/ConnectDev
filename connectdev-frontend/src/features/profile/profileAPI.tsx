@@ -11,7 +11,7 @@ export const updateProfile = async (profile: UpdateProfileBody) => {
 }
 
 export const countTotalPostByUserId = async (userId: string | undefined) => {
-  return instance.get(`/api/post/count/${userId}`)
+  return instance.get(`/api/posts/count/${userId}`)
 }
 
 export const loadFriendshipStatus = async (friendUserId: string) => {

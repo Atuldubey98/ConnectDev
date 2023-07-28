@@ -7,6 +7,7 @@
   border: 1px solid var(--primary-color);
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
+  padding-block: 0.5rem;
 }
 .profile__email {
   font-size: 0.9rem;

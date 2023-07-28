@@ -4,15 +4,15 @@ import "./Header.css"
 import HeaderLinks from "./HeaderLinks"
 import ProfileSection from "./ProfileSection"
 export default function Header() {
-  const { user } = useAppSelector((state) => state.login)
+  const name = useAppSelector((state) => state.login.user?.name)
 
   return (
     <header className="d-flex-center">
       <Banner />
-      {user ? (
+      {name ? (
         <>
           <HeaderLinks />
-          <ProfileSection name={user.name} />
+          <ProfileSection name={name} />
         </>
       ) : null}
     </header>

@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 const CommentsModal = lazy(() => import("./CommentsModal"));
 import CreatePost from "./CreatePost"
-
 import { BsFillFilePostFill } from "react-icons/bs"
 import Container from "../common/Container"
 import LoadingSkeleton from "../common/LoadingSkeleton"
@@ -20,9 +19,7 @@ export default function PostsPage() {
     (state) => state.post,
   )
   const { isCommentsModalOpen } = commentsModal
-  const { search: searchParams, user: userParam } = useParams()
-  const search: string = searchParams || ""
-  const user: string = userParam || ""
+  const { search = "", user = "" } = useParams()
 
   const { page, setElement } = useInfiniteScroll(hasNextPost)
   const appDispatch = useAppDispatch()

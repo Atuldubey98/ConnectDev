@@ -66,23 +66,23 @@ export const loginUserAction =
     navigateToPosts: () => void,
     tryConnectingToServer: VoidFunction | null,
   ): AppThunk =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading())
-      const { data } = await login(email, password)
-      dispatch(setSuccess(data))
-      if (tryConnectingToServer) {
-        tryConnectingToServer()
-        navigateToPosts()
+    async (dispatch) => {
+      try {
+        dispatch(setLoading())
+        const { data } = await login(email, password)
+        dispatch(setSuccess(data))
+        if (tryConnectingToServer) {
+          tryConnectingToServer()
+          navigateToPosts()
+        }
+      } catch (error) {
+        dispatch(
+          setFailed(
+            isAxiosError(error) ? error.response?.data.message : "Error occured",
+          ),
+        )
       }
-    } catch (error) {
-      dispatch(
-        setFailed(
-          isAxiosError(error) ? error.response?.data.message : "Error occured",
-        ),
-      )
     }
-  }
 
 export const loadUser = (): AppThunk => async (dispatch) => {
   try {
@@ -99,21 +99,21 @@ export const loadUser = (): AppThunk => async (dispatch) => {
 }
 export const logoutUserAction =
   (
-    showToast: (message: string) => void,
+    showToast: (message: string, isError: boolean) => void,
     navigateToHome: () => void,
   ): AppThunk =>
-  async (dispatch) => {
-    try {
-      const { data } = await logout()
-      if (data.status) {
-        dispatch(setIdle())
-        navigateToHome()
+    async (dispatch) => {
+      try {
+        const { data } = await logout()
+        if (data.status) {
+          dispatch(setIdle())
+          navigateToHome()
+        }
+      } catch (error) {
+        const message = isAxiosError(error)
+          ? error.response?.data.message
+          : "Error occured"
+        showToast(message, true);
       }
-    } catch (error) {
-      const message = isAxiosError(error)
-        ? error.response?.data.message
-        : "Error occured"
-      showToast(message)
     }
-  }
 export default loginSlice.reducer

@@ -9,7 +9,7 @@ export default function TotalPosts(props: TotalPostsProps) {
     <div className="total__posts d-flex-center">
       <LinkButton
         to={`/search/users/${props.userId}/posts`}
-        label={`Total Posts : ${props.total}`}
+        label={`Posts : ${props.total}`}
       />
     </div>
   )
