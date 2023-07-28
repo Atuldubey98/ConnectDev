@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Message = require("../../models/Message");
 const ErrorHandler = require("../../utils/errorhandler");
 
@@ -14,36 +15,41 @@ function messageRepository() {
     return newMessage;
   }
   async function getMessagesByContactIdAndPaginate(contactId, page = 1) {
-    if (typeof contactId !== "string" || typeof page !== "number")
-      throw new ErrorHandler("PAYLOAD_ERROR", 404);
-    const messagesPaginated = await Message.paginate(
-      { contact: contactId },
-      {
-        page,
-        limit: 10,
-        sort: {
-          createdAt: -1,
-        },
-        customLabels: {
-          docs: "messages",
-        },
-        populate: [
-          {
-            path: "sender",
-            select: "name email avatar _id",
-          },
-          {
-            path: "isRead",
-            select: "name email avatar _id",
-          },
-        ],
+    try {
+      if (!mongoose.isValidObjectId(contactId) || typeof page !== "number") {
+        throw new ErrorHandler("PAYLOAD_ERROR", 404);
       }
-    );
-    return {
-      contactId,
-      messages: messagesPaginated.messages.reverse(),
-      ...messagesPaginated,
-    };
+      const messagesPaginated = await Message.paginate(
+        { contact: contactId },
+        {
+          page,
+          limit: 10,
+          sort: {
+            createdAt: -1,
+          },
+          customLabels: {
+            docs: "messages",
+          },
+          populate: [
+            {
+              path: "sender",
+              select: "name email avatar _id",
+            },
+            {
+              path: "isRead",
+              select: "name email avatar _id",
+            },
+          ],
+        }
+      );
+      return {
+        contactId,
+        messages: messagesPaginated.messages.reverse(),
+        ...messagesPaginated,
+      };
+    } catch (error) {
+      throw error;
+    }
   }
   return Object.freeze({ createMessage, getMessagesByContactIdAndPaginate });
 }

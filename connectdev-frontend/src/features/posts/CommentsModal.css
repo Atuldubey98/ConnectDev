@@ -1,16 +1,20 @@
 .comments__modal {
   width: 100%;
 }
-.comments__modal > h1 {
+
+.comments__modal>h1 {
   text-align: center;
 }
+
 .comments__head {
   display: flex;
   gap: 0.8rem;
 }
+
 .comments__form {
   width: 100%;
 }
+
 .comment__field {
   width: 100%;
   border: 1px solid lightgray;
@@ -27,13 +31,27 @@
   padding: 0.5rem;
   font-size: 1.1rem;
 }
+
 .comments_footer {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
+
 .comments_footer button {
   margin-top: 0.5rem;
   color: var(--dominant-color);
   background-color: var(--secondary-color);
+}
+
+.comments__first {
+  font-size: smaller;
+}
+
+.comments__total,
+.comments__first {
+  font-size: smaller;
+  font-style: italic;
+  font-weight: bold;
+  text-decoration: underline;
 }

@@ -17,7 +17,6 @@ const CommentsList = forwardRef(
   ) => {
     const storedComments = [...comments]
     const { user } = useAppSelector((state) => state.login)
-
     return (
       <div>
         <div

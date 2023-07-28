@@ -1,5 +1,8 @@
+import { AiFillEdit } from "react-icons/ai"
+import { useParams } from "react-router-dom"
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import socket from "../../socket"
+import LinkButton from "../common/LinkButton"
 import AcceptFriendRequest from "./AcceptFriendRequest"
 import AlreadyFriends from "./AlreadyFriends"
 import CancelRequest from "./CancelRequest"
@@ -36,7 +39,7 @@ export default function FriendRequestWrapper(props: FriendRequestWrapperProps) {
     socket.emit("friendRequest:send", friendRequestId)
   }
   const cancelFriendRequest = () => {
-    appDispatch(cancelFriendRequestAction(friendRequest?._id || "",cancelFriendRequestSendNotificaition))
+    appDispatch(cancelFriendRequestAction(friendRequest?._id || "", cancelFriendRequestSendNotificaition))
   }
   const acceptFriendRequest = () => {
     appDispatch(acceptFriendRequestAction(friendRequest?._id || ""))
@@ -44,6 +47,8 @@ export default function FriendRequestWrapper(props: FriendRequestWrapperProps) {
   function cancelFriendRequestSendNotificaition() {
     socket.emit("friendRequest:cancel", friendRequest)
   }
+  const { userId } = useParams()
+
   return friendRequest ? (
     <div className="d-flex-center">
       {isFriendRequestSentByCurrentUser ? (
@@ -56,6 +61,7 @@ export default function FriendRequestWrapper(props: FriendRequestWrapperProps) {
   ) : (
     <div className="d-flex-center">
       <SendFriendRequest sendFriendRequest={sendFriendRequest} />
+      
     </div>
   )
 }

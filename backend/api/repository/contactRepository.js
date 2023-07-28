@@ -7,10 +7,12 @@ function contactRepository() {
     Array.isArray(members) &&
     members.every((member) => typeof member === "string");
   async function getMessagesForContactById(contactId, page = 1) {
-    if (typeof contactId !== "string" || typeof page !== "number")
-      throw new ErrorHandler("PAYLOAD_ERROR", 400);
-    const messages = await getMessagesByContactIdAndPaginate(contactId, page);
-    return messages;
+    try {
+      const messages = await getMessagesByContactIdAndPaginate(contactId, page);
+      return messages;
+    } catch (error) {
+      throw error;
+    }
   }
   async function updateContactWithMessage(messageId, contactId = "") {
     if (typeof messageId !== "object" || typeof contactId !== "string") {

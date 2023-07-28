@@ -37,7 +37,7 @@ export default function PostsPage() {
     }
   }, [user])
   const posts = postResponse?.posts || []
-  return (
+  return  (
     <Container>
       <main className="posts__page">
         <FilterComp />

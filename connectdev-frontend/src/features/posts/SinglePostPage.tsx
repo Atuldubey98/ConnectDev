@@ -20,6 +20,7 @@ import {
   likeOrDislikePost,
   makeNewComment,
 } from "./postAPI"
+import Container from "../common/Container"
 export default function SinglePostPage() {
   const { postId } = useParams()
   const [post, setPost] = useState<IPost | null>(null)
@@ -98,57 +99,59 @@ export default function SinglePostPage() {
   return loading ? (
     <FullLoading />
   ) : post ? (
-    <main className="single__postPage">
-      <div className="single__postContainer">
-        <div className="single__postWrapper">
-          <div className="single__post">
-            <h2>{post?.title}</h2>
-            <p>{post?.text}</p>
+    <Container>
+      <main className="single__postPage">
+        <div className="single__postContainer">
+          <div className="single__postWrapper">
+            <div className="single__post">
+              <h2>{post?.title}</h2>
+              <p>{post?.text}</p>
+            </div>
+            <PostTags tags={post?.tags || []} />
           </div>
-          <PostTags tags={post?.tags || []} />
-        </div>
-        <div className="single__postAbout">
-          <div className="single__postAvatar">
-            <div className="post__avatar">
-              <UserAvatarSmall
-                name={post?.user.name || ""}
-                avatar={post?.user.avatar}
-                size={40}
-              />
-              <div className="single__avatarSection">
-                <p>{post?.user.name}</p>
-                <p className="post__date">
-                  {formatDistanceToNow(new Date(post.createdAt || ""), { addSuffix: true })}
-                </p>
+          <div className="single__postAbout">
+            <div className="single__postAvatar">
+              <div className="post__avatar">
+                <UserAvatarSmall
+                  name={post?.user.name || ""}
+                  avatar={post?.user.avatar}
+                  size={40}
+                />
+                <div className="single__avatarSection">
+                  <p>{post?.user.name}</p>
+                  <p className="post__date">
+                    {formatDistanceToNow(new Date(post.createdAt || ""), { addSuffix: true })}
+                  </p>
+                </div>
+              </div>
+              <div className="single__postBtns d-flex-center">
+                <Like
+                  totalLikes={post.likes?.length || 0}
+                  liked={liked}
+                  createLikeOrDislike={createLikeOrDislike}
+                />
+                <ButtonWithIcon onClick={onCommentClick}>
+                  <FaRegCommentAlt size={20} />
+                  <span>Comment</span>
+                  <span>{post.comments?.length || 0}</span>
+                </ButtonWithIcon>
               </div>
             </div>
-            <div className="single__postBtns d-flex-center">
-              <Like
-                totalLikes={post.likes?.length || 0}
-                liked={liked}
-                createLikeOrDislike={createLikeOrDislike}
-              />
-              <ButtonWithIcon onClick={onCommentClick}>
-                <FaRegCommentAlt size={20} />
-                <span>Comment</span>
-                <span>{post.comments?.length || 0}</span>
-              </ButtonWithIcon>
-            </div>
+            <CommentsList
+              comments={post?.comments || []}
+              onDeleteComment={onDeleteComment}
+              maxHeight="30svh"
+              ref={lastCommentRef}
+            />
+            <CommentsForm
+              ref={commentInputRef}
+              postId={postId || ""}
+              onSubmitDispatch={onSubmitDispatch}
+            />
           </div>
-          <CommentsList
-            comments={post?.comments || []}
-            onDeleteComment={onDeleteComment}
-            maxHeight="30svh"
-            ref={lastCommentRef}
-          />
-          <CommentsForm
-            ref={commentInputRef}
-            postId={postId || ""}
-            onSubmitDispatch={onSubmitDispatch}
-          />
         </div>
-      </div>
-    </main>
+      </main>
+    </Container>
   ) : (
     <Notfound icon={BsFillFilePostFill} message="Post was deleted" />
   )

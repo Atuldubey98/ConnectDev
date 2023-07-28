@@ -43,6 +43,8 @@ export default function CommentSection({
   function sendCommentNotification(postId: string, commentId: string) {
     socket.emit("comment", { _id: postId, commentId })
   }
+  const isItFirstComment = (comments || []).length === 0
+
   return (
     <section className="comments__modal">
       {showClose ? (
@@ -60,6 +62,13 @@ export default function CommentSection({
         comments={comments || []}
         ref={lastCommentRef}
       />
+      {isItFirstComment ? (
+        <p className="comments__first">Be the first one to comment</p>
+      ) : (
+        <p className="comments__total">
+          Total Comments - {(comments || []).length}
+        </p>
+      )}
       <CommentsForm postId={postId || ""} onSubmitDispatch={onSubmitDispatch} />
     </section>
   )

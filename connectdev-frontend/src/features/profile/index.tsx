@@ -45,13 +45,7 @@ export default function ProfilePage() {
               user={profile?.user || null}
               status={profile?.status || "Here is using your website"}
             >
-              {(userId && userId === user?._id) || !userId ? (
-                <div className="d-flex-center">
-                  <LinkButton to="/profile/edit" label="Edit Profile">
-                    <AiFillEdit size={20} />
-                  </LinkButton>
-                </div>
-              ) : null}
+
               <TotalPosts
                 total={totalPostByUser}
                 userId={userId || user?._id || ""}
@@ -63,6 +57,13 @@ export default function ProfilePage() {
                 friendRequest={friendRequest}
               />
             )}
+            {(userId && userId === user?._id) || !userId ? (
+              <div className="d-flex-center">
+                <LinkButton to="/profile/edit" label="Edit Profile">
+                  <AiFillEdit size={20} />
+                </LinkButton>
+              </div>
+            ) : null}
             <ProfileRight profile={profile} />
           </div>
         )}

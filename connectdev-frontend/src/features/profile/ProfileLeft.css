@@ -13,7 +13,7 @@
   font-size: 0.9rem;
   color: var(--primary-color);
 }
-.common__profileList {
+.common__profileList > div > li {
   list-style: none;
 }
 .cursor__pointer {
