@@ -1,0 +1,26 @@
+version: "3"
+services:
+  connectdev-frontend:
+    image: frontend
+    build: ./connectdev-frontend/
+    volumes:
+      - ./connectdev-frontend/:/usr/src/app
+      - /usr/src/app/node_modules
+    stdin_open: true
+    network_mode: host
+    env_file:
+      - .env.development
+    ports:
+      - "5173:5173"
+
+  backend:
+    image: backend
+    build: ./backend
+    volumes:
+      - ./backend/:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env.development
+    network_mode: host
+    ports:
+      - "9000:9000"

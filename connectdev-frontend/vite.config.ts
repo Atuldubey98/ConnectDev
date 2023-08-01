@@ -4,7 +4,6 @@ export default defineConfig({
   plugins: [react()],
   envDir: "../.env",
   server: {
-    open: true,
     host: true,
   },
   build: {

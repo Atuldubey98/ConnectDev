@@ -15,7 +15,14 @@ app.use(
     },
   })
 );
-mongoose.connect(MONGO_URI);
+mongoose
+  .connect(MONGO_URI)
+  .then(() => {
+    console.log("Connected to db");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 app.get("/api/health", (req, res) => {
   return res.status(200).send("Server is healthy");
 });
