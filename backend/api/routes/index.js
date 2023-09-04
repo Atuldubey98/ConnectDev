@@ -4,7 +4,7 @@ const postRouter = require("./post");
 const notificationRouter = require("./notification");
 const contactRouter = require("./contact");
 const friendRequestRouter = require("./friendRequest");
-const chatRouter = require("./contact");
+const chatRouter = require("./chat");
 const profileRouter = require("./profile");
 const {
   getCurrentUserAllFriends,
