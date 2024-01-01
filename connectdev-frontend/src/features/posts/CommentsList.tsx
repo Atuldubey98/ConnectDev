@@ -58,7 +58,6 @@ function Comment({
   onClickDelete?: (postId: string, commentId: string) => void
 }) {
   const _id = `comment-${comment._id}`
-  console.log(comment.createdAt);
   return (
     <div id={_id} className="comment">
       <UserAvatarSmall
